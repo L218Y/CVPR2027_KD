@@ -1,0 +1,19 @@
+run: configs/kd_mfnet.yaml started at 2026-10-21T20:52:18Z
+/root/.local/lib/python3.10/site-packages/timm/models/layers/__init__.py:49: FutureWarning: Importing from timm.models.layers is deprecated, please import via timm.layers
+  warnings.warn(f"Importing from {__name__} is deprecated, please import via timm.layers", FutureWarning)
+Found 784 train images.
+Found 392 val images.
+_IncompatibleKeys(missing_keys=[], unexpected_keys=['head.weight', 'head.bias'])
+Traceback (most recent call last):
+  File "/data/lab/CVPR2027_KD/code/tools/train_kd.py", line 356, in <module>
+    main(cfg, gpu, save_dir, args)
+  File "/data/lab/CVPR2027_KD/code/tools/train_kd.py", line 121, in main
+    msg = load_state(teacher_path, teacher, strict=True)
+  File "/data/lab/CVPR2027_KD/code/tools/train_kd.py", line 69, in load_state
+    msg = model.load_state_dict(ckpt, strict=strict)
+  File "/usr/local/lib/python3.10/dist-packages/torch/nn/modules/module.py", line 2639, in load_state_dict
+    raise RuntimeError(
+RuntimeError: Error(s) in loading state_dict for CMNeXt:
+	Missing key(s) in state_dict: "backbone.extra_downsample_layers.0.proj.module.weight", "backbone.extra_downsample_layers.0.proj.module.bias", "backbone.extra_downsample_layers.1.proj.module.weight", "backbone.extra_downsample_layers.1.proj.module.bias", "backbone.extra_downsample_layers.2.proj.module.weight", "backbone.extra_downsample_layers.2.proj.module.bias", "backbone.extra_downsample_layers.3.proj.module.weight", "backbone.extra_downsample_layers.3.proj.module.bias". 
+	Unexpected key(s) in state_dict: "backbone.extra_downsample_layers.0.proj.weight", "backbone.extra_downsample_layers.0.proj.bias", "backbone.extra_downsample_layers.1.proj.weight", "backbone.extra_downsample_layers.1.proj.bias", "backbone.extra_downsample_layers.2.proj.weight", "backbone.extra_downsample_layers.2.proj.bias", "backbone.extra_downsample_layers.3.proj.weight", "backbone.extra_downsample_layers.3.proj.bias". 
+collected 2 experiment(s) into results/
