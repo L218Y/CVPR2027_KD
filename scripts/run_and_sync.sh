@@ -9,6 +9,7 @@ set -uo pipefail
 
 REPO_ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 cd "$REPO_ROOT"
+export PYTHONPATH="$REPO_ROOT:${PYTHONPATH:-}"
 
 CFG="${1:?usage: run_and_sync.sh <config.yaml> [note]}"
 NOTE="${2:-$(basename "$CFG" .yaml)}"
