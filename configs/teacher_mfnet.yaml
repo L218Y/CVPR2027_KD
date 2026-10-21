@@ -17,8 +17,8 @@ TRAIN:
   IMAGE_SIZE    : [480, 640]
   BATCH_SIZE    : 8
   EPOCHS        : 500
-  EVAL_START    : 300
-  EVAL_INTERVAL : 5
+  EVAL_START    : 50
+  EVAL_INTERVAL : 25
   AMP           : true
   DDP           : true
 
