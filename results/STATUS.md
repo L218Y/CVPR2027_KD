@@ -1,11 +1,11 @@
 # Experiment status
 
-- updated: 2026-10-21 20:52:33 UTC
+- updated: 2026-10-21 20:52:42 UTC
 - host: 7ec8c19e901c (Linux-6.8.0-138-generic-x86_64-with-glibc2.35)
 - gpu: NVIDIA GeForce RTX 4090, 24564 MiB
-- commit: f959de8
+- commit: 21be551
 - exit status: 1
-- note: S3 conservative only
+- note: S4 rapd eps 0.2
 
 | experiment | dataset | kd | seed | best mIoU | epoch | time |
 |---|---|---|---|---|---|---|
