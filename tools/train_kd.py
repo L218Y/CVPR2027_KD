@@ -277,9 +277,13 @@ def main(cfg, gpu, save_dir, args):
             if writer:
                 writer.add_scalar("val/mIoU", miou, epoch)
             logger.info(f"epoch {epoch + 1} mIoU {miou:.3f} mAcc {macc:.3f} best {best_miou:.3f}")
+            sd = student.module.state_dict() if distributed else student.state_dict()
+            torch.save({"model_state_dict": sd, "epoch": epoch + 1, "miou": miou}, save_dir / "last.pth")
+            if probe is not None:
+                pmod = probe.module if distributed else probe
+                torch.save(pmod.state_dict(), save_dir / "probe.pth")
             if miou > best_miou:
                 best_miou, best_epoch = miou, epoch + 1
-                sd = student.module.state_dict() if distributed else student.state_dict()
                 torch.save(sd, save_dir / "best.pth")
                 logger.info(print_iou(epoch, ious, miou, acc, macc, class_names))
 
