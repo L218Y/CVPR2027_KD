@@ -1,0 +1,73 @@
+DEVICE: cuda
+SAVE_DIR: output
+MODEL:
+  NAME: CMNeXt
+  BACKBONE: CMNeXt-B2
+  PRETRAINED: checkpoints/pretrained/segformer/mit_b2.pth
+  RESUME: ''
+DATASET:
+  NAME: DELIVER
+  ROOT: data/DELIVER
+  IGNORE_LABEL: 255
+  MODALS:
+  - img
+  - depth
+  - event
+  - lidar
+TRAIN:
+  IMAGE_SIZE:
+  - 512
+  - 512
+  BATCH_SIZE: 1
+  EPOCHS: 150
+  EVAL_START: 40
+  EVAL_INTERVAL: 20
+  AMP: true
+  DDP: true
+LOSS:
+  NAME: OhemCrossEntropy
+  CLS_WEIGHTS: false
+OPTIMIZER:
+  NAME: adamw
+  LR: 6.0e-05
+  WEIGHT_DECAY: 0.01
+SCHEDULER:
+  NAME: warmuppolylr
+  POWER: 0.9
+  WARMUP: 10
+  WARMUP_RATIO: 0.1
+KD:
+  ENABLE: true
+  MODE: recoverability
+  TEACHER_MODALS:
+  - img
+  - depth
+  - event
+  - lidar
+  TEACHER_BACKBONE: CMNeXt-B2
+  TEACHER_PATH: output/DELIVER_CMNeXt-B2_imgdel_teacher_s3407/best.pth
+  TAU: 2.0
+  LAMBDA_KD: 1.0
+  LAMBDA_FEAT: 0.1
+  EPS_MAX: 0.5
+  WARMUP_EPOCHS: 5
+  PROBE_LR: 0.001
+  PROBE_HIDDEN: 128
+  DEPLOY_HEAD: false
+  LAMBDA_HEAD: 0.1
+EVAL:
+  MODEL_PATH: output/DELIVER_CMNeXt-B2_imgdel_teacher_s3407/best.pth
+  IMAGE_SIZE:
+  - 512
+  - 512
+  BATCH_SIZE: 1
+  MSF:
+    ENABLE: false
+    FLIP: true
+    SCALES:
+    - 0.5
+    - 0.75
+    - 1.0
+    - 1.25
+    - 1.5
+    - 1.75

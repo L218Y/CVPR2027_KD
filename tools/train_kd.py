@@ -191,6 +191,7 @@ def main(cfg, gpu, save_dir, args):
     lambda_feat = float(kd_cfg.get("LAMBDA_FEAT", 0.0))
     ignore_index = trainset.ignore_label
 
+    stats = {}
     for epoch in range(epochs):
         student.train()
         if probe is not None:
@@ -203,6 +204,7 @@ def main(cfg, gpu, save_dir, args):
         running = {"loss": 0.0, "kd": 0.0, "r": 0.0, "probe": 0.0}
         use_rec = epoch >= warmup
         pbar = tqdm(enumerate(trainloader), total=iters_per_epoch, desc=f"Epoch {epoch + 1}/{epochs}")
+        it = -1
         for it, (sample, lbl) in pbar:
             sample = [x.to(device, non_blocking=True) for x in sample]
             lbl = lbl.to(device, non_blocking=True)
@@ -262,6 +264,8 @@ def main(cfg, gpu, save_dir, args):
 
         n = max(1, it + 1)
         stats = {k: v / n for k, v in running.items()}
+        if it < 0:
+            logger.warning("trainloader produced no batches; skipping epoch statistics")
         if writer:
             for k, v in stats.items():
                 writer.add_scalar(f"train/{k}", v, epoch)
