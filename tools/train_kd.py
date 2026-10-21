@@ -253,9 +253,11 @@ def main(cfg, gpu, save_dir, args):
             scheduler.step()
 
             running["loss"] += loss.item()
-            running["kd"] += float(kd_out["kd"])
+            running["kd"] += float(kd_out["kd"].detach())
             running["r"] += float(kd_out["r_mean"]) if r_small is not None else 0.0
-            running["probe"] += float(probe_mse)
+            running["probe"] += float(probe_mse.detach())
+            if args.max_iters and (it + 1) >= args.max_iters:
+                break
             if it % 10 == 0:
                 pbar.set_description(
                     f"ep {epoch + 1}/{epochs} loss {running['loss'] / (it + 1):.4f} "
@@ -270,8 +272,9 @@ def main(cfg, gpu, save_dir, args):
             for k, v in stats.items():
                 writer.add_scalar(f"train/{k}", v, epoch)
 
-        should_eval = ((epoch + 1) % train_cfg.get("EVAL_INTERVAL", 1) == 0 and
-                       (epoch + 1) > train_cfg.get("EVAL_START", 0)) or (epoch + 1) == epochs
+        should_eval = not args.skip_eval and (
+            ((epoch + 1) % train_cfg.get("EVAL_INTERVAL", 1) == 0 and
+             (epoch + 1) > train_cfg.get("EVAL_START", 0)) or (epoch + 1) == epochs)
         if should_eval and ((distributed and dist.get_rank() == 0) or not distributed):
             acc, macc, _, _, ious, miou = evaluate(student, valloader, device)
             if writer:
@@ -326,6 +329,8 @@ if __name__ == "__main__":
     parser.add_argument("--epochs", type=int, default=0, help="override config epochs (smoke tests)")
     parser.add_argument("--workers", type=int, default=8)
     parser.add_argument("--tag", type=str, default="", help="suffix for the experiment name")
+    parser.add_argument("--max-iters", type=int, default=0, help="stop an epoch early (smoke tests)")
+    parser.add_argument("--skip-eval", action="store_true", help="disable validation (smoke tests)")
     args = parser.parse_args()
 
     with open(args.cfg) as f:
@@ -336,7 +341,10 @@ if __name__ == "__main__":
     gpu = setup_ddp()
     modals = "".join([m[0] for m in cfg["DATASET"]["MODALS"]])
     kd_cfg = cfg.get("KD", {})
-    stage = kd_cfg.get("MODE", "kd") if kd_cfg.get("ENABLE", True) else "teacher"
+    if kd_cfg.get("ENABLE", True):
+        stage = kd_cfg.get("MODE", "kd")
+    else:
+        stage = "rgb" if len(cfg["DATASET"]["MODALS"]) == 1 else "teacher"
     exp_name = "_".join([
         cfg["DATASET"]["NAME"], cfg["MODEL"]["BACKBONE"], modals, stage, f"s{args.seed}",
     ])

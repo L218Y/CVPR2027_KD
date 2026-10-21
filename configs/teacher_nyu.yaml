@@ -40,7 +40,7 @@ KD:
   - img
   - depth
 EVAL:
-  MODEL_PATH: output/NYU_CMNeXt-B2_imgd_teacher_s3407/best.pth
+  MODEL_PATH: output/NYU_CMNeXt-B2_id_teacher_s3407/best.pth
   IMAGE_SIZE:
   - 480
   - 640

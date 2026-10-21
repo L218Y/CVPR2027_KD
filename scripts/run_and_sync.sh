@@ -11,13 +11,14 @@ REPO_ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 cd "$REPO_ROOT"
 export PYTHONPATH="$REPO_ROOT:${PYTHONPATH:-}"
 
-CFG="${1:?usage: run_and_sync.sh <config.yaml> [note]}"
+CFG="${1:?usage: run_and_sync.sh <config.yaml> [note] [extra trainer args...]}"
 NOTE="${2:-$(basename "$CFG" .yaml)}"
+shift $(( $# >= 2 ? 2 : 1 ))
 
 START=$(date -u +%Y-%m-%dT%H:%M:%SZ)
 echo "run: $CFG started at $START"
 
-python3 tools/train_kd.py --cfg "$CFG"
+python3 tools/train_kd.py --cfg "$CFG" "$@"
 STATUS=$?
 
 python3 scripts/collect_results.py --status "$STATUS" --note "$NOTE" || true

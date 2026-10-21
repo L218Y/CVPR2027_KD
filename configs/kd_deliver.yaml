@@ -45,7 +45,7 @@ KD:
   - event
   - lidar
   TEACHER_BACKBONE: CMNeXt-B2
-  TEACHER_PATH: output/DELIVER_CMNeXt-B2_imgdel_teacher_s3407/best.pth
+  TEACHER_PATH: output/DELIVER_CMNeXt-B2_idel_teacher_s3407/best.pth
   TAU: 2.0
   LAMBDA_KD: 1.0
   LAMBDA_FEAT: 0.1
@@ -56,7 +56,7 @@ KD:
   DEPLOY_HEAD: false
   LAMBDA_HEAD: 0.1
 EVAL:
-  MODEL_PATH: output/DELIVER_CMNeXt-B2_imgdel_teacher_s3407/best.pth
+  MODEL_PATH: output/DELIVER_CMNeXt-B2_idel_teacher_s3407/best.pth
   IMAGE_SIZE:
   - 512
   - 512

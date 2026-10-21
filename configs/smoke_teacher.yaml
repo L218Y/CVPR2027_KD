@@ -40,7 +40,7 @@ KD:
   - img
   - thermal
 EVAL:
-  MODEL_PATH: output/MFNet_CMNeXt-B2_imgt_teacher_s3407/best.pth
+  MODEL_PATH: output/MFNet_CMNeXt-B2_it_teacher_s3407/best.pth
   IMAGE_SIZE:
   - 480
   - 640

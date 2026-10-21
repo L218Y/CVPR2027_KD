@@ -1,0 +1,68 @@
+DEVICE: cuda
+SAVE_DIR: output
+MODEL:
+  NAME: CMNeXt
+  BACKBONE: CMNeXt-B2
+  PRETRAINED: ''
+  RESUME: ''
+DATASET:
+  NAME: MFNet
+  ROOT: /tmp/work/fake_mfnet
+  IGNORE_LABEL: 255
+  MODALS:
+  - img
+  - thermal
+TRAIN:
+  IMAGE_SIZE:
+  - 128
+  - 160
+  BATCH_SIZE: 2
+  EPOCHS: 1
+  EVAL_START: 50
+  EVAL_INTERVAL: 25
+  AMP: false
+  DDP: true
+LOSS:
+  NAME: CrossEntropy
+  CLS_WEIGHTS: false
+OPTIMIZER:
+  NAME: adamw
+  LR: 6.0e-05
+  WEIGHT_DECAY: 0.01
+SCHEDULER:
+  NAME: warmuppolylr
+  POWER: 0.9
+  WARMUP: 10
+  WARMUP_RATIO: 0.1
+KD:
+  MODE: recoverability
+  TEACHER_MODALS:
+  - img
+  - thermal
+  TEACHER_BACKBONE: CMNeXt-B2
+  TEACHER_PATH: output/MFNet_CMNeXt-B2_it_teacher_s3407/best.pth
+  TAU: 2.0
+  LAMBDA_KD: 1.0
+  LAMBDA_FEAT: 0.1
+  EPS_MAX: 0.5
+  WARMUP_EPOCHS: 5
+  PROBE_LR: 0.001
+  PROBE_HIDDEN: 32
+  DEPLOY_HEAD: false
+  LAMBDA_HEAD: 0.1
+EVAL:
+  MODEL_PATH: output/MFNet_CMNeXt-B2_imgt_recoverability_s3407/best.pth
+  IMAGE_SIZE:
+  - 128
+  - 160
+  BATCH_SIZE: 2
+  MSF:
+    ENABLE: false
+    FLIP: true
+    SCALES:
+    - 0.5
+    - 0.75
+    - 1.0
+    - 1.25
+    - 1.5
+    - 1.75
