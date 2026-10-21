@@ -69,18 +69,27 @@ def main() -> None:
             print(f"  {i + 1}/{len(common)}")
 
     train_txt = next((p for p in src.rglob("train.txt")), None)
-    test_txt = next((p for p in src.rglob("test.txt")), None)
+    # MFNet convention: val.txt holds the 392-image standard test split,
+    # test.txt the 393 remaining images that are not part of the benchmark.
+    test_txt = next((p for p in src.rglob("val.txt")), None) or next((p for p in src.rglob("test.txt")), None)
     if train_txt and test_txt:
-        def clean(path):
+        available = set(common)
+
+        def clean(path, drop_augmented=False):
             names = []
             for line in path.read_text().splitlines():
                 name = line.strip().split()[0] if line.strip() else ""
-                if name:
-                    names.append(Path(name).stem)
-            return [n for n in names if n in set(common)]
+                if not name:
+                    continue
+                stem = Path(name).stem
+                if drop_augmented and ("_flip" in stem or "_seed" in stem):
+                    continue
+                if stem in available:
+                    names.append(stem)
+            return names
 
-        train, test = clean(train_txt), clean(test_txt)
-        source = f"official ({train_txt}, {test_txt})"
+        train, test = clean(train_txt, drop_augmented=True), clean(test_txt)
+        source = f"official (train={train_txt.name}, test={test_txt.name}; augmented duplicates dropped)"
     else:
         names = list(common)
         random.Random(args.seed).shuffle(names)
