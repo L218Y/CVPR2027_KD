@@ -1,0 +1,2 @@
+experiment,dataset,backbone,teacher,modals,kd_mode,seed,epochs,best_miou,best_epoch,train_time
+MFNet_CMNeXt-B2_it_teacher_s3407,MFNet,CMNeXt-B2,CMNeXt-B2,img-thermal,recoverability,3407,1,10.9,1,00:02:38

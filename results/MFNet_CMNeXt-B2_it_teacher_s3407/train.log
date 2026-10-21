@@ -1,0 +1,90 @@
+20261021 15:09:28 - root - INFO: - {
+  "DEVICE": "cuda",
+  "SAVE_DIR": "output",
+  "MODEL": {
+    "NAME": "CMNeXt",
+    "BACKBONE": "CMNeXt-B2",
+    "PRETRAINED": "",
+    "RESUME": ""
+  },
+  "DATASET": {
+    "NAME": "MFNet",
+    "ROOT": "data/MFNet",
+    "IGNORE_LABEL": 255,
+    "MODALS": [
+      "img",
+      "thermal"
+    ]
+  },
+  "TRAIN": {
+    "IMAGE_SIZE": [
+      480,
+      640
+    ],
+    "BATCH_SIZE": 4,
+    "EPOCHS": 1,
+    "EVAL_START": 0,
+    "EVAL_INTERVAL": 1,
+    "AMP": true,
+    "DDP": true
+  },
+  "LOSS": {
+    "NAME": "CrossEntropy",
+    "CLS_WEIGHTS": false
+  },
+  "OPTIMIZER": {
+    "NAME": "adamw",
+    "LR": 6e-05,
+    "WEIGHT_DECAY": 0.01
+  },
+  "SCHEDULER": {
+    "NAME": "warmuppolylr",
+    "POWER": 0.9,
+    "WARMUP": 10,
+    "WARMUP_RATIO": 0.1
+  },
+  "KD": {
+    "ENABLE": false,
+    "TEACHER_MODALS": [
+      "img",
+      "thermal"
+    ]
+  },
+  "EVAL": {
+    "MODEL_PATH": "output/MFNet_CMNeXt-B2_imgt_teacher_s3407/best.pth",
+    "IMAGE_SIZE": [
+      480,
+      640
+    ],
+    "BATCH_SIZE": 4,
+    "MSF": {
+      "ENABLE": false,
+      "FLIP": true,
+      "SCALES": [
+        0.5,
+        0.75,
+        1.0,
+        1.25,
+        1.5,
+        1.75
+      ]
+    }
+  }
+}
+20261021 15:12:05 - root - INFO: - epoch 1 mIoU 10.900 mAcc 11.980 best 0.000
+20261021 15:12:05 - root - INFO: - 
+Class   	IoU     	Acc     
+1 unlabeled	90.66	97.92
+2 car   	4.87	6.70
+3 person	1.12	1.54
+4 bike  	0.62	0.69
+5 curve 	0.16	0.17
+6 car_stop	0.40	0.51
+7 guardrail	0.01	0.02
+8 color_cone	0.19	0.27
+9 bump  	0.04	0.04
+== Epoch:  	0	mean_IoU	10.90	mean_Acc	11.98
+20261021 15:12:05 - root - INFO: - ---------  --------
+Best mIoU  10.90
+Time       00:02:38
+---------  --------
