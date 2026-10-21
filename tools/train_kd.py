@@ -151,11 +151,12 @@ def main(cfg, gpu, save_dir, args):
     iters_per_epoch = len(trainset) // train_cfg["BATCH_SIZE"] // world
     ce_loss = get_loss(loss_cfg["NAME"], trainset.ignore_label, None)
     optimizer = get_optimizer(student, optim_cfg["NAME"], lr, optim_cfg["WEIGHT_DECAY"])
-    probe_optimizer = torch.optim.AdamW(
-        (list(probe.parameters()) if probe else []) + (list(rec_head.parameters()) if rec_head else []),
-        lr=kd_cfg.get("PROBE_LR", 1e-3),
-        weight_decay=0.01,
-    )
+    probe_params = (list(probe.parameters()) if probe else []) + (list(rec_head.parameters()) if rec_head else [])
+    probe_optimizer = None
+    if probe_params:
+        probe_optimizer = torch.optim.AdamW(
+            probe_params, lr=kd_cfg.get("PROBE_LR", 1e-3), weight_decay=0.01
+        )
     scheduler = get_scheduler(
         sched_cfg["NAME"], optimizer, int((epochs + 1) * iters_per_epoch),
         sched_cfg["POWER"], iters_per_epoch * sched_cfg["WARMUP"], sched_cfg["WARMUP_RATIO"],
