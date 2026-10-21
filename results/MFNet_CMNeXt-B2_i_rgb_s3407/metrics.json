@@ -1,0 +1,27 @@
+{
+  "experiment": "MFNet_CMNeXt-B2_i_rgb_s3407",
+  "dataset": "MFNet",
+  "backbone": "CMNeXt-B2",
+  "teacher_backbone": "CMNeXt-B2",
+  "modals": [
+    "img"
+  ],
+  "kd_mode": "recoverability",
+  "tau": 2.0,
+  "eps_max": 0.5,
+  "lambda_kd": 1.0,
+  "lambda_feat": 0.0,
+  "seed": 3407,
+  "epochs": 500,
+  "batch_size": 8,
+  "world_size": 1,
+  "best_miou": 58.95,
+  "best_epoch": 400,
+  "train_time": "01:50:49",
+  "final_stats": {
+    "loss": 0.02175816063940221,
+    "kd": 0.0,
+    "r": 0.0,
+    "probe": 0.0
+  }
+}
