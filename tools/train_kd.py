@@ -66,7 +66,18 @@ def load_state(path, model, strict=True):
                 ckpt = ckpt[key]
                 break
     ckpt = {k.replace("module.", "", 1): v for k, v in ckpt.items()}
+    target = model.state_dict()
+    renamed = 0
+    for key in list(ckpt):
+        if key in target:
+            continue
+        flat = key.replace(".module.", ".")
+        if flat in target:
+            ckpt[flat] = ckpt.pop(key)
+            renamed += 1
     msg = model.load_state_dict(ckpt, strict=strict)
+    if renamed:
+        msg.missing_keys = [k for k in msg.missing_keys]
     return msg
 
 
@@ -185,7 +196,7 @@ def main(cfg, gpu, save_dir, args):
         writer = SummaryWriter(str(save_dir))
         logger.info(json.dumps(cfg, indent=2))
 
-    best_miou, best_epoch = 0.0, 0
+    best_miou, best_epoch, best_acc, best_macc = 0.0, 0, 0.0, 0.0
     warmup = int(kd_cfg.get("WARMUP_EPOCHS", 5))
     lambda_kd = float(kd_cfg.get("LAMBDA_KD", 1.0))
     lambda_feat = float(kd_cfg.get("LAMBDA_FEAT", 0.0))
@@ -286,7 +297,7 @@ def main(cfg, gpu, save_dir, args):
                 pmod = probe.module if distributed else probe
                 torch.save(pmod.state_dict(), save_dir / "probe.pth")
             if miou > best_miou:
-                best_miou, best_epoch = miou, epoch + 1
+                best_miou, best_epoch, best_acc, best_macc = miou, epoch + 1, acc, macc
                 torch.save(sd, save_dir / "best.pth")
                 logger.info(print_iou(epoch, ious, miou, acc, macc, class_names))
 
@@ -301,7 +312,7 @@ def main(cfg, gpu, save_dir, args):
             "backbone": model_cfg["BACKBONE"],
             "teacher_backbone": kd_cfg.get("TEACHER_BACKBONE", model_cfg["BACKBONE"]),
             "modals": teacher_modals,
-            "kd_mode": kd_cfg.get("MODE", "recoverability"),
+            "kd_mode": kd_cfg.get("MODE", "recoverability") if kd_cfg.get("ENABLE", True) else "none",
             "tau": kd_cfg.get("TAU", 2.0),
             "eps_max": kd_cfg.get("EPS_MAX", 0.5),
             "lambda_kd": lambda_kd,
@@ -311,6 +322,8 @@ def main(cfg, gpu, save_dir, args):
             "batch_size": train_cfg["BATCH_SIZE"],
             "world_size": world,
             "best_miou": best_miou,
+            "mAcc": best_macc,
+            "aAcc": best_acc,
             "best_epoch": best_epoch,
             "train_time": time.strftime("%H:%M:%S", elapsed),
             "final_stats": stats,

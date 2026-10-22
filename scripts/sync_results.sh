@@ -38,6 +38,14 @@ trap 'rm -f "$ASKPASS"' EXIT
 printf '#!/bin/sh\ncat "%s"\n' "$PAT_FILE" > "$ASKPASS"
 chmod 700 "$ASKPASS"
 
+echo "sync: rebasing onto $REMOTE/$BRANCH"
+GIT_ASKPASS="$ASKPASS" GIT_TERMINAL_PROMPT=0 git -c rebase.autoStash=true pull -q --rebase "$REMOTE" "$BRANCH" || true
+
 echo "sync: pushing to $REMOTE/$BRANCH"
-GIT_ASKPASS="$ASKPASS" GIT_TERMINAL_PROMPT=0 git push "$REMOTE" "HEAD:$BRANCH"
+for attempt in 1 2 3; do
+  GIT_ASKPASS="$ASKPASS" GIT_TERMINAL_PROMPT=0 git push "$REMOTE" "HEAD:$BRANCH" && break
+  echo "sync: push rejected, rebasing and retrying ($attempt)" >&2
+  GIT_ASKPASS="$ASKPASS" GIT_TERMINAL_PROMPT=0 git -c rebase.autoStash=true pull -q --rebase "$REMOTE" "$BRANCH" || true
+  sleep 5
+done
 echo "sync: done"
