@@ -161,3 +161,8 @@ Class   	IoU     	Acc
 20261022 05:56:01 - root - INFO: - epoch 425 mIoU 59.010 mAcc 68.320 best 60.490
 20261022 06:11:40 - root - INFO: - epoch 450 mIoU 59.010 mAcc 68.430 best 60.490
 20261022 06:27:17 - root - INFO: - epoch 475 mIoU 59.540 mAcc 69.240 best 60.490
+20261022 06:38:00 - root - INFO: - epoch 500 mIoU 59.550 mAcc 68.930 best 60.490
+20261022 06:38:00 - root - INFO: - ---------  --------
+Best mIoU  60.49
+Time       05:07:21
+---------  --------
