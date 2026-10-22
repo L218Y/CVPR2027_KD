@@ -4,7 +4,7 @@
 
 | run | epoch | best mIoU | best ep | last mIoU |
 |---|---|---|---|---|
-| seed3408_teacher | 67/500 | - | - | - |
+| seed3408_teacher | 99/500 | 51.810 | 75 | 51.810 |
 | S4_rapd_eps_0.2 | 500/500 | 59.620 | 350 | 58.590 |
 | S1_uniform_kd | 500/500 | 59.300 | 375 | 58.730 |
 | S3_conservative_only | 500/500 | 61.010 | 275 | 58.850 |
