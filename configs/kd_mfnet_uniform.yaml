@@ -50,6 +50,7 @@ KD:
   PROBE_HIDDEN: 128
   DEPLOY_HEAD: false
   LAMBDA_HEAD: 0.1
+  LAMBDA_PROBE: 0.1
 EVAL:
   MODEL_PATH: output/MFNet_CMNeXt-B2_imgt_recoverability_s3407/best.pth
   IMAGE_SIZE:

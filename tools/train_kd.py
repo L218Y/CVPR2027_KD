@@ -204,6 +204,7 @@ def main(cfg, gpu, save_dir, args):
     warmup = int(kd_cfg.get("WARMUP_EPOCHS", 5))
     lambda_kd = float(kd_cfg.get("LAMBDA_KD", 1.0))
     lambda_feat = float(kd_cfg.get("LAMBDA_FEAT", 0.0))
+    lambda_probe = float(kd_cfg.get("LAMBDA_PROBE", 0.1))
     ignore_index = trainset.ignore_label
 
     stats = {}
@@ -243,7 +244,7 @@ def main(cfg, gpu, save_dir, args):
                         t_logits = teacher.decode_head(t_feats)
                         t_logits = F.interpolate(t_logits, size=lbl.shape[-2:], mode="bilinear", align_corners=False)
                     probe_module = probe.module if distributed else probe
-                    r_small, probe_mse = probe_module(s_feats[-1], t_feats[-1])
+                    r_small, probe_mse = probe_module(s_feats[-1].detach(), t_feats[-1])
                     r_map = F.interpolate(r_small.unsqueeze(1), size=lbl.shape[-2:], mode="bilinear", align_corners=False)
                     r_used = r_map if use_rec else None
                     kd_out = kd_loss(
@@ -253,7 +254,7 @@ def main(cfg, gpu, save_dir, args):
                         proj=probe_module.proj if lambda_feat > 0 else None,
                         lambda_feat=lambda_feat,
                     )
-                    loss = loss + lambda_kd * kd_out["total"]
+                    loss = loss + lambda_kd * kd_out["total"] + lambda_probe * probe_mse
                     if rec_head is not None and use_rec:
                         r_pred = rec_head(s_feats[-1])
                         loss = loss + float(kd_cfg.get("LAMBDA_HEAD", 0.1)) * F.mse_loss(
