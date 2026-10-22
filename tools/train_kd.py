@@ -81,9 +81,8 @@ def load_state(path, model, strict=True):
     missing = [k for k in tgt if k not in used]
     if missing and strict:
         raise RuntimeError(f"checkpoint '{path}' is missing {len(missing)} tensors, e.g. {missing[:4]}")
-    msg = model.load_state_dict(mapped, strict=False)
-    msg.missing_keys = missing
-    return msg
+    model.load_state_dict(mapped, strict=False)
+    return f"loaded {len(mapped)}/{len(target)} tensors (missing {len(missing)})"
 
 
 def build_model(cfg, n_classes, modals, backbone=None, pretrained=None):
