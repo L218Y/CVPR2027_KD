@@ -33,10 +33,24 @@ def load(results: Path):
     return runs
 
 
+def role(run):
+    name = run["experiment"]
+    if name.endswith("_teacher"):
+        return "teacher"
+    if name.endswith("_rgb"):
+        return "rgb"
+    if name.endswith("_uniform"):
+        return "uniform"
+    if name.endswith("_conservative_only"):
+        return "conservative_only"
+    if "_recoverability_" in name:
+        return "recoverability"
+    return run.get("kd_mode", "other")
+
+
 def rank(run):
-    mode = run.get("kd_mode", "rgb")
-    stage = "teacher" if run["experiment"].endswith("teacher") or mode == "teacher" else mode
-    return ORDER.index(mode) if mode in ORDER else len(ORDER)
+    r = role(run)
+    return ORDER.index(r) if r in ORDER else len(ORDER)
 
 
 def main():
@@ -57,24 +71,24 @@ def main():
     lines = ["# Experiment summary", "", "| dataset | run | mode | mIoU | mAcc | ECE | halluc. | PGR | best epoch |",
              "|---|---|---|---|---|---|---|---|---|"]
     for ds, group in by_ds.items():
-        teacher = next((r for r in group if r["experiment"].endswith("teacher")), None)
-        rgb = next((r for r in group if r.get("kd_mode") in (None, "none", "rgb")
-                    and not r["experiment"].endswith("teacher")), None)
+        teacher = next((r for r in group if role(r) == "teacher"), None)
+        rgb = next((r for r in group if role(r) == "rgb"), None)
         base = rgb["best_miou"] if rgb else 0.0
         top = teacher["best_miou"] if teacher else None
 
         for r in sorted(group, key=rank):
             gap = (top - base) if top is not None and top > base else None
             pgr = "—"
-            if gap and r is not rgb:
-                pgr = f"{(r['best_miou'] - base) / gap:.3f}"
-            elif r is rgb:
+            if role(r) == "rgb":
                 pgr = "0.000"
+            elif gap and role(r) not in ("teacher", "rgb"):
+                pgr = f"{(r['best_miou'] - base) / gap:.3f}"
             ece = f"{r['ECE']:.3f}" if "ECE" in r else "—"
+            macc = f"{r['mAcc']:.2f}" if r.get("mAcc") == r.get("mAcc") and r.get("mAcc") is not None else "—"
             hall = f"{r['hallucination_rate']:.3f}" if "hallucination_rate" in r else "—"
             lines.append(
-                f"| {ds} | {r['experiment']} | {r.get('kd_mode', '—')} | {r['best_miou']:.2f} | "
-                f"{r.get('mAcc', float('nan')):.2f} | {ece} | {hall} | {pgr} | {r.get('best_epoch', '—')} |"
+                f"| {ds} | {r['experiment']} | {role(r)} | {r['best_miou']:.2f} | "
+                f"{macc} | {ece} | {hall} | {pgr} | {r.get('best_epoch', '—')} |"
             )
     lines.append("")
     Path(args.out).write_text("\n".join(lines))
