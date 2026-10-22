@@ -62,22 +62,27 @@ def load_state(path, model, strict=True):
     ckpt = torch.load(path, map_location="cpu", weights_only=False)
     if isinstance(ckpt, dict):
         for key in ("model_state_dict", "state_dict", "model"):
-            if key in ckpt:
+            if key in ckpt and isinstance(ckpt[key], dict):
                 ckpt = ckpt[key]
                 break
-    ckpt = {k.replace("module.", "", 1): v for k, v in ckpt.items()}
+
+    def norm(k):
+        k = k.replace("module.", "", 1)
+        return k.replace(".module.", ".")
+
     target = model.state_dict()
-    renamed = 0
-    for key in list(ckpt):
-        if key in target:
-            continue
-        flat = key.replace(".module.", ".")
-        if flat in target:
-            ckpt[flat] = ckpt.pop(key)
-            renamed += 1
-    msg = model.load_state_dict(ckpt, strict=strict)
-    if renamed:
-        msg.missing_keys = [k for k in msg.missing_keys]
+    tgt = {norm(k): k for k in target}
+    mapped, used = {}, set()
+    for k, v in ckpt.items():
+        nk = norm(k)
+        if nk in tgt and target[tgt[nk]].shape == v.shape:
+            mapped[tgt[nk]] = v
+            used.add(nk)
+    missing = [k for k in tgt if k not in used]
+    if missing and strict:
+        raise RuntimeError(f"checkpoint '{path}' is missing {len(missing)} tensors, e.g. {missing[:4]}")
+    msg = model.load_state_dict(mapped, strict=False)
+    msg.missing_keys = missing
     return msg
 
 
