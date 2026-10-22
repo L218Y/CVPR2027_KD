@@ -1,0 +1,40 @@
+{
+  "experiment": "MFNet_CMNeXt-B2_it_conservative_only_s3407",
+  "dataset": "MFNet",
+  "backbone": "CMNeXt-B2",
+  "teacher_backbone": "CMNeXt-B2",
+  "modals": [
+    "img",
+    "thermal"
+  ],
+  "kd_mode": "conservative_only",
+  "tau": 2.0,
+  "eps_max": 0.5,
+  "lambda_kd": 1.0,
+  "lambda_feat": 0.1,
+  "seed": 3407,
+  "epochs": 500,
+  "batch_size": 8,
+  "world_size": 1,
+  "best_miou": 61.01,
+  "mAcc": 71.23,
+  "aAcc": [
+    99.06999969482422,
+    89.98999786376953,
+    70.52999877929688,
+    83.31999969482422,
+    41.150001525878906,
+    41.38999938964844,
+    75.41999816894531,
+    68.94999694824219,
+    71.20999908447266
+  ],
+  "best_epoch": 275,
+  "train_time": "03:02:30",
+  "final_stats": {
+    "loss": 0.06439937054350668,
+    "kd": 0.025326091663113663,
+    "r": 0.920911157009553,
+    "probe": 0.0006178818697737036
+  }
+}
