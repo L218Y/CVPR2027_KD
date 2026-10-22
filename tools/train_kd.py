@@ -201,6 +201,7 @@ def main(cfg, gpu, save_dir, args):
         logger.info(json.dumps(cfg, indent=2))
 
     best_miou, best_epoch, best_acc, best_macc = 0.0, 0, 0.0, 0.0
+    eval_history = []
     warmup = int(kd_cfg.get("WARMUP_EPOCHS", 5))
     lambda_kd = float(kd_cfg.get("LAMBDA_KD", 1.0))
     lambda_feat = float(kd_cfg.get("LAMBDA_FEAT", 0.0))
@@ -296,6 +297,7 @@ def main(cfg, gpu, save_dir, args):
             if writer:
                 writer.add_scalar("val/mIoU", miou, epoch)
             logger.info(f"epoch {epoch + 1} mIoU {miou:.3f} mAcc {macc:.3f} best {best_miou:.3f}")
+            eval_history.append((epoch + 1, float(miou)))
             sd = student.module.state_dict() if distributed else student.state_dict()
             torch.save({"model_state_dict": sd, "epoch": epoch + 1, "miou": miou}, save_dir / "last.pth")
             if probe is not None:
@@ -327,6 +329,8 @@ def main(cfg, gpu, save_dir, args):
             "batch_size": train_cfg["BATCH_SIZE"],
             "world_size": world,
             "best_miou": best_miou,
+            "last10_miou": float(sum(m for _, m in eval_history[-10:]) / max(len(eval_history[-10:]), 1)),
+            "eval_history": eval_history,
             "mAcc": best_macc,
             "acc_per_class": [round(float(x), 2) for x in best_acc],
             "best_epoch": best_epoch,
