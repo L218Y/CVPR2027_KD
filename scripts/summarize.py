@@ -33,18 +33,14 @@ def load(results: Path):
     return runs
 
 
+ROLES = ("teacher", "rgb", "uniform", "conservative_only", "recoverability")
+
+
 def role(run):
     name = run["experiment"]
-    if name.endswith("_teacher"):
-        return "teacher"
-    if name.endswith("_rgb"):
-        return "rgb"
-    if name.endswith("_uniform"):
-        return "uniform"
-    if name.endswith("_conservative_only"):
-        return "conservative_only"
-    if "_recoverability_" in name:
-        return "recoverability"
+    for r in ROLES:
+        if f"_{r}_s" in name or name.endswith(f"_{r}"):
+            return r
     return run.get("kd_mode", "other")
 
 
@@ -68,7 +64,7 @@ def main():
     for r in runs:
         by_ds.setdefault(r.get("dataset", "?"), []).append(r)
 
-    lines = ["# Experiment summary", "", "| dataset | run | mode | mIoU | mAcc | ECE | halluc. | PGR | best epoch |",
+    lines = ["# Experiment summary", "", "| dataset | run | role | mIoU | mAcc | ECE | halluc. | PGR | best epoch |",
              "|---|---|---|---|---|---|---|---|---|"]
     for ds, group in by_ds.items():
         teacher = next((r for r in group if role(r) == "teacher"), None)
