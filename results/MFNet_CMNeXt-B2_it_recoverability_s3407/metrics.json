@@ -1,0 +1,40 @@
+{
+  "experiment": "MFNet_CMNeXt-B2_it_recoverability_s3407",
+  "dataset": "MFNet",
+  "backbone": "CMNeXt-B2",
+  "teacher_backbone": "CMNeXt-B2",
+  "modals": [
+    "img",
+    "thermal"
+  ],
+  "kd_mode": "recoverability",
+  "tau": 2.0,
+  "eps_max": 0.5,
+  "lambda_kd": 1.0,
+  "lambda_feat": 0.1,
+  "seed": 3407,
+  "epochs": 500,
+  "batch_size": 8,
+  "world_size": 1,
+  "best_miou": 60.54,
+  "mAcc": 70.67,
+  "aAcc": [
+    99.05999755859375,
+    90.55999755859375,
+    69.94999694824219,
+    84.30000305175781,
+    42.099998474121094,
+    37.650001525878906,
+    79.37999725341797,
+    70.19000244140625,
+    62.83000183105469
+  ],
+  "best_epoch": 275,
+  "train_time": "05:06:53",
+  "final_stats": {
+    "loss": 0.0651786701411617,
+    "kd": 0.027625825712267234,
+    "r": 0.895675215185905,
+    "probe": 0.0008150377015022523
+  }
+}

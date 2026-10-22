@@ -1,0 +1,163 @@
+20261022 01:30:41 - root - INFO: - teacher loaded: loaded 896/896 tensors (missing 0)
+20261022 01:30:42 - root - INFO: - {
+  "DEVICE": "cuda",
+  "SAVE_DIR": "output",
+  "MODEL": {
+    "NAME": "CMNeXt",
+    "BACKBONE": "CMNeXt-B2",
+    "PRETRAINED": "checkpoints/pretrained/segformer/mit_b2.pth",
+    "RESUME": ""
+  },
+  "DATASET": {
+    "NAME": "MFNet",
+    "ROOT": "data/MFNet",
+    "IGNORE_LABEL": 255,
+    "MODALS": [
+      "img",
+      "thermal"
+    ]
+  },
+  "TRAIN": {
+    "IMAGE_SIZE": [
+      480,
+      640
+    ],
+    "BATCH_SIZE": 8,
+    "EPOCHS": 500,
+    "EVAL_START": 50,
+    "EVAL_INTERVAL": 25,
+    "AMP": true,
+    "DDP": true
+  },
+  "LOSS": {
+    "NAME": "CrossEntropy",
+    "CLS_WEIGHTS": false
+  },
+  "OPTIMIZER": {
+    "NAME": "adamw",
+    "LR": 6e-05,
+    "WEIGHT_DECAY": 0.01
+  },
+  "SCHEDULER": {
+    "NAME": "warmuppolylr",
+    "POWER": 0.9,
+    "WARMUP": 10,
+    "WARMUP_RATIO": 0.1
+  },
+  "KD": {
+    "MODE": "recoverability",
+    "TEACHER_MODALS": [
+      "img",
+      "thermal"
+    ],
+    "TEACHER_BACKBONE": "CMNeXt-B2",
+    "TEACHER_PATH": "output/MFNet_CMNeXt-B2_it_teacher_s3407/best.pth",
+    "TAU": 2.0,
+    "LAMBDA_KD": 1.0,
+    "LAMBDA_FEAT": 0.1,
+    "EPS_MAX": 0.5,
+    "WARMUP_EPOCHS": 5,
+    "PROBE_LR": 0.001,
+    "PROBE_HIDDEN": 128,
+    "DEPLOY_HEAD": false,
+    "LAMBDA_HEAD": 0.1,
+    "LAMBDA_PROBE": 0.1
+  },
+  "EVAL": {
+    "MODEL_PATH": "output/MFNet_CMNeXt-B2_imgt_recoverability_s3407/best.pth",
+    "IMAGE_SIZE": [
+      480,
+      640
+    ],
+    "BATCH_SIZE": 4,
+    "MSF": {
+      "ENABLE": false,
+      "FLIP": true,
+      "SCALES": [
+        0.5,
+        0.75,
+        1.0,
+        1.25,
+        1.5,
+        20261022 02:05:51 - root 20261022 02:17:26 - root - INFO: - epoch 75 mIoU 53.280 mAcc 59.990 best 0.000
+20261022 02:17:27 - root - INFO: - 
+Class   	IoU     	Acc     
+1 unlabeled	97.20	99.05
+2 car   	84.03	91.22
+3 person	54.85	65.26
+4 bike  	70.31	84.75
+5 curve 	27.87	33.42
+6 car_stop	33.12	37.85
+7 guardrail	19.52	28.54
+8 color_cone	51.96	57.75
+9 bump  	40.67	42.03
+== Epoch:  	74	mean_20261022 02:21:23 - root 20261022 02:32:46 - root - INFO: - epoch 100 mIoU 57.180 mAcc 67.260 best 53.280
+20261022 02:32:46 - root - INFO: - 
+Class   	IoU     	Acc     
+1 unlabeled	97.21	98.81
+2 car   	83.62	90.55
+3 person	57.30	68.97
+4 bike  	68.20	87.40
+5 curve 	26.47	30.32
+6 car_stop	39.70	48.06
+7 guardrail	28.02	46.97
+8 color_cone	55.97	67.45
+9 bump  	58.13	66.84
+== Epoch:  	99	mean_20261022 02:36:39 - root 20261022 02:48:05 - root - INFO: - epoch 125 mIoU 58.99020261022 02:51:51 - root - INFO: - epoch 150 mIoU 57.070 mAcc 65.670 best 57.160
+20261022 03:07:13 - root - INFO: - epoch 175 mIoU 58.440 mAcc 68.490 best 57.160
+20261022 03:07:14 - root - INFO: - 
+Class   	IoU     	Acc     
+1 unlabeled	97.29	98.96
+2 car   	83.55	89.96
+3 person	58.20	69.56
+4 bike  	70.66	86.65
+5 curve 	34.03	42.83
+6 car_stop	33.62	38.19
+7 guardrail	43.40	73.42
+8 color_cone	59.46	68.23
+9 bump  	4520261022 03:18:46 - root - INFO: - epoch 175 mIoU 58.41020261022 03:22:25 - root 20261022 03:34:32 - root - INFO: - epoch 200 mIoU 59.05020261022 03:38:10 - root - INFO: - epoch 225 mIoU 58.300 mAcc 67.170 best 58.440
+20261022 03:53:54 - root - INFO: - epoch 250 mIoU 56.930 mAcc 64.830 best 58.440
+20261022 04:09:37 - root - INFO: - epoch 275 mIoU 60.540 mAcc 70.670 best 58.440
+20261022 04:09:37 - root - INFO: - 
+Class   	IoU     	Acc     
+1 unlabeled	97.43	99.06
+2 car   	84.16	90.56
+3 person	58.78	69.95
+4 bike  	72.20	84.30
+5 curve 	34.18	42.10
+6 car_stop	32.92	37.65
+7 guardrail	46.49	79.38
+8 color_cone	61.47	70.19
+9 bump  	57.24	62.83
+== Epoch:  	274	mean_IoU	60.54	mean_Acc	70.67
+20261022 04:25:23 - root - INFO: - epoch 300 mIoU 58.290 mAcc 67.070 best 60.540
+20261022 04:41:08 - root - INFO: - epoch 325 mIoU 57.960 mAcc 66.710 best 60.540
+20261022 04:56:54 - root - INFO: - epoch 350 mIoU 59.160 mAcc 68.020 best 60.540
+20261022 05:12:37 - root - INFO: - epoch 375 mIoU 60.140 mAcc 69.750 best 60.540
+20261022 05:28:18 - root - INFO: - epoch 400 mIoU 58.790 mAcc 67.430 best 60.540
+20261022 05:44:03 - root - INFO: - epoch 425 mIoU 58.960 mAcc 68.200 best 60.540
+20261022 05:59:39 - root - INFO: - epoch 450 mIoU 58.990 mAcc 68.450 best 60.540
+20261022 06:15:19 - root - INFO: - epoch 475 mIoU 59.230 mAcc 68.600 best 60.540
+20261022 06:30:52 - root - INFO: - epoch 500 mIoU 59.300 mAcc 68.570 best 60.540
+20261022 06:30:52 - root - INFO: - ---------  --------
+Best mIoU  60.54
+Time       05:06:53
+---------  --------
+ epoch 350 mIoU 60.490 mAcc 69.230 best 60.210
+20261022 05:09:01 - root - INFO: - 
+Class   	IoU     	Acc     
+1 unlabeled	97.45	99.10
+2 car   	84.66	90.89
+3 person	58.46	70.63
+4 bike  	71.78	84.85
+5 curve 	35.37	42.47
+6 car_stop	30.28	32.71
+7 guardrail	49.14	73.49
+8 color_cone	59.64	67.57
+9 bump  	57.60	61.38
+== Epoch:  	349	mean_IoU	60.49	mean_Acc	69.23
+20261022 05:24:39 - root - INFO: - epoch 375 mIoU 59.730 mAcc 69.020 best 60.490
+20261022 05:40:25 - root - INFO: - epoch 400 mIoU 59.340 mAcc 68.410 best 60.490
+20261022 05:56:01 - root - INFO: - epoch 425 mIoU 59.010 mAcc 68.320 best 60.490
+20261022 06:11:40 - root - INFO: - epoch 450 mIoU 59.010 mAcc 68.430 best 60.490
+20261022 06:27:17 - root - INFO: - epoch 475 mIoU 59.540 mAcc 69.240 best 60.490
