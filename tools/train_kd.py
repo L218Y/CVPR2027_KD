@@ -328,7 +328,7 @@ def main(cfg, gpu, save_dir, args):
             "world_size": world,
             "best_miou": best_miou,
             "mAcc": best_macc,
-            "aAcc": best_acc,
+            "acc_per_class": [round(float(x), 2) for x in best_acc],
             "best_epoch": best_epoch,
             "train_time": time.strftime("%H:%M:%S", elapsed),
             "final_stats": stats,
