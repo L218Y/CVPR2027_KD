@@ -3,3 +3,4 @@ MFNet_CMNeXt-B2_i_rgb_s3407,MFNet,CMNeXt-B2,CMNeXt-B2,img,recoverability,3407,50
 MFNet_CMNeXt-B2_it_conservative_only_s3407,MFNet,CMNeXt-B2,CMNeXt-B2,img-thermal,conservative_only,3407,500,61.01,275,03:02:30
 MFNet_CMNeXt-B2_it_recoverability_s3407,MFNet,CMNeXt-B2,CMNeXt-B2,img-thermal,recoverability,3407,500,60.49,350,05:07:21
 MFNet_CMNeXt-B2_it_teacher_s3407,MFNet,CMNeXt-B2,CMNeXt-B2,img-thermal,recoverability,3407,500,60.07,225,03:44:32
+MFNet_CMNeXt-B2_it_uniform_s3407,MFNet,CMNeXt-B2,CMNeXt-B2,img-thermal,uniform,3407,500,59.3,375,02:55:44
