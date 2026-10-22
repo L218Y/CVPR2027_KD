@@ -49,7 +49,12 @@ class UniformKD(nn.Module):
         kl = F.kl_div(log_p_s, p_t, reduction="none").sum(dim=1, keepdim=True)
         mask = None if labels is None else (labels != ignore_index)
         loss = _masked_mean(kl, mask) * (self.tau ** 2)
-        return {"total": loss, "kd": loss.detach(), "feat": student_logits.new_zeros(())}
+        return {
+            "total": loss,
+            "kd": loss.detach(),
+            "feat": student_logits.new_zeros(()),
+            "r_mean": student_logits.new_ones(()),
+        }
 
 
 class RecoverabilityKD(nn.Module):

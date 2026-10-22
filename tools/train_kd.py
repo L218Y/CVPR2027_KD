@@ -270,7 +270,7 @@ def main(cfg, gpu, save_dir, args):
 
             running["loss"] += loss.item()
             running["kd"] += float(kd_out["kd"].detach())
-            running["r"] += float(kd_out["r_mean"]) if r_small is not None else 0.0
+            running["r"] += float(kd_out["r_mean"]) if "r_mean" in kd_out else 0.0
             running["probe"] += float(probe_mse.detach())
             if args.max_iters and (it + 1) >= args.max_iters:
                 break
