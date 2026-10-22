@@ -64,13 +64,16 @@ def main():
     for r in runs:
         by_ds.setdefault(r.get("dataset", "?"), []).append(r)
 
-    lines = ["# Experiment summary", "", "| dataset | run | role | mIoU | mAcc | ECE | halluc. | PGR | best epoch |",
+    lines = ["# Experiment summary", "", "| dataset | run | role | mIoU | last-10 | mAcc | PGR | best epoch |",
              "|---|---|---|---|---|---|---|---|---|"]
     for ds, group in by_ds.items():
         teacher = next((r for r in group if role(r) == "teacher"), None)
         rgb = next((r for r in group if role(r) == "rgb"), None)
-        base = rgb["best_miou"] if rgb else 0.0
-        top = teacher["best_miou"] if teacher else None
+        def score(r):
+            return r.get("last10_miou") or r["best_miou"]
+
+        base = score(rgb) if rgb else 0.0
+        top = score(teacher) if teacher else None
 
         for r in sorted(group, key=rank):
             gap = (top - base) if top is not None and top > base else None
@@ -78,13 +81,13 @@ def main():
             if role(r) == "rgb":
                 pgr = "0.000"
             elif gap and role(r) not in ("teacher", "rgb"):
-                pgr = f"{(r['best_miou'] - base) / gap:.3f}"
+                pgr = f"{(score(r) - base) / gap:.3f}"
             ece = f"{r['ECE']:.3f}" if "ECE" in r else "—"
             macc = f"{r['mAcc']:.2f}" if r.get("mAcc") == r.get("mAcc") and r.get("mAcc") is not None else "—"
             hall = f"{r['hallucination_rate']:.3f}" if "hallucination_rate" in r else "—"
             lines.append(
                 f"| {ds} | {r['experiment']} | {role(r)} | {r['best_miou']:.2f} | "
-                f"{macc} | {ece} | {hall} | {pgr} | {r.get('best_epoch', '—')} |"
+                f"{r.get('last10_miou', float('nan')):.2f} | {macc} | {pgr} | {r.get('best_epoch', '—')} |"
             )
     lines.append("")
     Path(args.out).write_text("\n".join(lines))
