@@ -279,3 +279,4 @@ wandb/
 logs/
 __pycache__/
 *.pyc
+configs/seeds/
