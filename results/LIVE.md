@@ -4,8 +4,8 @@
 
 | run | epoch | best mIoU | best ep | last mIoU |
 |---|---|---|---|---|
-| p1_v2_s3408_final | 456/500 | 60.680 | 300 | 60.000 |
-| p1_finish | 11/500 | - | - | - |
+| p1_finish | 51/500 | - | - | - |
+| p1_v2_s3408_final | 496/500 | 60.680 | 300 | 59.750 |
 | p0_uniform | 500/500 | 59.950 | 375 | 59.630 |
 
 ## finished runs
