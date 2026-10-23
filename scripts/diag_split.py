@@ -26,6 +26,7 @@ ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 sys.path.insert(0, ROOT)
 sys.path.insert(0, os.path.join(ROOT, "tools"))
 
+import semseg.datasets as _datasets  # noqa: E402
 from semseg.augmentations_mm import get_val_augmentation  # noqa: E402
 from semseg.kd import FeatureProbe  # noqa: E402
 from train_kd import build_model, load_state  # noqa: E402
@@ -59,7 +60,7 @@ def main():
     teacher_modals = kd.get("TEACHER_MODALS", dcfg["MODALS"])
     has_teacher = os.path.isfile(kd.get("TEACHER_PATH", ""))
 
-    ds = eval(dcfg["NAME"])
+    ds = getattr(_datasets, dcfg["NAME"])
     modals = teacher_modals if has_teacher else ["img"]
     valset = ds(dcfg["ROOT"], "val", get_val_augmentation(cfg["EVAL"]["IMAGE_SIZE"]), modals)
     loader = DataLoader(valset, batch_size=cfg["EVAL"]["BATCH_SIZE"], num_workers=args.workers, pin_memory=True)

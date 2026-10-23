@@ -23,6 +23,7 @@ import yaml
 
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
+import semseg.datasets as _datasets  # noqa: E402
 from semseg.augmentations_mm import get_val_augmentation  # noqa: E402
 from semseg.kd import FeatureProbe, RecoverabilityHead  # noqa: E402
 from torch.utils.data import DataLoader  # noqa: E402
@@ -79,7 +80,7 @@ def main():
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
     dcfg, mcfg, kd_cfg = cfg["DATASET"], cfg["MODEL"], cfg.get("KD", {})
 
-    dataset_cls = eval(dcfg["NAME"])
+    dataset_cls = getattr(_datasets, dcfg["NAME"])
     kd_enabled = bool(kd_cfg.get("ENABLE", True))
     infer_modals = ["img"] if kd_enabled else list(dcfg["MODALS"])
     valset = dataset_cls(dcfg["ROOT"], "val", get_val_augmentation(cfg["EVAL"]["IMAGE_SIZE"]), infer_modals)
