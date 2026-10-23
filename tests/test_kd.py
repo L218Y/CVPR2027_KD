@@ -68,6 +68,20 @@ def test_full_loss_backward_with_feature_term():
     assert s.grad is not None and torch.isfinite(s.grad).all()
 
 
+def test_v2_gates_reduce_backoff():
+    torch.manual_seed(0)
+    s = torch.randn(2, 9, 16, 20)
+    t = torch.randn(2, 9, 16, 20)
+    r = torch.rand(2, 16, 20)
+    labels = torch.randint(0, 9, (2, 16, 20))
+    base = RecoverabilityKD(mode="recoverability", eps_max=0.5)(s, t, r=r, labels=labels)
+    gated = RecoverabilityKD(mode="recoverability", eps_max=0.5, gate="disagreement")(s, t, r=r, labels=labels)
+    rare = RecoverabilityKD(mode="recoverability", eps_max=0.5, rare_protect=1.0)(s, t, r=r, labels=labels)
+    for out in (gated, rare):
+        assert torch.isfinite(out["total"])
+        assert abs(out["total"].item() - base["total"].item()) > 1e-6
+
+
 if __name__ == "__main__":
     for name, fn in list(globals().items()):
         if name.startswith("test_") and callable(fn):

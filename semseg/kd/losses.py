@@ -79,9 +79,14 @@ class RecoverabilityKD(nn.Module):
         eps_max: float = 0.5,
         mode: str = "recoverability",
         prior_momentum: float = 0.99,
+        gate: str = "none",
+        rare_protect: float = 0.0,
     ) -> None:
         super().__init__()
         assert mode in {"recoverability", "uniform", "conservative_only", "hard"}
+        assert gate in {"none", "disagreement"}
+        self.gate = gate
+        self.rare_protect = rare_protect
         self.tau = tau
         self.eps_max = eps_max
         self.mode = mode
@@ -144,6 +149,25 @@ class RecoverabilityKD(nn.Module):
             r_map = r_map.clamp(0.0, 1.0)
 
         eps = self.eps_max * (1.0 - r_map)
+
+        if self.gate == "disagreement":
+            # only back off where the student already disagrees with the teacher:
+            # if it predicts the teacher's class confidently, the privileged
+            # evidence is evidently not needed at that pixel.
+            with torch.no_grad():
+                p_s_soft = F.softmax(student_logits / self.tau, dim=1)
+                y_t = p_t.argmax(dim=1, keepdim=True)
+                agree = p_s_soft.gather(1, y_t)
+                eps = eps * (1.0 - agree).clamp(0.0, 1.0)
+
+        if self.rare_protect > 0:
+            # keep the teacher target intact on rare classes: the class prior
+            # would otherwise flatten classes such as pedestrian or bump.
+            with torch.no_grad():
+                y_t = p_t.argmax(dim=1, keepdim=True)
+                pv = prior.view(1, -1, 1, 1).expand(y_t.shape[0], -1, y_t.shape[2], y_t.shape[3])
+                rel = pv.gather(1, y_t) / prior.max().clamp_min(1e-8)
+                eps = eps * rel.pow(self.rare_protect)
         p_u = (1.0 - eps) * p_t + eps * prior.view(1, -1, 1, 1)
         log_p_u = torch.log(p_u.clamp_min(1e-8))
 

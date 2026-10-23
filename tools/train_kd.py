@@ -161,6 +161,8 @@ def main(cfg, gpu, save_dir, args):
                 tau=kd_cfg.get("TAU", 2.0),
                 eps_max=kd_cfg.get("EPS_MAX", 0.5),
                 mode=kd_cfg.get("MODE", "recoverability"),
+                gate=kd_cfg.get("GATE", "none"),
+                rare_protect=float(kd_cfg.get("RARE_PROTECT", 0.0)),
             ).to(device)
 
     iters_per_epoch = len(trainset) // train_cfg["BATCH_SIZE"] // world
@@ -320,6 +322,8 @@ def main(cfg, gpu, save_dir, args):
             "teacher_backbone": kd_cfg.get("TEACHER_BACKBONE", model_cfg["BACKBONE"]),
             "modals": teacher_modals,
             "kd_mode": kd_cfg.get("MODE", "recoverability") if kd_cfg.get("ENABLE", True) else "none",
+            "gate": kd_cfg.get("GATE", "none"),
+            "rare_protect": float(kd_cfg.get("RARE_PROTECT", 0.0)),
             "tau": kd_cfg.get("TAU", 2.0),
             "eps_max": kd_cfg.get("EPS_MAX", 0.5),
             "lambda_kd": lambda_kd,
