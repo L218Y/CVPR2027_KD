@@ -117,10 +117,13 @@ def main():
     for i, batch in enumerate(loader):
         if args.max_images and i * loader.batch_size >= args.max_images:
             break
-        if isinstance(batch, (list, tuple)):
-            inputs = {m: batch[j].to(device, non_blocking=True) for j, m in enumerate(infer_modals)}
-        else:
+        if isinstance(batch, dict):
             inputs = {m: batch[m].to(device, non_blocking=True) for m in infer_modals}
+        else:
+            seq = batch
+            while isinstance(seq, (list, tuple)) and seq and not torch.is_tensor(seq[0]):
+                seq = seq[0]
+            inputs = {m: seq[j].to(device, non_blocking=True) for j, m in enumerate(infer_modals)}
         label = batch["gt_seg_label_ignore_255"].squeeze(1).cpu().numpy()
         logits = model(inputs)
         prob = F.softmax(logits, dim=1)
