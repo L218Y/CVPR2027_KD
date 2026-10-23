@@ -1,23 +1,12 @@
 # Experiment status
 
-- updated: 2026-10-23 09:08:51 UTC
-- host: 7ec8c19e901c (Linux-6.8.0-138-generic-x86_64-with-glibc2.35)
-- gpu: NVIDIA GeForce RTX 4090, 24564 MiB
-- commit: 85dd725
+- updated: 2026-10-23 13:06:16 UTC
+- host: 5fda2408b93d (Linux-6.8.0-147-generic-x86_64-with-glibc2.35)
+- gpu: NVIDIA GeForce RTX 4090, 24564 MiB; NVIDIA GeForce RTX 4090, 24564 MiB
+- commit: 37d3c8d
 - exit status: 0
-- note: seed3409 rgb
+- note: p0 rgb
 
 | experiment | dataset | kd | seed | best mIoU | epoch | time |
 |---|---|---|---|---|---|---|
-| MFNet_CMNeXt-B2_i_rgb_s3407 | MFNet | recoverability | 3407 | 58.95 | 400 | 01:50:49 |
-| MFNet_CMNeXt-B2_i_rgb_s3408 | MFNet | none | 3408 | 59.27 | 175 | 01:51:06 |
-| MFNet_CMNeXt-B2_i_rgb_s3409 | MFNet | none | 3409 | 59.58 | 400 | 02:00:25 |
-| MFNet_CMNeXt-B2_it_conservative_only_s3407 | MFNet | conservative_only | 3407 | 61.01 | 275 | 03:02:30 |
-| MFNet_CMNeXt-B2_it_recoverability_s3407 | MFNet | recoverability | 3407 | 60.49 | 350 | 05:07:21 |
-| MFNet_CMNeXt-B2_it_recoverability_s3407_eps02 | MFNet | recoverability | 3407 | 59.62 | 350 | 03:06:50 |
-| MFNet_CMNeXt-B2_it_recoverability_s3408 | MFNet | recoverability | 3408 | 59.95 | 275 | 03:04:12 |
-| MFNet_CMNeXt-B2_it_teacher_s3407 | MFNet | recoverability | 3407 | 60.07 | 225 | 03:44:32 |
-| MFNet_CMNeXt-B2_it_teacher_s3408 | MFNet | none | 3408 | 58.57 | 375 | 03:44:28 |
-| MFNet_CMNeXt-B2_it_teacher_s3409 | MFNet | none | 3409 | 60.01 | 400 | 03:47:35 |
-| MFNet_CMNeXt-B2_it_uniform_s3407 | MFNet | uniform | 3407 | 59.3 | 375 | 02:55:44 |
-| MFNet_CMNeXt-B2_it_uniform_s3408 | MFNet | uniform | 3408 | 60.79 | 350 | 02:53:44 |
+| MFNet_CMNeXt-B2_i_rgb_s3407 | MFNet | none | 3407 | 61.72 | 275 | 02:01:34 |
