@@ -7,5 +7,6 @@ MFNet_CMNeXt-B2_it_recoverability_s3407_eps02,MFNet,CMNeXt-B2,CMNeXt-B2,img-ther
 MFNet_CMNeXt-B2_it_recoverability_s3408,MFNet,CMNeXt-B2,CMNeXt-B2,img-thermal,recoverability,3408,500,59.95,275,03:04:12
 MFNet_CMNeXt-B2_it_teacher_s3407,MFNet,CMNeXt-B2,CMNeXt-B2,img-thermal,recoverability,3407,500,60.07,225,03:44:32
 MFNet_CMNeXt-B2_it_teacher_s3408,MFNet,CMNeXt-B2,CMNeXt-B2,img-thermal,none,3408,500,58.57,375,03:44:28
+MFNet_CMNeXt-B2_it_teacher_s3409,MFNet,CMNeXt-B2,CMNeXt-B2,img-thermal,none,3409,500,60.01,400,03:47:35
 MFNet_CMNeXt-B2_it_uniform_s3407,MFNet,CMNeXt-B2,CMNeXt-B2,img-thermal,uniform,3407,500,59.3,375,02:55:44
 MFNet_CMNeXt-B2_it_uniform_s3408,MFNet,CMNeXt-B2,CMNeXt-B2,img-thermal,uniform,3408,500,60.79,350,02:53:44

@@ -1,0 +1,215 @@
+20261023 03:20:43 - root - INFO: - {
+  "DEVICE": "cuda",
+  "SAVE_DIR": "output",
+  "MODEL": {
+    "NAME": "CMNeXt",
+    "BACKBONE": "CMNeXt-B2",
+    "PRETRAINED": "checkpoints/pretrained/segformer/mit_b2.pth",
+    "RESUME": ""
+  },
+  "DATASET": {
+    "NAME": "MFNet",
+    "ROOT": "data/MFNet",
+    "IGNORE_LABEL": 255,
+    "MODALS": [
+      "img",
+      "thermal"
+    ]
+  },
+  "TRAIN": {
+    "IMAGE_SIZE": [
+      480,
+      640
+    ],
+    "BATCH_SIZE": 8,
+    "EPOCHS": 500,
+    "EVAL_START": 50,
+    "EVAL_INTERVAL": 25,
+    "AMP": true,
+    "DDP": true
+  },
+  "LOSS": {
+    "NAME": "CrossEntropy",
+    "CLS_WEIGHTS": false
+  },
+  "OPTIMIZER": {
+    "NAME": "adamw",
+    "LR": 6e-05,
+    "WEIGHT_DECAY": 0.01
+  },
+  "SCHEDULER": {
+    "NAME": "warmuppolylr",
+    "POWER": 0.9,
+    "WARMUP": 10,
+    "WARMUP_RATIO": 0.1
+  },
+  "KD": {
+    "ENABLE": false,
+    "TEACHER_MODALS": [
+      "img",
+      "thermal"
+    ]
+  },
+  "EVAL": {
+    "MODEL_PATH": "output/MFNet_CMNeXt-B2_it_teacher_s3407/best.pth",
+    "IMAGE_SIZE": [
+      480,
+      640
+    ],
+    "BATCH_SIZE": 4,
+    "MSF": {
+      "ENABLE": false,
+      "FLIP": true,
+      "SCALES": [
+        0.5,
+        0.75,
+        1.0,
+        1.25,
+        1.5,
+        1.75
+      ]
+    }
+  }
+}
+20261023 03:56:22 - root - INFO: - epoch 75 mIoU 55.660 mAcc 64.870 best 0.000
+20261023 03:56:22 - root - INFO: - 
+Class   	IoU     	Acc     
+1 unlabeled	97.23	99.03
+2 car   	82.93	88.22
+3 person	63.06	79.58
+4 bike  	69.04	78.88
+5 curve 	32.09	40.87
+6 car_stop	29.76	40.77
+7 guardrail	32.45	52.18
+8 color_cone	48.29	54.21
+9 bump  	46.04	50.06
+== Epoch:  	74	mean_IoU	55.66	mean_Acc	64.87
+20261023 04:07:40 - root - INFO: - epoch 100 mIoU 54.800 mAcc 62.150 best 55.660
+20261023 04:18:55 - root - INFO: - epoch 125 mIoU 54.550 mAcc 63.850 best 55.660
+20261023 04:30:13 - root - INFO: - epoch 150 mIoU 56.010 mAcc 64.620 best 55.660
+20261023 04:30:14 - root - INFO: - 
+Class   	IoU     	Acc     
+1 unlabeled	97.35	99.09
+2 car   	84.58	90.93
+3 person	68.01	78.83
+4 bike  	69.93	83.89
+5 curve 	31.36	37.01
+6 car_stop	30.40	35.15
+7 guardrail	33.48	57.51
+8 color_cone	59.06	67.63
+9 bump  	29.90	31.51
+== Epoch:  	149	mean_IoU	56.01	mean_Acc	64.62
+20261023 04:41:39 - root - INFO: - epoch 175 mIoU 57.400 mAcc 66.030 best 56.010
+20261023 04:41:40 - root - INFO: - 
+Class   	IoU     	Acc     
+1 unlabeled	97.42	99.10
+2 car   	84.04	90.84
+3 person	67.57	81.73
+4 bike  	71.63	82.37
+5 curve 	32.04	38.79
+6 car_stop	29.82	32.00
+7 guardrail	34.13	56.48
+8 color_cone	58.57	66.44
+9 bump  	41.37	46.47
+== Epoch:  	174	mean_IoU	57.40	mean_Acc	66.03
+20261023 04:53:07 - root - INFO: - epoch 200 mIoU 57.690 mAcc 64.870 best 57.400
+20261023 04:53:07 - root - INFO: - 
+Class   	IoU     	Acc     
+1 unlabeled	97.50	99.23
+2 car   	85.27	91.28
+3 person	69.44	80.73
+4 bike  	70.91	80.89
+5 curve 	34.07	41.10
+6 car_stop	32.33	35.79
+7 guardrail	32.52	49.86
+8 color_cone	58.54	64.34
+9 bump  	38.63	40.66
+== Epoch:  	199	mean_IoU	57.69	mean_Acc	64.87
+20261023 05:04:33 - root - INFO: - epoch 225 mIoU 58.380 mAcc 65.660 best 57.690
+20261023 05:04:33 - root - INFO: - 
+Class   	IoU     	Acc     
+1 unlabeled	97.45	99.23
+2 car   	84.43	89.82
+3 person	69.82	82.12
+4 bike  	71.19	79.78
+5 curve 	36.93	46.32
+6 car_stop	33.70	36.44
+7 guardrail	37.92	53.63
+8 color_cone	57.30	63.04
+9 bump  	36.64	40.57
+== Epoch:  	224	mean_IoU	58.38	mean_Acc	65.66
+20261023 05:15:40 - root - INFO: - epoch 250 mIoU 58.530 mAcc 66.470 best 58.380
+20261023 05:15:41 - root - INFO: - 
+Class   	IoU     	Acc     
+1 unlabeled	97.50	99.16
+2 car   	85.23	91.82
+3 person	69.84	81.16
+4 bike  	71.06	82.75
+5 curve 	34.43	41.42
+6 car_stop	33.12	37.23
+7 guardrail	40.38	60.84
+8 color_cone	57.26	64.05
+9 bump  	37.99	39.81
+== Epoch:  	249	mean_IoU	58.53	mean_Acc	66.47
+20261023 05:26:47 - root - INFO: - epoch 275 mIoU 57.290 mAcc 64.420 best 58.530
+20261023 05:38:02 - root - INFO: - epoch 300 mIoU 59.150 mAcc 67.650 best 58.530
+20261023 05:38:02 - root - INFO: - 
+Class   	IoU     	Acc     
+1 unlabeled	97.52	99.08
+2 car   	85.88	92.00
+3 person	69.72	81.02
+4 bike  	71.46	85.39
+5 curve 	35.66	44.86
+6 car_stop	34.47	38.45
+7 guardrail	39.50	61.32
+8 color_cone	57.23	63.41
+9 bump  	40.88	43.31
+== Epoch:  	299	mean_IoU	59.15	mean_Acc	67.65
+20261023 05:49:21 - root - INFO: - epoch 325 mIoU 59.080 mAcc 65.880 best 59.150
+20261023 06:00:45 - root - INFO: - epoch 350 mIoU 59.290 mAcc 66.910 best 59.150
+20261023 06:00:46 - root - INFO: - 
+Class   	IoU     	Acc     
+1 unlabeled	97.57	99.24
+2 car   	86.03	91.37
+3 person	70.06	81.23
+4 bike  	72.14	81.88
+5 curve 	35.31	44.02
+6 car_stop	30.58	33.07
+7 guardrail	38.30	57.09
+8 color_cone	59.82	67.12
+9 bump  	43.82	47.13
+== Epoch:  	349	mean_IoU	59.29	mean_Acc	66.91
+20261023 06:12:09 - root - INFO: - epoch 375 mIoU 59.910 mAcc 67.960 best 59.290
+20261023 06:12:09 - root - INFO: - 
+Class   	IoU     	Acc     
+1 unlabeled	97.58	99.30
+2 car   	86.02	91.58
+3 person	70.25	81.72
+4 bike  	71.02	79.45
+5 curve 	35.34	42.44
+6 car_stop	32.70	34.85
+7 guardrail	47.90	74.99
+8 color_cone	57.95	64.58
+9 bump  	40.44	42.76
+== Epoch:  	374	mean_IoU	59.91	mean_Acc	67.96
+20261023 06:23:31 - root - INFO: - epoch 400 mIoU 60.010 mAcc 68.520 best 59.910
+20261023 06:23:31 - root - INFO: - 
+Class   	IoU     	Acc     
+1 unlabeled	97.58	99.25
+2 car   	86.06	91.93
+3 person	69.92	81.22
+4 bike  	71.82	80.53
+5 curve 	34.34	42.15
+6 car_stop	33.11	36.02
+7 guardrail	47.07	76.44
+8 color_cone	57.91	64.26
+9 bump  	42.30	44.91
+== Epoch:  	399	mean_IoU	60.01	mean_Acc	68.52
+20261023 06:34:50 - root - INFO: - epoch 425 mIoU 59.750 mAcc 67.240 best 60.010
+20261023 06:45:59 - root - INFO: - epoch 450 mIoU 59.670 mAcc 67.940 best 60.010
+20261023 06:57:08 - root - INFO: - epoch 475 mIoU 59.760 mAcc 67.550 best 60.010
+20261023 07:08:15 - root - INFO: - epoch 500 mIoU 59.860 mAcc 67.950 best 60.010
+20261023 07:08:15 - root - INFO: - ---------  --------
+Best mIoU  60.01
+Time       03:47:35
+---------  --------
