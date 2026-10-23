@@ -4,10 +4,10 @@
 
 | run | epoch | best mIoU | best ep | last mIoU |
 |---|---|---|---|---|
-| seed3409_teacher | 494/500 | 60.010 | 400 | 59.760 |
+| seed3409_rgb | 50/500 | - | - | - |
+| seed3409_teacher | 500/500 | 60.010 | 400 | 59.860 |
 | seed3408_rapd | 500/500 | 59.950 | 275 | 59.450 |
 | seed3408_uniform | 500/500 | 60.790 | 350 | 60.270 |
-| seed3408_rgb | 500/500 | 59.270 | 175 | 58.300 |
 
 ## finished runs
 
@@ -17,6 +17,7 @@
 | MFNet_CMNeXt-B2_it_uniform_s3408 | 60.79 | 69.80 |
 | MFNet_CMNeXt-B2_it_recoverability_s3407 | 60.49 | 69.23 |
 | MFNet_CMNeXt-B2_it_teacher_s3407 | 60.07 | nan |
+| MFNet_CMNeXt-B2_it_teacher_s3409 | 60.01 | 68.52 |
 | MFNet_CMNeXt-B2_it_recoverability_s3408 | 59.95 | 68.80 |
 | MFNet_CMNeXt-B2_it_recoverability_s3407_eps02 | 59.62 | 68.63 |
 | MFNet_CMNeXt-B2_it_uniform_s3407 | 59.30 | 69.23 |

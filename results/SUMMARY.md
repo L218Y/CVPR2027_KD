@@ -12,3 +12,4 @@
 | MFNet | MFNet_CMNeXt-B2_it_recoverability_s3408 | recoverability | 59.95 | 59.55 | 68.80 | 0.532 | 275 |
 | MFNet | MFNet_CMNeXt-B2_it_teacher_s3407 | teacher | 60.07 | nan | — | — | 225 |
 | MFNet | MFNet_CMNeXt-B2_it_teacher_s3408 | teacher | 58.57 | nan | 67.36 | — | 375 |
+| MFNet | MFNet_CMNeXt-B2_it_teacher_s3409 | teacher | 60.01 | 59.38 | 68.52 | — | 400 |
