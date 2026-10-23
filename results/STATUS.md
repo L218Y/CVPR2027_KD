@@ -1,11 +1,11 @@
 # Experiment status
 
-- updated: 2026-10-22 21:22:20 UTC
+- updated: 2026-10-23 00:16:12 UTC
 - host: 7ec8c19e901c (Linux-6.8.0-138-generic-x86_64-with-glibc2.35)
 - gpu: NVIDIA GeForce RTX 4090, 24564 MiB
-- commit: 5cb596d
+- commit: a6d867c
 - exit status: 0
-- note: seed3408 rgb
+- note: seed3408 uniform
 
 | experiment | dataset | kd | seed | best mIoU | epoch | time |
 |---|---|---|---|---|---|---|
@@ -17,3 +17,4 @@
 | MFNet_CMNeXt-B2_it_teacher_s3407 | MFNet | recoverability | 3407 | 60.07 | 225 | 03:44:32 |
 | MFNet_CMNeXt-B2_it_teacher_s3408 | MFNet | none | 3408 | 58.57 | 375 | 03:44:28 |
 | MFNet_CMNeXt-B2_it_uniform_s3407 | MFNet | uniform | 3407 | 59.3 | 375 | 02:55:44 |
+| MFNet_CMNeXt-B2_it_uniform_s3408 | MFNet | uniform | 3408 | 60.79 | 350 | 02:53:44 |
