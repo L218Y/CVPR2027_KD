@@ -51,8 +51,8 @@ KD:
   DEPLOY_HEAD: false
   LAMBDA_HEAD: 0.1
   LAMBDA_PROBE: 0.1
-  GATE: disagreement
-  RARE_PROTECT: 0.5
+  GATE: none
+  RARE_PROTECT: 1.0
 EVAL:
   MODEL_PATH: output/MFNet_CMNeXt-B2_imgt_recoverability_s3407/best.pth
   IMAGE_SIZE:
