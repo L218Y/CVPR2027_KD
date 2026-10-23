@@ -91,14 +91,23 @@ def main():
     r_sum = {i: 0.0 for i in range(n)}
     r_cnt = {i: 0 for i in range(n)}
 
-    for i, (sample, label) in enumerate(loader):
+    for i, batch in enumerate(loader):
         if args.max_images and i * loader.batch_size >= args.max_images:
             break
         files = valset.files[i * loader.batch_size:(i + 1) * loader.batch_size]
-        sample = [x.to(device) for x in sample]
-        label_np = label.squeeze(1).cpu().numpy()
+        if isinstance(batch, dict):
+            sample, lbl = batch, batch["gt_seg_label_ignore_255"]
+        else:
+            sample, lbl = batch[0], batch[1]
+            while isinstance(sample, (list, tuple)) and sample and not torch.is_tensor(sample[0]):
+                sample = sample[0]
+        if isinstance(sample, dict):
+            tensors = [sample[m].to(device) for m in modals]
+        else:
+            tensors = [x.to(device) for x in sample]
+        label_np = lbl.squeeze(1).cpu().numpy()
 
-        feats = model.backbone(sample[:len(infer_modals)])
+        feats = model.backbone(tensors[:len(infer_modals)])
         logits = model.decode_head(feats)
         logits = F.interpolate(logits, size=label_np.shape[-2:], mode="bilinear", align_corners=False)
         pred = logits.argmax(1).cpu().numpy()
@@ -108,7 +117,7 @@ def main():
             hists[cond] = hist_add(hists[cond], pred[k], label_np[k], n)
 
         if probe is not None:
-            r = probe.score(feats[-1], teacher.backbone(sample)[-1])
+            r = probe.score(feats[-1], teacher.backbone(tensors)[-1])
             r = F.interpolate(r.unsqueeze(1), size=label_np.shape[-2:], mode="bilinear",
                               align_corners=False).squeeze(1).cpu().numpy()
             for k in range(label_np.shape[0]):
