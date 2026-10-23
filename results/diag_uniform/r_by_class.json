@@ -1,0 +1,72 @@
+{
+  "run": "output/MFNet_CMNeXt-B2_it_uniform_s3407",
+  "cfg": "configs/kd_mfnet_uniform.yaml",
+  "r": {
+    "all": {
+      "unlabeled": 0.9293680902270731,
+      "car": 0.8975110304169898,
+      "person": 0.8654395582614538,
+      "bike": 0.8809081639864126,
+      "curve": 0.8614234647725769,
+      "car_stop": 0.8408125685444521,
+      "guardrail": 0.8288922990425885,
+      "color_cone": 0.8446502036255907,
+      "bump": 0.8548992659709391
+    },
+    "all_pixels": {
+      "unlabeled": 110824522,
+      "car": 4219671,
+      "person": 1106006,
+      "bike": 2122305,
+      "curve": 684884,
+      "car_stop": 499275,
+      "guardrail": 75317,
+      "color_cone": 361079,
+      "bump": 529341
+    },
+    "day": {
+      "unlabeled": 0.9342496415067255,
+      "car": 0.9153705163163364,
+      "person": 0.8740225543212061,
+      "bike": 0.8583060116123664,
+      "curve": 0.8671597514827111,
+      "car_stop": 0.8404107245677196,
+      "guardrail": null,
+      "color_cone": 0.8486692101486083,
+      "bump": 0.8687107378338305
+    },
+    "day_pixels": {
+      "unlabeled": 58475907,
+      "car": 2597689,
+      "person": 599211,
+      "bike": 301682,
+      "curve": 533122,
+      "car_stop": 99757,
+      "guardrail": 0,
+      "color_cone": 53233,
+      "bump": 315399
+    },
+    "night": {
+      "unlabeled": 0.9239151639434516,
+      "car": 0.8689081297273472,
+      "person": 0.8552914201544081,
+      "bike": 0.8846533998383749,
+      "curve": 0.8412725663692868,
+      "car_stop": 0.8409129063254455,
+      "guardrail": 0.8288922990425885,
+      "color_cone": 0.8439552334968906,
+      "bump": 0.834538025942875
+    },
+    "night_pixels": {
+      "unlabeled": 52348615,
+      "car": 1621982,
+      "person": 506795,
+      "bike": 1820623,
+      "curve": 151762,
+      "car_stop": 399518,
+      "guardrail": 75317,
+      "color_cone": 307846,
+      "bump": 213942
+    }
+  }
+}
