@@ -1,0 +1,47 @@
+{
+  "checkpoint": "output/MFNet_CMNeXt-B2_it_teacher_s3407/best.pth",
+  "teacher": "",
+  "conditions": {
+    "day": {
+      "mIoU": 10.53219736002634,
+      "n_pixels": 62976000,
+      "per_class": {
+        "unlabeled": 92.34340762996412,
+        "car": 0.16998791113595502,
+        "person": 0.06820544561892686,
+        "bike": 0.0735744006831364,
+        "curve": 0.0,
+        "car_stop": 0.09594509147756734,
+        "guardrail": 0.0,
+        "color_cone": 2.038655761357355,
+        "bump": 0.0
+      }
+    },
+    "night": {
+      "mIoU": 10.412625237271437,
+      "n_pixels": 57446400,
+      "per_class": {
+        "unlabeled": 88.95080766030877,
+        "car": 0.47229553801254665,
+        "person": 0.5216087447782098,
+        "bike": 0.10296729391575041,
+        "curve": 0.0,
+        "car_stop": 0.175022906065709,
+        "guardrail": 0.1855585490748836,
+        "color_cone": 3.3053664432870575,
+        "bump": 0.0
+      }
+    }
+  },
+  "r_by_class": {
+    "unlabeled": null,
+    "car": null,
+    "person": null,
+    "bike": null,
+    "curve": null,
+    "car_stop": null,
+    "guardrail": null,
+    "color_cone": null,
+    "bump": null
+  }
+}
