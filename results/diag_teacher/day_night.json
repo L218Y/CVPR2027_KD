@@ -1,0 +1,60 @@
+{
+  "cfg": "configs/teacher_mfnet.yaml",
+  "ckpt": "output/MFNet_CMNeXt-B2_it_teacher_s3407/best.pth",
+  "modals": [
+    "img",
+    "thermal"
+  ],
+  "n_images": {
+    "day": 205,
+    "night": 187
+  },
+  "load": "loaded 896/896 tensors (missing 0)",
+  "conditions": {
+    "day": {
+      "mIoU": 60.857042347337774,
+      "per_class": {
+        "unlabeled": 98.18713933097911,
+        "car": 90.35292466489994,
+        "person": 71.49273484626852,
+        "bike": 56.163733925820345,
+        "curve": 39.73277578297322,
+        "car_stop": 49.96715157203191,
+        "guardrail": 0.0,
+        "color_cone": 75.96357049411291,
+        "bump": 65.85335050895405
+      },
+      "pixels": 62976000
+    },
+    "night": {
+      "mIoU": 57.98835828777598,
+      "per_class": {
+        "unlabeled": 96.8950945546364,
+        "car": 77.55533071819849,
+        "person": 65.73678352045515,
+        "bike": 72.95704963725643,
+        "curve": 33.379446750115285,
+        "car_stop": 33.69087235559781,
+        "guardrail": 43.76927107041939,
+        "color_cone": 54.395664173891134,
+        "bump": 43.51571180941375
+      },
+      "pixels": 57446400
+    }
+  },
+  "overall": {
+    "mIoU": 61.28310167235223,
+    "per_class": {
+      "unlabeled": 97.57398481944382,
+      "car": 85.28421429606374,
+      "person": 68.9150913642091,
+      "bike": 70.47850331402408,
+      "curve": 38.38753507084752,
+      "car_stop": 37.12975431423766,
+      "guardrail": 39.030536046627404,
+      "color_cone": 57.54051132556286,
+      "bump": 57.207784500153956
+    },
+    "pixels": 120422400
+  }
+}
