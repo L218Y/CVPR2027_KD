@@ -56,9 +56,13 @@ python3 scripts/r_by_class.py --run output/MFNet_CMNeXt-B2_it_uniform_s3407 \
 bash scripts/sync_results.sh "P0 recoverability diagnostic" >> "$LOG" 2>&1
 say "r diagnostic done"
 
-# 4. Remaining seed on the free GPU.
+# 4. Seed 3407 on the GPU the uniform run releases; 3409 on the other one.
+bash scripts/run_and_sync.sh configs/kd_mfnet_v2.yaml "p1 v2 s3407 final" --seed 3407 --tag v2 >> "$LOG" 2>&1 &
+S3407=$!
 wait $S3408
-bash scripts/run_and_sync.sh configs/kd_mfnet_v2.yaml "p1 v2 s3409 final" --seed 3409 --tag v2 >> "$LOG" 2>&1
+bash scripts/run_and_sync.sh configs/kd_mfnet_v2.yaml "p1 v2 s3409 final" --seed 3409 --tag v2 >> "$LOG" 2>&1 &
+S3409=$!
+wait $S3407 $S3409
 
 python3 scripts/verify_stats.py >> "$LOG" 2>&1
 bash scripts/sync_results.sh "P0+P1 complete" >> "$LOG" 2>&1
