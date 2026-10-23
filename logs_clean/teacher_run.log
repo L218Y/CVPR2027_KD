@@ -1,0 +1,215 @@
+run: configs/teacher_mfnet.yaml started at 2026-10-21T15:16:07Z
+/root/.local/lib/python3.10/site-packages/timm/models/layers/__init__.py:49: FutureWarning: Importing from timm.models.layers is deprecated, please import via timm.layers
+  warnings.warn(f"Importing from {__name__} is deprecated, please import via timm.layers", FutureWarning)
+20261021 15:16:12 - root - INFO: - {
+  "DEVICE": "cuda",
+  "SAVE_DIR": "output",
+  "MODEL": {
+    "NAME": "CMNeXt",
+    "BACKBONE": "CMNeXt-B2",
+    "PRETRAINED": "checkpoints/pretrained/segformer/mit_b2.pth",
+    "RESUME": ""
+  },
+  "DATASET": {
+    "NAME": "MFNet",
+    "ROOT": "data/MFNet",
+    "IGNORE_LABEL": 255,
+    "MODALS": [
+      "img",
+      "thermal"
+    ]
+  },
+  "TRAIN": {
+    "IMAGE_SIZE": [
+      480,
+      640
+    ],
+    "BATCH_SIZE": 8,
+    "EPOCHS": 500,
+    "EVAL_START": 50,
+    "EVAL_INTERVAL": 25,
+    "AMP": true,
+    "DDP": true
+  },
+  "LOSS": {
+    "NAME": "CrossEntropy",
+    "CLS_WEIGHTS": false
+  },
+  "OPTIMIZER": {
+    "NAME": "adamw",
+    "LR": 6e-05,
+    "WEIGHT_DECAY": 0.01
+  },
+  "SCHEDULER": {
+    "NAME": "warmuppolylr",
+    "POWER": 0.9,
+    "WARMUP": 10,
+    "WARMUP_RATIO": 0.1
+  },
+  "KD": {
+    "ENABLE": false,
+    "TEACHER_MODALS": [
+      "img",
+      "thermal"
+    ]
+  },
+  "EVAL": {
+    "MODEL_PATH": "output/MFNet_CMNeXt-B2_imgt_teacher_s3407/best.pth",
+    "IMAGE_SIZE": [
+      480,
+      640
+    ],
+    "BATCH_SIZE": 4,
+    "MSF": {
+      "ENABLE": false,
+      "FLIP": true,
+      "SCALES": [
+        0.5,
+        0.75,
+        1.0,
+        1.25,
+        1.5,
+        1.75
+      ]
+    }
+  }
+}
+Found 784 train images.
+Found 392 val images.
+  scheduler.step()
+Evaluating...
+20261021 15:51:04 - root - INFO: - epoch 75 mIoU 54.160 mAcc 64.960 best 0.000
+20261021 15:51:05 - root - INFO: - 
+Class   	IoU     	Acc     
+1 unlabeled	96.90	98.78
+2 car   	77.45	84.78
+3 person	63.37	78.48
+4 bike  	67.28	81.32
+5 curve 	31.21	43.58
+6 car_stop	22.33	25.25
+7 guardrail	33.71	59.90
+8 color_cone	48.22	57.89
+9 bump  	46.97	54.67
+== Epoch:  	74	mean_IoU	54.16	mean_Acc	64.96
+Evaluating...
+20261021 16:02:15 - root - INFO: - epoch 100 mIoU 57.320 mAcc 66.120 best 54.160
+20261021 16:02:16 - root - INFO: - 
+Class   	IoU     	Acc     
+1 unlabeled	97.30	99.00
+2 car   	83.01	90.00
+3 person	67.37	80.32
+4 bike  	69.85	81.52
+5 curve 	35.14	44.85
+6 car_stop	26.96	33.48
+7 guardrail	37.89	57.24
+8 color_cone	54.08	61.39
+9 bump  	44.26	47.31
+== Epoch:  	99	mean_IoU	57.32	mean_Acc	66.12
+Evaluating...
+20261021 16:13:45 - root - INFO: - epoch 125 mIoU 57.960 mAcc 67.820 best 57.320
+20261021 16:13:46 - root - INFO: - 
+Class   	IoU     	Acc     
+1 unlabeled	97.36	99.04
+2 car   	84.89	92.89
+3 person	67.37	78.22
+4 bike  	69.44	79.75
+5 curve 	36.64	47.34
+6 car_stop	23.19	26.02
+7 guardrail	47.79	80.40
+8 color_cone	57.36	67.18
+9 bump  	37.64	39.54
+== Epoch:  	124	mean_IoU	57.96	mean_Acc	67.82
+Evaluating...
+20261021 16:25:00 - root - INFO: - epoch 150 mIoU 58.100 mAcc 70.180 best 57.960
+20261021 16:25:00 - root - INFO: - 
+Class   	IoU     	Acc     
+1 unlabeled	97.16	98.64
+2 car   	79.87	93.26
+3 person	68.23	79.83
+4 bike  	70.07	82.84
+5 curve 	33.41	40.67
+6 car_stop	30.80	39.95
+7 guardrail	36.94	76.09
+8 color_cone	57.06	64.91
+9 bump  	49.37	55.40
+== Epoch:  	149	mean_IoU	58.10	mean_Acc	70.18
+Evaluating...
+20261021 16:35:30 - root - INFO: - epoch 175 mIoU 58.150 mAcc 68.060 best 58.100
+20261021 16:35:30 - root - INFO: - 
+Class   	IoU     	Acc     
+1 unlabeled	97.49	99.10
+2 car   	85.66	91.41
+3 person	68.02	80.22
+4 bike  	71.09	83.50
+5 curve 	33.53	40.34
+6 car_stop	29.40	32.93
+7 guardrail	36.60	68.90
+8 color_cone	57.65	66.63
+9 bump  	43.90	49.46
+== Epoch:  	174	mean_IoU	58.15	mean_Acc	68.06
+Evaluating...
+20261021 16:46:56 - root - INFO: - epoch 200 mIoU 60.030 mAcc 70.030 best 58.150
+20261021 16:46:56 - root - INFO: - 
+Class   	IoU     	Acc     
+1 unlabeled	97.50	99.01
+2 car   	85.90	91.95
+3 person	69.58	82.20
+4 bike  	70.78	83.97
+5 curve 	36.30	46.10
+6 car_stop	37.00	46.05
+7 guardrail	44.08	70.76
+8 color_cone	59.04	67.44
+9 bump  	40.07	42.83
+== Epoch:  	199	mean_IoU	60.03	mean_Acc	70.03
+Evaluating...
+20261021 16:58:21 - root - INFO: - epoch 225 mIoU 60.070 mAcc 70.340 best 60.030
+20261021 16:58:21 - root - INFO: - 
+Class   	IoU     	Acc     
+1 unlabeled	97.48	98.96
+2 car   	85.61	92.13
+3 person	68.48	80.45
+4 bike  	69.39	87.46
+5 curve 	35.99	43.95
+6 car_stop	36.35	40.10
+7 guardrail	45.51	78.57
+8 color_cone	56.85	63.65
+9 bump  	44.98	47.80
+== Epoch:  	224	mean_IoU	60.07	mean_Acc	70.34
+Evaluating...
+20261021 17:09:32 - root - INFO: - epoch 250 mIoU 59.340 mAcc 68.320 best 60.070
+Evaluating...
+20261021 17:20:50 - root - INFO: - epoch 275 mIoU 59.720 mAcc 69.950 best 60.070
+Evaluating...
+20261021 17:31:52 - root - INFO: - epoch 300 mIoU 59.950 mAcc 71.150 best 60.070
+Evaluating...
+20261021 17:43:07 - root - INFO: - epoch 325 mIoU 59.600 mAcc 68.480 best 60.070
+Evaluating...
+20261021 17:54:10 - root - INFO: - epoch 350 mIoU 60.050 mAcc 68.790 best 60.070
+Evaluating...
+20261021 18:05:16 - root - INFO: - epoch 375 mIoU 58.870 mAcc 68.380 best 60.070
+Evaluating...
+20261021 18:16:24 - root - INFO: - epoch 400 mIoU 58.440 mAcc 67.510 best 60.070
+Evaluating...
+20261021 18:27:28 - root - INFO: - epoch 425 mIoU 59.360 mAcc 68.480 best 60.070
+Evaluating...
+20261021 18:38:39 - root - INFO: - epoch 450 mIoU 59.050 mAcc 67.830 best 60.070
+Evaluating...
+20261021 18:49:42 - root - INFO: - epoch 475 mIoU 58.630 mAcc 67.550 best 60.070
+Evaluating...
+20261021 19:00:42 - root - INFO: - epoch 500 mIoU 59.190 mAcc 68.110 best 60.070
+20261021 19:00:42 - root - INFO: - ---------  --------
+Best mIoU  60.07
+Time       03:44:32
+---------  --------
+collected 1 experiment(s) into results/
+sync: pushing to origin/main
+To https://github.com/L218Y/CVPR2027_KD.git
+ ! [rejected]        HEAD -> main (fetch first)
+error: failed to push some refs to 'https://github.com/L218Y/CVPR2027_KD.git'
+hint: Updates were rejected because the remote contains work that you do
+hint: not have locally. This is usually caused by another repository pushing
+hint: to the same ref. You may want to first integrate the remote changes
+hint: (e.g., 'git pull ...') before pushing again.
+hint: See the 'Note about fast-forwards' in 'git push --help' for details.
+sync failed (exit 1)
+run: finished with status 0

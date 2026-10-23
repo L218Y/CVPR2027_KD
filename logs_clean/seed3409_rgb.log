@@ -1,0 +1,182 @@
+run: configs/seeds/rgb_s3409.yaml started at 2026-10-23T07:08:19Z
+/root/.local/lib/python3.10/site-packages/timm/models/layers/__init__.py:49: FutureWarning: Importing from timm.models.layers is deprecated, please import via timm.layers
+  warnings.warn(f"Importing from {__name__} is deprecated, please import via timm.layers", FutureWarning)
+20261023 07:08:24 - root - INFO: - {
+  "DEVICE": "cuda",
+  "SAVE_DIR": "output",
+  "MODEL": {
+    "NAME": "CMNeXt",
+    "BACKBONE": "CMNeXt-B2",
+    "PRETRAINED": "checkpoints/pretrained/segformer/mit_b2.pth",
+    "RESUME": ""
+  },
+  "DATASET": {
+    "NAME": "MFNet",
+    "ROOT": "data/MFNet",
+    "IGNORE_LABEL": 255,
+    "MODALS": [
+      "img"
+    ]
+  },
+  "TRAIN": {
+    "IMAGE_SIZE": [
+      480,
+      640
+    ],
+    "BATCH_SIZE": 8,
+    "EPOCHS": 500,
+    "EVAL_START": 50,
+    "EVAL_INTERVAL": 25,
+    "AMP": true,
+    "DDP": true
+  },
+  "LOSS": {
+    "NAME": "CrossEntropy",
+    "CLS_WEIGHTS": false
+  },
+  "OPTIMIZER": {
+    "NAME": "adamw",
+    "LR": 6e-05,
+    "WEIGHT_DECAY": 0.01
+  },
+  "SCHEDULER": {
+    "NAME": "warmuppolylr",
+    "POWER": 0.9,
+    "WARMUP": 10,
+    "WARMUP_RATIO": 0.1
+  },
+  "KD": {
+    "ENABLE": false
+  },
+  "EVAL": {
+    "MODEL_PATH": "output/MFNet_CMNeXt-B2_i_rgb_s3407/best.pth",
+    "IMAGE_SIZE": [
+      480,
+      640
+    ],
+    "BATCH_SIZE": 4,
+    "MSF": {
+      "ENABLE": false,
+      "FLIP": true,
+      "SCALES": [
+        0.5,
+        0.75,
+        1.0,
+        1.25,
+        1.5,
+        1.75
+      ]
+    }
+  }
+}
+Found 784 train images.
+Found 392 val images.
+_IncompatibleKeys(missing_keys=[], unexpected_keys=['head.weight', 'head.bias'])
+  scheduler.step()
+Evaluating...
+20261023 07:26:36 - root - INFO: - epoch 75 mIoU 56.800 mAcc 68.660 best 0.000
+20261023 07:26:36 - root - INFO: - 
+Class   	IoU     	Acc     
+1 unlabeled	97.10	98.69
+2 car   	82.21	89.80
+3 person	55.31	69.12
+4 bike  	69.04	86.01
+5 curve 	32.74	44.33
+6 car_stop	36.13	45.37
+7 guardrail	32.54	63.80
+8 color_cone	55.19	64.27
+9 bump  	50.93	56.58
+== Epoch:  	74	mean_IoU	56.80	mean_Acc	68.66
+Evaluating...
+20261023 07:32:34 - root - INFO: - epoch 100 mIoU 55.070 mAcc 62.540 best 56.800
+Evaluating...
+20261023 07:38:33 - root - INFO: - epoch 125 mIoU 57.870 mAcc 68.190 best 56.800
+20261023 07:38:33 - root - INFO: - 
+Class   	IoU     	Acc     
+1 unlabeled	97.29	98.90
+2 car   	83.62	91.47
+3 person	57.15	69.12
+4 bike  	71.01	83.90
+5 curve 	34.19	45.50
+6 car_stop	42.93	51.38
+7 guardrail	34.96	62.67
+8 color_cone	57.36	65.11
+9 bump  	42.35	45.66
+== Epoch:  	124	mean_IoU	57.87	mean_Acc	68.19
+Evaluating...
+20261023 07:44:33 - root - INFO: - epoch 150 mIoU 57.190 mAcc 65.140 best 57.870
+Evaluating...
+20261023 07:50:33 - root - INFO: - epoch 175 mIoU 58.480 mAcc 68.110 best 57.870
+20261023 07:50:34 - root - INFO: - 
+Class   	IoU     	Acc     
+1 unlabeled	97.35	99.02
+2 car   	83.98	90.99
+3 person	58.29	70.60
+4 bike  	71.08	81.49
+5 curve 	31.60	38.08
+6 car_stop	37.55	50.46
+7 guardrail	35.35	59.08
+8 color_cone	61.14	70.46
+9 bump  	49.98	52.82
+== Epoch:  	174	mean_IoU	58.48	mean_Acc	68.11
+Evaluating...
+20261023 07:56:35 - root - INFO: - epoch 200 mIoU 59.140 mAcc 68.810 best 58.480
+20261023 07:56:35 - root - INFO: - 
+Class   	IoU     	Acc     
+1 unlabeled	97.34	98.99
+2 car   	83.34	90.73
+3 person	57.37	70.91
+4 bike  	71.18	82.95
+5 curve 	33.47	41.86
+6 car_stop	38.47	46.56
+7 guardrail	43.93	70.25
+8 color_cone	55.57	60.98
+9 bump  	51.57	56.07
+== Epoch:  	199	mean_IoU	59.14	mean_Acc	68.81
+Evaluating...
+20261023 08:02:35 - root - INFO: - epoch 225 mIoU 58.880 mAcc 67.840 best 59.140
+Evaluating...
+20261023 08:08:36 - root - INFO: - epoch 250 mIoU 57.720 mAcc 65.990 best 59.140
+Evaluating...
+20261023 08:14:39 - root - INFO: - epoch 275 mIoU 57.420 mAcc 67.050 best 59.140
+Evaluating...
+20261023 08:20:39 - root - INFO: - epoch 300 mIoU 58.650 mAcc 68.030 best 59.140
+Evaluating...
+20261023 08:26:41 - root - INFO: - epoch 325 mIoU 58.660 mAcc 68.370 best 59.140
+Evaluating...
+20261023 08:32:40 - root - INFO: - epoch 350 mIoU 58.030 mAcc 67.210 best 59.140
+Evaluating...
+20261023 08:38:43 - root - INFO: - epoch 375 mIoU 59.040 mAcc 68.880 best 59.140
+Evaluating...
+20261023 08:44:40 - root - INFO: - epoch 400 mIoU 59.580 mAcc 69.510 best 59.140
+20261023 08:44:40 - root - INFO: - 
+Class   	IoU     	Acc     
+1 unlabeled	97.42	99.12
+2 car   	83.78	90.89
+3 person	58.11	69.40
+4 bike  	71.35	80.41
+5 curve 	34.80	43.13
+6 car_stop	32.95	36.87
+7 guardrail	44.12	79.63
+8 color_cone	58.77	66.16
+9 bump  	54.92	60.00
+== Epoch:  	399	mean_IoU	59.58	mean_Acc	69.51
+Evaluating...
+20261023 08:50:37 - root - INFO: - epoch 425 mIoU 58.150 mAcc 66.990 best 59.580
+Evaluating...
+20261023 08:56:39 - root - INFO: - epoch 450 mIoU 58.730 mAcc 67.520 best 59.580
+Evaluating...
+20261023 09:02:46 - root - INFO: - epoch 475 mIoU 58.680 mAcc 68.520 best 59.580
+Evaluating...
+20261023 09:08:48 - root - INFO: - epoch 500 mIoU 58.670 mAcc 67.680 best 59.580
+20261023 09:08:48 - root - INFO: - ---------  --------
+Best mIoU  59.58
+Time       02:00:25
+---------  --------
+collected 12 experiment(s) into results/
+sync: rebasing onto origin/main
+sync: pushing to origin/main
+To https://github.com/L218Y/CVPR2027_KD.git
+   85dd725..ab79961  HEAD -> main
+sync: done
+run: finished with status 0
