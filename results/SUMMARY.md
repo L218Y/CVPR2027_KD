@@ -4,6 +4,7 @@
 |---|---|---|---|---|---|---|---|---|
 | MFNet | MFNet_CMNeXt-B2_i_rgb_s3407 | rgb | 58.95 | nan | — | 0.000 | 400 |
 | MFNet | MFNet_CMNeXt-B2_i_rgb_s3408 | rgb | 59.27 | 58.17 | 69.01 | 0.000 | 175 |
+| MFNet | MFNet_CMNeXt-B2_i_rgb_s3409 | rgb | 59.58 | 58.56 | 69.51 | 0.000 | 400 |
 | MFNet | MFNet_CMNeXt-B2_it_uniform_s3407 | uniform | 59.30 | nan | 69.23 | 0.312 | 375 |
 | MFNet | MFNet_CMNeXt-B2_it_uniform_s3408 | uniform | 60.79 | 60.24 | 69.80 | 1.153 | 350 |
 | MFNet | MFNet_CMNeXt-B2_it_conservative_only_s3407 | conservative_only | 61.01 | nan | 71.23 | 1.839 | 275 |
