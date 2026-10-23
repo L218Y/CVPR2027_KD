@@ -1,0 +1,59 @@
+{
+  "cfg": "configs/rgb_mfnet.yaml",
+  "ckpt": "output/MFNet_CMNeXt-B2_it_recoverability_s3408_v2/best.pth",
+  "modals": [
+    "img"
+  ],
+  "n_images": {
+    "day": 205,
+    "night": 187
+  },
+  "load": "loaded 348/348 tensors (missing 0)",
+  "conditions": {
+    "day": {
+      "mIoU": 58.74935357622061,
+      "per_class": {
+        "unlabeled": 98.0208324897285,
+        "car": 88.78911385132005,
+        "person": 67.36043528266832,
+        "bike": 55.65492135448863,
+        "curve": 38.263926681565025,
+        "car_stop": 44.74778165767236,
+        "guardrail": 0.0,
+        "color_cone": 76.28180938161414,
+        "bump": 59.62536148692834
+      },
+      "pixels": 62976000
+    },
+    "night": {
+      "mIoU": 56.41935900389669,
+      "per_class": {
+        "unlabeled": 96.69642606498718,
+        "car": 75.55232738453904,
+        "person": 46.10498447228416,
+        "bike": 73.50342313192007,
+        "curve": 28.425588224036396,
+        "car_stop": 42.71394621581959,
+        "guardrail": 50.33290279571685,
+        "color_cone": 58.47483886960833,
+        "bump": 35.969793876158604
+      },
+      "pixels": 57446400
+    }
+  },
+  "overall": {
+    "mIoU": 60.68324751635517,
+    "per_class": {
+      "unlabeled": 97.39156918391362,
+      "car": 83.57046145166034,
+      "person": 57.75858083419798,
+      "bike": 70.8632431287905,
+      "curve": 36.20478721882385,
+      "car_stop": 43.18228890184578,
+      "guardrail": 45.57781550650821,
+      "color_cone": 61.08414414544371,
+      "bump": 50.51633727601257
+    },
+    "pixels": 120422400
+  }
+}
