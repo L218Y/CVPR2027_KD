@@ -16,7 +16,7 @@
   "batch_size": 8,
   "world_size": 1,
   "best_miou": 59.58,
-  "last10_miou": 58.56099999999999,
+  "last10_miou": 58.561,
   "eval_history": [
     [
       75,
