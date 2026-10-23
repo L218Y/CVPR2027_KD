@@ -1,5 +1,5 @@
-20261022 09:42:40 - root - INFO: - teacher loaded: loaded 896/896 tensors (missing 0)
-20261022 09:42:40 - root - INFO: - {
+20261023 14:54:38 - root - INFO: - teacher loaded: loaded 896/896 tensors (missing 0)
+20261023 14:54:38 - root - INFO: - {
   "DEVICE": "cuda",
   "SAVE_DIR": "output",
   "MODEL": {
@@ -84,85 +84,85 @@
     }
   }
 }
-20261022 10:09:28 - root - INFO: - epoch 75 mIoU 54.500 mAcc 62.550 best 0.000
-20261022 10:09:28 - root - INFO: - 
+20261023 15:22:08 - root - INFO: - epoch 75 mIoU 54.840 mAcc 64.510 best 0.000
+20261023 15:22:08 - root - INFO: - 
 Class   	IoU     	Acc     
-1 unlabeled	97.22	98.99
-2 car   	83.19	90.65
-3 person	54.03	63.86
-4 bike  	70.09	84.47
-5 curve 	30.54	36.99
-6 car_stop	36.95	46.41
-7 guardrail	22.76	38.29
-8 color_cone	52.18	58.32
-9 bump  	43.56	44.92
-== Epoch:  	74	mean_IoU	54.50	mean_Acc	62.55
-20261022 10:18:17 - root - INFO: - epoch 100 mIoU 57.810 mAcc 70.670 best 54.500
-20261022 10:18:17 - root - INFO: - 
+1 unlabeled	97.14	98.92
+2 car   	83.49	90.82
+3 person	53.68	62.27
+4 bike  	69.10	86.20
+5 curve 	30.16	37.02
+6 car_stop	35.14	43.56
+7 guardrail	34.71	62.20
+8 color_cone	54.76	63.14
+9 bump  	35.40	36.49
+== Epoch:  	74	mean_IoU	54.84	mean_Acc	64.51
+20261023 15:31:02 - root - INFO: - epoch 100 mIoU 58.590 mAcc 71.610 best 54.840
+20261023 15:31:02 - root - INFO: - 
 Class   	IoU     	Acc     
-1 unlabeled	97.22	98.74
-2 car   	83.25	91.98
-3 person	56.18	67.23
-4 bike  	68.74	86.65
-5 curve 	27.22	30.76
-6 car_stop	38.25	48.23
-7 guardrail	38.40	79.08
-8 color_cone	55.16	65.79
-9 bump  	55.89	67.54
-== Epoch:  	99	mean_IoU	57.81	mean_Acc	70.67
-20261022 10:27:00 - root - INFO: - epoch 125 mIoU 54.940 mAcc 62.420 best 57.810
-20261022 10:35:46 - root - INFO: - epoch 150 mIoU 57.620 mAcc 67.280 best 57.810
-20261022 10:44:34 - root - INFO: - epoch 175 mIoU 55.360 mAcc 63.610 best 57.810
-20261022 10:53:19 - root - INFO: - epoch 200 mIoU 56.460 mAcc 65.180 best 57.810
-20261022 11:02:04 - root - INFO: - epoch 225 mIoU 56.910 mAcc 65.490 best 57.810
-20261022 11:10:48 - root - INFO: - epoch 250 mIoU 57.080 mAcc 64.780 best 57.810
-20261022 11:19:34 - root - INFO: - epoch 275 mIoU 57.910 mAcc 67.090 best 57.810
-20261022 11:19:34 - root - INFO: - 
+1 unlabeled	97.17	98.72
+2 car   	83.40	89.40
+3 person	56.68	67.61
+4 bike  	67.45	87.87
+5 curve 	30.63	36.20
+6 car_stop	37.96	44.60
+7 guardrail	39.14	72.81
+8 color_cone	57.30	73.07
+9 bump  	57.62	74.17
+== Epoch:  	99	mean_IoU	58.59	mean_Acc	71.61
+20261023 15:40:04 - root - INFO: - epoch 125 mIoU 55.870 mAcc 63.830 best 58.590
+20261023 15:49:03 - root - INFO: - epoch 150 mIoU 57.170 mAcc 66.600 best 58.590
+20261023 15:57:58 - root - INFO: - epoch 175 mIoU 57.620 mAcc 70.000 best 58.590
+20261023 16:06:27 - root - INFO: - epoch 200 mIoU 57.380 mAcc 67.000 best 58.590
+20261023 16:15:24 - root - INFO: - epoch 225 mIoU 58.650 mAcc 68.010 best 58.590
+20261023 16:15:24 - root - INFO: - 
 Class   	IoU     	Acc     
-1 unlabeled	97.39	99.03
-2 car   	84.25	90.31
-3 person	58.03	69.58
-4 bike  	72.12	84.22
-5 curve 	33.05	40.42
-6 car_stop	35.48	47.66
-7 guardrail	28.12	47.71
-8 color_cone	60.05	68.95
-9 bump  	52.70	55.98
-== Epoch:  	274	mean_IoU	57.91	mean_Acc	67.09
-20261022 11:28:16 - root - INFO: - epoch 300 mIoU 57.100 mAcc 66.010 best 57.910
-20261022 11:36:57 - root - INFO: - epoch 325 mIoU 57.700 mAcc 67.070 best 57.910
-20261022 11:45:44 - root - INFO: - epoch 350 mIoU 58.770 mAcc 67.800 best 57.910
-20261022 11:45:45 - root - INFO: - 
+1 unlabeled	97.32	99.14
+2 car   	82.71	87.96
+3 person	58.11	71.18
+4 bike  	71.69	82.22
+5 curve 	34.00	40.08
+6 car_stop	29.66	35.27
+7 guardrail	44.25	73.21
+8 color_cone	59.22	68.82
+9 bump  	50.86	54.17
+== Epoch:  	224	mean_IoU	58.65	mean_Acc	68.01
+20261023 16:24:20 - root - INFO: - epoch 250 mIoU 58.620 mAcc 67.860 best 58.650
+20261023 16:33:21 - root - INFO: - epoch 275 mIoU 58.590 mAcc 67.720 best 58.650
+20261023 16:42:18 - root - INFO: - epoch 300 mIoU 58.570 mAcc 67.270 best 58.650
+20261023 16:51:09 - root - INFO: - epoch 325 mIoU 58.570 mAcc 67.590 best 58.650
+20261023 17:00:05 - root - INFO: - epoch 350 mIoU 59.430 mAcc 68.140 best 58.650
+20261023 17:00:06 - root - INFO: - 
 Class   	IoU     	Acc     
-1 unlabeled	97.39	99.08
-2 car   	84.82	90.93
-3 person	58.79	71.78
-4 bike  	71.92	84.75
-5 curve 	33.50	39.97
-6 car_stop	30.32	35.31
-7 guardrail	44.90	71.56
-8 color_cone	58.88	65.87
-9 bump  	48.36	50.92
-== Epoch:  	349	mean_IoU	58.77	mean_Acc	67.80
-20261022 11:54:31 - root - INFO: - epoch 375 mIoU 59.300 mAcc 69.230 best 58.770
-20261022 11:54:31 - root - INFO: - 
+1 unlabeled	97.46	99.20
+2 car   	84.75	90.86
+3 person	59.08	71.80
+4 bike  	71.89	82.03
+5 curve 	33.11	38.62
+6 car_stop	31.53	34.62
+7 guardrail	47.68	76.17
+8 color_cone	59.93	68.43
+9 bump  	49.42	51.52
+== Epoch:  	349	mean_IoU	59.43	mean_Acc	68.14
+20261023 17:09:03 - root - INFO: - epoch 375 mIoU 59.950 mAcc 69.480 best 59.430
+20261023 17:09:04 - root - INFO: - 
 Class   	IoU     	Acc     
-1 unlabeled	97.41	99.05
-2 car   	85.30	91.44
-3 person	58.71	69.96
-4 bike  	71.69	85.26
-5 curve 	35.13	42.64
-6 car_stop	30.45	36.00
-7 guardrail	45.37	77.68
-8 color_cone	59.34	67.44
-9 bump  	50.26	53.56
-== Epoch:  	374	mean_IoU	59.30	mean_Acc	69.23
-20261022 12:03:18 - root - INFO: - epoch 400 mIoU 58.390 mAcc 67.480 best 59.300
-20261022 12:12:03 - root - INFO: - epoch 425 mIoU 58.600 mAcc 67.660 best 59.300
-20261022 12:20:49 - root - INFO: - epoch 450 mIoU 58.900 mAcc 68.500 best 59.300
-20261022 12:29:34 - root - INFO: - epoch 475 mIoU 59.030 mAcc 68.430 best 59.300
-20261022 12:38:20 - root - INFO: - epoch 500 mIoU 58.730 mAcc 67.630 best 59.300
-20261022 12:38:20 - root - INFO: - ---------  --------
-Best mIoU  59.30
-Time       02:55:44
+1 unlabeled	97.47	99.17
+2 car   	84.92	90.57
+3 person	58.84	70.51
+4 bike  	72.09	83.27
+5 curve 	36.23	43.56
+6 car_stop	33.29	36.61
+7 guardrail	46.35	80.03
+8 color_cone	60.07	68.67
+9 bump  	50.32	52.90
+== Epoch:  	374	mean_IoU	59.95	mean_Acc	69.48
+20261023 17:18:00 - root - INFO: - epoch 400 mIoU 59.220 mAcc 68.180 best 59.950
+20261023 17:26:56 - root - INFO: - epoch 425 mIoU 58.800 mAcc 68.170 best 59.950
+20261023 17:35:52 - root - INFO: - epoch 450 mIoU 59.930 mAcc 69.890 best 59.950
+20261023 17:44:50 - root - INFO: - epoch 475 mIoU 59.440 mAcc 69.110 best 59.950
+20261023 17:53:51 - root - INFO: - epoch 500 mIoU 59.630 mAcc 69.060 best 59.950
+20261023 17:53:51 - root - INFO: - ---------  --------
+Best mIoU  59.95
+Time       02:59:14
 ---------  --------
