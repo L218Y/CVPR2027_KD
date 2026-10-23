@@ -66,7 +66,8 @@ def main():
     loader = DataLoader(valset, batch_size=cfg["EVAL"]["BATCH_SIZE"], num_workers=args.workers, pin_memory=True)
     n = valset.n_classes
 
-    model = build_model(cfg, n, ["img"]).to(device)
+    infer_modals = teacher_modals if not kd.get("ENABLE", True) else ["img"]
+    model = build_model(cfg, n, infer_modals).to(device)
     print(load_state(args.ckpt, model, strict=True))
     model.eval()
 
@@ -97,7 +98,7 @@ def main():
         sample = [x.to(device) for x in sample]
         label_np = label.squeeze(1).cpu().numpy()
 
-        feats = model.backbone(sample[:1])
+        feats = model.backbone(sample[:len(infer_modals)])
         logits = model.decode_head(feats)
         logits = F.interpolate(logits, size=label_np.shape[-2:], mode="bilinear", align_corners=False)
         pred = logits.argmax(1).cpu().numpy()
