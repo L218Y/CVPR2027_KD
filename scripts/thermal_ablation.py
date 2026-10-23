@@ -24,13 +24,15 @@ from train_kd import build_model, load_state
 C = ["unlabeled", "car", "person", "bike", "curve", "car_stop", "guardrail", "cone", "bump"]
 
 
-def evaluate(model, dl, files, drop_thermal):
+def evaluate(model, dl, files, mode):
     h = {k: np.zeros((9, 9), np.int64) for k in ("day", "night")}
     with torch.no_grad():
         for i, (sample, label) in enumerate(dl):
             img, thm = sample[0].cuda(), sample[1].cuda()
-            if drop_thermal:
+            if mode == "zeros":
                 thm = torch.zeros_like(thm)
+            elif mode == "shuffled":
+                thm = torch.roll(thm, shifts=1, dims=0)
             pred = model([img, thm]).argmax(1).cpu().numpy()
             lab = label.squeeze(1).numpy()
             for k in range(lab.shape[0]):
@@ -56,8 +58,7 @@ model = build_model(cfg, 9, ["img", "thermal"]).cuda()
 load_state("output/MFNet_CMNeXt-B2_it_teacher_s3407/best.pth", model, strict=True)
 model.eval()
 
-for drop in (False, True):
-    r = evaluate(model, dl, ds.files, drop)
-    tag = "thermal zeroed" if drop else "thermal on"
+for mode, tag in ((None, "thermal on"), ("zeros", "thermal zeroed"), ("shuffled", "thermal shuffled")):
+    r = evaluate(model, dl, ds.files, mode)
     print("%-14s day mIoU %5.2f person %5.2f | night mIoU %5.2f person %5.2f"
           % (tag, r["day"]["mIoU"], r["day"]["person"], r["night"]["mIoU"], r["night"]["person"]))
