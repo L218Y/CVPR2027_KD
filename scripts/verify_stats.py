@@ -64,6 +64,8 @@ def main():
                     "logs/S2_rapd.log",
                 ][names.index(name):names.index(name) + 1]
             for c in cands:
+                if not Path(c).is_file():
+                    continue
                 s = summary(c)
                 if s:
                     s["source"] = c
