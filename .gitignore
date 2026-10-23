@@ -277,6 +277,10 @@ wandb/
 !results/**
 
 logs/
+!logs_clean/
+!logs_clean/**
 __pycache__/
 *.pyc
 configs/seeds/
+
+!results/**/probe.pth
