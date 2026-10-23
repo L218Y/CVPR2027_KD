@@ -16,6 +16,7 @@ say() { echo "p1finish: $* $(date -u +%H:%M:%SZ)" >> "$LOG"; }
 
 UNIFORM=output/MFNet_CMNeXt-B2_it_uniform_s3407
 busy() { pgrep -f "train_kd.py --cfg $1" >/dev/null 2>&1; }
+busy_seed() { pgrep -f "train_kd.py --cfg configs/kd_mfnet_v2.yaml --seed $1" >/dev/null 2>&1; }
 
 say "start"
 
@@ -30,12 +31,12 @@ bash scripts/sync_results.sh "P0 recoverability diagnostic" >> "$LOG" 2>&1
 say "r diagnostic done"
 
 # 2. Seed 3407 on the GPU the uniform run releases.
-bash scripts/run_and_sync.sh configs/kd_mfnet_v2.yaml "p1 v2 s3407 final" --seed 3407 --tag v2 >> "$LOG" 2>&1 &
+CUDA_VISIBLE_DEVICES=0 bash scripts/run_and_sync.sh configs/kd_mfnet_v2.yaml "p1 v2 s3407 final" --seed 3407 --tag v2 >> "$LOG" 2>&1 &
 S3407=$!
 
 # 3. Seed 3409 once the GPU running 3408 is free.
-while busy configs/kd_mfnet_v2.yaml; do sleep 60; done
-bash scripts/run_and_sync.sh configs/kd_mfnet_v2.yaml "p1 v2 s3409 final" --seed 3409 --tag v2 >> "$LOG" 2>&1 &
+while busy_seed 3408; do sleep 60; done
+CUDA_VISIBLE_DEVICES=1 bash scripts/run_and_sync.sh configs/kd_mfnet_v2.yaml "p1 v2 s3409 final" --seed 3409 --tag v2 >> "$LOG" 2>&1 &
 S3409=$!
 
 wait $S3407 $S3409
