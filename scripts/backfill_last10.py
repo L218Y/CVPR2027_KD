@@ -9,7 +9,10 @@ SOURCES = {
 
 def history(path):
     text = Path(path).read_text(errors="ignore").replace("\r", "\n")
-    return [(int(a), float(b)) for a, b in re.findall(r"epoch (\d+) mIoU ([\d.]+)", text)]
+    seen = {}
+    for a, b in re.findall(r"epoch (\d+) mIoU ([\d.]+)", text):
+        seen[int(a)] = float(b)
+    return sorted(seen.items())
 
 
 for metrics_path in Path("results").glob("*/metrics.json"):
