@@ -80,12 +80,14 @@ def main():
     dcfg, mcfg, kd_cfg = cfg["DATASET"], cfg["MODEL"], cfg.get("KD", {})
 
     dataset_cls = eval(dcfg["NAME"])
-    valset = dataset_cls(dcfg["ROOT"], "val", get_val_augmentation(cfg["EVAL"]["IMAGE_SIZE"]), ["img"])
+    kd_enabled = bool(kd_cfg.get("ENABLE", True))
+    infer_modals = ["img"] if kd_enabled else list(dcfg["MODALS"])
+    valset = dataset_cls(dcfg["ROOT"], "val", get_val_augmentation(cfg["EVAL"]["IMAGE_SIZE"]), infer_modals)
     loader = DataLoader(valset, batch_size=cfg["EVAL"]["BATCH_SIZE"], num_workers=args.workers,
                         pin_memory=True, shuffle=False)
     n_classes = valset.n_classes
 
-    model = build_model(cfg, n_classes, ["img"]).to(device)
+    model = build_model(cfg, n_classes, infer_modals).to(device)
     load_state(args.ckpt, model, strict=True)
     model.eval()
 
@@ -114,9 +116,9 @@ def main():
     for i, batch in enumerate(loader):
         if args.max_images and i * loader.batch_size >= args.max_images:
             break
-        img = batch["img"].to(device, non_blocking=True)
+        inputs = {m: batch[m].to(device, non_blocking=True) for m in infer_modals}
         label = batch["gt_seg_label_ignore_255"].squeeze(1).cpu().numpy()
-        logits = model({"img": img})
+        logits = model(inputs)
         prob = F.softmax(logits, dim=1)
         conf, pred = prob.max(1)
         pred = pred.cpu().numpy()
@@ -133,18 +135,18 @@ def main():
 
         if probe is not None and args.save_rmaps and saved < args.save_rmaps:
             with torch.no_grad():
-                s_feat = model.backbone({"img": img})
+                s_feat = model.backbone({"img": inputs["img"]})
                 t_modals = kd_cfg.get("TEACHER_MODALS", dcfg["MODALS"])
-                t_in = {"img": img}
+                t_in = {"img": inputs["img"]}
                 for m in t_modals[1:]:
-                    t_in[m] = batch[m].to(device, non_blocking=True)
+                    t_in[m] = inputs[m]
                 t_feat = teacher.backbone(t_in)
                 r = probe(s_feat[-1], t_feat[-1])
             import matplotlib.pyplot as plt
             os.makedirs(rmap_dir, exist_ok=True)
             for k in range(min(label.shape[0], args.save_rmaps - saved)):
                 fig, ax = plt.subplots(1, 4, figsize=(12, 2.6))
-                rgb = img[k].cpu().numpy().transpose(1, 2, 0)
+                rgb = inputs["img"][k].cpu().numpy().transpose(1, 2, 0)
                 rgb = (rgb - rgb.min()) / max(rgb.ptp(), 1e-6)
                 ax[0].imshow(rgb); ax[0].set_title("RGB")
                 ax[1].imshow(label[k], vmin=0, vmax=n_classes - 1); ax[1].set_title("GT")
