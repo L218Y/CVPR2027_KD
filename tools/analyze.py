@@ -128,7 +128,8 @@ def main():
         else:
             inputs = {m: seq[j].to(device, non_blocking=True) for j, m in enumerate(infer_modals)}
         label = lbl_t.squeeze(1).cpu().numpy()
-        logits = model(inputs)
+        seq_inputs = [inputs[m] for m in infer_modals]
+        logits = model(seq_inputs)
         prob = F.softmax(logits, dim=1)
         conf, pred = prob.max(1)
         pred = pred.cpu().numpy()
@@ -145,11 +146,11 @@ def main():
 
         if probe is not None and args.save_rmaps and saved < args.save_rmaps:
             with torch.no_grad():
-                s_feat = model.backbone({"img": inputs["img"]})
+                s_feat = model.backbone([inputs["img"]])
                 t_modals = kd_cfg.get("TEACHER_MODALS", dcfg["MODALS"])
-                t_in = {"img": inputs["img"]}
+                t_in = [inputs["img"]]
                 for m in t_modals[1:]:
-                    t_in[m] = inputs[m]
+                    t_in.append(inputs[m])
                 t_feat = teacher.backbone(t_in)
                 r = probe(s_feat[-1], t_feat[-1])
             import matplotlib.pyplot as plt
