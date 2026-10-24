@@ -28,12 +28,17 @@ megabytes and keeps every result that is small enough to diff.
 | `MFNet_CMNeXt-B2_it_recoverability_s3407_v2_{best,last,probe}.pth` | 207 MB | RAPD v2, best 60.10 @375 |
 | `MFNet_CMNeXt-B2_it_recoverability_s3408_v2_{best,last,probe}.pth` | 207 MB | RAPD v2, best 60.68 @300 |
 | `MFNet_CMNeXt-B2_it_recoverability_s3409_v2_{best,last,probe}.pth` | 207 MB | RAPD v2, seed 3409 |
-| `MFNet_dataset.tar.gz` | 282 MB | MFNet train+val images, labels and split files |
+| `MFNet_dataset.tar.gz` | 282 MB | full MFNet release as used: 2353 RGB, 2353 thermal, 2353 labels |
 
 "RAPD v2" is `KD.MODE=recoverability` with `GATE=none`, `RARE_PROTECT=1.0`,
 `EPS_MAX=0.5`, `TAU=2`, `LAMBDA_KD=1`, `LAMBDA_FEAT=0.1`, 500 epochs, seed as named.
 
 ## What is not in the release, and how to get it
+
+The archive holds every image the MFNet authors distributed, including their
+`_flip` augmented copies; `scripts/prepare_mfnet.py` drops those, so the usable
+set is 1176 originals split 784 train / 392 val. The split itself is frozen in
+`results/splits/{train,test}.txt`.
 
 - **MFNet source archive** (984 MB, `MFNet.zip`): public, re-downloadable with
   `gdown 1NFdIigejYmCHFrdN2MSe1vxHHAs739SA`. The extracted copy in
