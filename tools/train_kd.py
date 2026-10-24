@@ -196,6 +196,7 @@ def main(cfg, gpu, save_dir, args):
                 gate=kd_gate,
                 class_weights=class_weights if class_weights is not None else torch.ones(n_classes),
                 ignore_index=trainset.ignore_label,
+                foreground_only=bool(kd_cfg.get("FOREGROUND_ONLY", False)),
             ).to(device)
         else:
             kd_loss = RecoverabilityKD(

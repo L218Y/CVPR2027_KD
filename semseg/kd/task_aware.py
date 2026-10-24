@@ -45,12 +45,14 @@ class TaskAwareKD(nn.Module):
         gate: str = "both",
         class_weights: Optional[Tensor] = None,
         ignore_index: int = 255,
+        foreground_only: bool = False,
     ) -> None:
         super().__init__()
         assert gate in GATES, f"unknown gate {gate}"
         self.tau = tau
         self.gate = gate
         self.ignore_index = ignore_index
+        self.foreground_only = foreground_only
         if class_weights is None:
             class_weights = torch.ones(1)
         self.register_buffer("class_weights", class_weights.float())
@@ -71,6 +73,11 @@ class TaskAwareKD(nn.Module):
         kl = (p_t * (log_p_t - log_p_s)).sum(dim=1, keepdim=True)
 
         valid = labels != ignore_index
+        if self.foreground_only:
+            # the unlabeled class is ~92% of pixels and the teacher is almost
+            # always right there, so a correctness gate that includes it selects
+            # ~99% of pixels and stops being a gate at all.
+            valid = valid & (labels != 0)
         w = valid.float().unsqueeze(1)
         if self.gate in ("correctness", "both"):
             correct = (t.argmax(dim=1) == labels) & valid

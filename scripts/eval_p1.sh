@@ -9,6 +9,8 @@ cfg_for () {
     uniform)     echo configs/kd_mfnet_uniform.yaml ;;
     correctness) echo configs/kd_mfnet_correctness.yaml ;;
     classbalance) echo configs/kd_mfnet_classbalance.yaml ;;
+    correctnessfg) echo configs/kd_mfnet_correctness_fg.yaml ;;
+    uniformrgbteacher) echo configs/kd_mfnet_uniform_rgbteacher.yaml ;;
     both)        echo configs/kd_mfnet_both.yaml ;;
     cbce)        echo configs/rgb_mfnet_cbce.yaml ;;
   esac

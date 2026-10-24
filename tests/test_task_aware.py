@@ -101,6 +101,19 @@ def test_conservative_only_forces_r_zero():
     assert not torch.allclose(with_r1, plain(s, t, r=torch.ones(2, 6, 8), labels=y)["total"], atol=1e-4)
 
 
+def test_foreground_only_excludes_unlabeled():
+    s, t = _logits(seed=20), _logits(seed=21)
+    y = torch.zeros(2, 6, 8, dtype=torch.long)      # all unlabeled
+    kd_fg = TaskAwareKD(tau=2.0, gate="correctness", foreground_only=True)
+    out = kd_fg(s, t, labels=y)
+    assert float(out["select_frac"]) == 0.0
+    assert float(out["total"]) == 0.0
+    y2 = y.clone()
+    y2[:, :3, :] = 2                                # half person
+    out2 = kd_fg(s, t, labels=y2)
+    assert 0.0 < float(out2["select_frac"]) <= 1.0
+
+
 if __name__ == "__main__":
     for name, fn in sorted(globals().items()):
         if name.startswith("test_") and callable(fn):

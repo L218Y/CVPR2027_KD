@@ -14,7 +14,8 @@ from pathlib import Path
 
 CLASSES = ["unlabeled", "car", "person", "bike", "curve", "car_stop", "guardrail", "color_cone", "bump"]
 ARMS = [("CE", "ce"), ("Uniform", "uniform"), ("Correctness", "correctness"),
-        ("ClassBalance", "classbalance"), ("Both", "both"), ("BalancedCE", "cbce")]
+        ("CorrectFg", "correctnessfg"), ("ClassBalance", "classbalance"), ("Both", "both"),
+        ("BalancedCE", "cbce"), ("UniformRGBTeacher", "uniformrgbteacher")]
 
 
 def load(kind):
