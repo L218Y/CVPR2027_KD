@@ -112,3 +112,12 @@ the numbers in the paper. Runs planned:
 ```bash
 PYTHONPATH=. python3 tests/test_kd.py     # loss equivalence, masking, gradients
 ```
+
+## Documents
+
+| file | contents |
+|---|---|
+| [`docs/WORK_SUMMARY.md`](docs/WORK_SUMMARY.md) | full Chinese summary: method, contributions, all 15 runs, result analysis |
+| [`results/ANALYSIS.md`](results/ANALYSIS.md) | run inventory, cross-machine variance, thermal ablation |
+| [`results/P0_DAYNIGHT.md`](results/P0_DAYNIGHT.md) | day/night and per-class breakdown |
+| [`MANIFEST.md`](MANIFEST.md) | release assets, checksums, restore instructions |
