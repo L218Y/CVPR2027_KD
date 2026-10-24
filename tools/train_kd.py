@@ -13,8 +13,10 @@ Usage (DDP, 4 GPUs):
 """
 
 import argparse
+import hashlib
 import json
 import os
+import subprocess
 import time
 from pathlib import Path
 
@@ -24,6 +26,7 @@ import torch.nn.functional as F
 import yaml
 from tabulate import tabulate
 from torch import nn
+from torch.backends import cudnn
 from torch.nn.parallel import DistributedDataParallel as DDP
 from torch.utils.data import DataLoader, DistributedSampler, RandomSampler
 from torch.utils.tensorboard import SummaryWriter
@@ -31,7 +34,15 @@ from tqdm import tqdm
 
 from semseg.augmentations_mm import get_train_augmentation, get_val_augmentation
 from semseg.datasets import *
-from semseg.kd import FeatureProbe, RecoverabilityKD, RecoverabilityHead, UniformKD
+from semseg.datasets.stats import train_label_counts
+from semseg.kd import (
+    FeatureProbe,
+    RecoverabilityHead,
+    RecoverabilityKD,
+    TaskAwareKD,
+    UniformKD,
+    class_balance_weights,
+)
 from semseg.losses import get_loss
 from semseg.models import *
 from semseg.optimizers import get_optimizer
@@ -101,6 +112,10 @@ def main(cfg, gpu, save_dir, args):
     loss_cfg, optim_cfg, sched_cfg = cfg["LOSS"], cfg["OPTIMIZER"], cfg["SCHEDULER"]
     kd_cfg = cfg.get("KD", {})
 
+    if train_cfg.get("DETERMINISTIC", False):
+        cudnn.benchmark = False
+        cudnn.deterministic = True
+
     epochs = int(args.epochs or train_cfg["EPOCHS"])
     lr = optim_cfg["LR"]
     resume_path = cfg["MODEL"].get("RESUME", "")
@@ -135,8 +150,10 @@ def main(cfg, gpu, save_dir, args):
         if teacher_path and os.path.isfile(teacher_path):
             msg = load_state(teacher_path, teacher, strict=True)
             logger.info(f"teacher loaded: {msg}")
-        else:
+        elif kd_cfg.get("ALLOW_RANDOM_TEACHER", False):
             logger.warning(f"teacher checkpoint not found at '{teacher_path}'; using random weights (smoke test only)")
+        else:
+            raise FileNotFoundError(f"teacher checkpoint required but missing: '{teacher_path}'")
         teacher.to(device).eval()
         for p in teacher.parameters():
             p.requires_grad_(False)
@@ -149,24 +166,48 @@ def main(cfg, gpu, save_dir, args):
 
     s_dim = student.backbone.channels[-1]
     probe, rec_head, kd_loss = None, None, None
+    kd_mode = kd_cfg.get("MODE", "recoverability") if use_kd else "none"
+    balance_cfg = loss_cfg.get("CLASS_BALANCE") or {}
+    balance_on = bool(balance_cfg.get("ENABLE", False))
+    kd_gate = str(kd_cfg.get("GATE", "none"))
+    counts, class_weights = None, None
+    if balance_on or (kd_mode == "task_aware" and "class_balance" in kd_gate):
+        counts = train_label_counts(trainset, cache_dir=Path("results/protocol"))
+        class_weights = class_balance_weights(
+            counts, beta=float(balance_cfg.get("BETA", 0.5)), cap=float(balance_cfg.get("CAP", 5.0))
+        ).to(device)
+        logger.info(
+            "train label weights: "
+            + json.dumps({c: round(float(w), 4) for c, w in zip(class_names, class_weights.tolist())})
+        )
     if use_kd:
         t_dim = teacher.backbone.channels[-1]
-        probe = FeatureProbe(s_dim, t_dim, hidden_dim=kd_cfg.get("PROBE_HIDDEN", 128)).to(device)
+        # The probe is only meaningful for the recoverability family; task-level
+        # gating needs no learned feature predictor, so it is skipped entirely.
+        if kd_mode in ("recoverability", "conservative_only"):
+            probe = FeatureProbe(s_dim, t_dim, hidden_dim=kd_cfg.get("PROBE_HIDDEN", 128)).to(device)
         if kd_cfg.get("DEPLOY_HEAD", False):
             rec_head = RecoverabilityHead(s_dim).to(device)
-        if kd_cfg.get("MODE", "recoverability") == "uniform":
+        if kd_mode == "uniform":
             kd_loss = UniformKD(tau=kd_cfg.get("TAU", 2.0)).to(device)
+        elif kd_mode == "task_aware":
+            kd_loss = TaskAwareKD(
+                tau=kd_cfg.get("TAU", 2.0),
+                gate=kd_gate,
+                class_weights=class_weights if class_weights is not None else torch.ones(n_classes),
+                ignore_index=trainset.ignore_label,
+            ).to(device)
         else:
             kd_loss = RecoverabilityKD(
                 tau=kd_cfg.get("TAU", 2.0),
                 eps_max=kd_cfg.get("EPS_MAX", 0.5),
-                mode=kd_cfg.get("MODE", "recoverability"),
-                gate=kd_cfg.get("GATE", "none"),
+                mode=kd_mode,
+                gate=kd_gate,
                 rare_protect=float(kd_cfg.get("RARE_PROTECT", 0.0)),
             ).to(device)
 
     iters_per_epoch = len(trainset) // train_cfg["BATCH_SIZE"] // world
-    ce_loss = get_loss(loss_cfg["NAME"], trainset.ignore_label, None)
+    ce_loss = get_loss(loss_cfg["NAME"], trainset.ignore_label, class_weights if balance_on else None)
     optimizer = get_optimizer(student, optim_cfg["NAME"], lr, optim_cfg["WEIGHT_DECAY"])
     probe_params = (list(probe.parameters()) if probe else []) + (list(rec_head.parameters()) if rec_head else [])
     probe_optimizer = None
@@ -179,17 +220,24 @@ def main(cfg, gpu, save_dir, args):
         sched_cfg["POWER"], iters_per_epoch * sched_cfg["WARMUP"], sched_cfg["WARMUP_RATIO"],
     )
 
+    # Data order and augmentation randomness come from a generator that is not
+    # shared with module construction: building a teacher or a probe consumes
+    # draws from the global RNG, so arms would otherwise see different batches
+    # despite the same --seed.
+    data_generator = torch.Generator()
+    data_generator.manual_seed(args.seed)
+
     if distributed:
         sampler = DistributedSampler(trainset, world, dist.get_rank(), shuffle=True)
         student = DDP(student, device_ids=[gpu], output_device=gpu, find_unused_parameters=True)
         if probe is not None:
             probe = DDP(probe, device_ids=[gpu], output_device=gpu)
     else:
-        sampler = RandomSampler(trainset)
+        sampler = RandomSampler(trainset, generator=data_generator)
 
     trainloader = DataLoader(
         trainset, batch_size=train_cfg["BATCH_SIZE"], num_workers=args.workers,
-        drop_last=True, pin_memory=True, sampler=sampler,
+        drop_last=True, pin_memory=True, sampler=sampler, generator=data_generator,
     )
     valloader = DataLoader(
         valset, batch_size=eval_cfg["BATCH_SIZE"], num_workers=args.workers,
@@ -210,6 +258,12 @@ def main(cfg, gpu, save_dir, args):
     lambda_probe = float(kd_cfg.get("LAMBDA_PROBE", 0.1))
     ignore_index = trainset.ignore_label
 
+    # Re-seed the global RNG so dropout masks (SegFormerHead uses Dropout2d) are
+    # identical across arms; everything drawn before this point differs because
+    # some arms build a teacher or a probe and others do not.
+    torch.manual_seed(args.seed)
+    torch.cuda.manual_seed_all(args.seed)
+
     stats = {}
     for epoch in range(epochs):
         student.train()
@@ -220,8 +274,10 @@ def main(cfg, gpu, save_dir, args):
         if distributed:
             sampler.set_epoch(epoch)
 
-        running = {"loss": 0.0, "kd": 0.0, "r": 0.0, "probe": 0.0}
-        use_rec = epoch >= warmup
+        running = {"loss": 0.0, "kd": 0.0, "r": 0.0, "probe": 0.0, "sel": 0.0}
+        # task-level gates need no warm-up: they depend on the label and the
+        # teacher posterior, not on a probe that has to learn first.
+        use_rec = True if kd_mode == "task_aware" else epoch >= warmup
         pbar = tqdm(enumerate(trainloader), total=iters_per_epoch, desc=f"Epoch {epoch + 1}/{epochs}")
         it = -1
         for it, (sample, lbl) in pbar:
@@ -240,25 +296,29 @@ def main(cfg, gpu, save_dir, args):
                 loss = ce_loss(logits, lbl)
                 kd_out = {"kd": torch.zeros((), device=device), "r_mean": torch.zeros((), device=device)}
                 probe_mse = torch.zeros((), device=device)
-                r_small = None
+                r_small, r_map = None, None
                 if use_kd:
                     with torch.no_grad():
                         t_feats = teacher.backbone(sample)
                         t_logits = teacher.decode_head(t_feats)
                         t_logits = F.interpolate(t_logits, size=lbl.shape[-2:], mode="bilinear", align_corners=False)
-                    probe_module = probe.module if distributed else probe
-                    r_small, probe_mse = probe_module(s_feats[-1].detach(), t_feats[-1])
-                    r_map = F.interpolate(r_small.unsqueeze(1), size=lbl.shape[-2:], mode="bilinear", align_corners=False)
-                    r_used = r_map if use_rec else None
+                    probe_module = (probe.module if distributed else probe) if probe is not None else None
+                    if probe_module is not None:
+                        r_small, probe_mse = probe_module(s_feats[-1].detach(), t_feats[-1])
+                        r_map = F.interpolate(
+                            r_small.unsqueeze(1), size=lbl.shape[-2:], mode="bilinear", align_corners=False
+                        )
                     kd_out = kd_loss(
-                        logits, t_logits, r=r_used, labels=lbl, ignore_index=ignore_index,
+                        logits, t_logits, r=r_map if use_rec else None, labels=lbl, ignore_index=ignore_index,
                         student_feat=s_feats[-1] if lambda_feat > 0 else None,
                         teacher_feat=t_feats[-1] if lambda_feat > 0 else None,
-                        proj=probe_module.proj if lambda_feat > 0 else None,
+                        proj=probe_module.proj if (lambda_feat > 0 and probe_module is not None) else None,
                         lambda_feat=lambda_feat,
                     )
-                    loss = loss + lambda_kd * kd_out["total"] + lambda_probe * probe_mse
-                    if rec_head is not None and use_rec:
+                    loss = loss + lambda_kd * kd_out["total"]
+                    if probe_module is not None:
+                        loss = loss + lambda_probe * probe_mse
+                    if rec_head is not None and use_rec and r_small is not None:
                         r_pred = rec_head(s_feats[-1])
                         loss = loss + float(kd_cfg.get("LAMBDA_HEAD", 0.1)) * F.mse_loss(
                             r_pred, r_small.detach().unsqueeze(1)
@@ -274,6 +334,7 @@ def main(cfg, gpu, save_dir, args):
             running["loss"] += loss.item()
             running["kd"] += float(kd_out["kd"].detach())
             running["r"] += float(kd_out["r_mean"]) if "r_mean" in kd_out else 0.0
+            running["sel"] += float(kd_out.get("select_frac", torch.zeros(())))
             running["probe"] += float(probe_mse.detach())
             if args.max_iters and (it + 1) >= args.max_iters:
                 break
@@ -315,19 +376,44 @@ def main(cfg, gpu, save_dir, args):
 
     if (distributed and dist.get_rank() == 0) or not distributed:
         elapsed = time.gmtime(time.time() - start)
+
+        def sha256(path):
+            p = Path(path)
+            return hashlib.sha256(p.read_bytes()).hexdigest() if p.is_file() else None
+
+        try:
+            commit = subprocess.run(
+                ["git", "rev-parse", "HEAD"], capture_output=True, text=True, check=True
+            ).stdout.strip()
+        except Exception:
+            commit = None
         summary = {
             "experiment": save_dir.name,
             "dataset": dataset_cfg["NAME"],
             "backbone": model_cfg["BACKBONE"],
             "teacher_backbone": kd_cfg.get("TEACHER_BACKBONE", model_cfg["BACKBONE"]),
+            "teacher_path": kd_cfg.get("TEACHER_PATH", "") if use_kd else "",
+            "teacher_sha256": sha256(kd_cfg.get("TEACHER_PATH", "")) if use_kd else None,
             "modals": teacher_modals,
-            "kd_mode": kd_cfg.get("MODE", "recoverability") if kd_cfg.get("ENABLE", True) else "none",
-            "gate": kd_cfg.get("GATE", "none"),
+            "student_modals": student_modals,
+            "kd_mode": kd_mode,
+            "gate": kd_gate if use_kd else "none",
             "rare_protect": float(kd_cfg.get("RARE_PROTECT", 0.0)),
             "tau": kd_cfg.get("TAU", 2.0),
             "eps_max": kd_cfg.get("EPS_MAX", 0.5),
             "lambda_kd": lambda_kd,
             "lambda_feat": lambda_feat,
+            "class_balance": {
+                "enabled": balance_on,
+                "beta": float(balance_cfg.get("BETA", 0.5)),
+                "cap": float(balance_cfg.get("CAP", 5.0)),
+                "weights": None if class_weights is None else {
+                    c: round(float(w), 4) for c, w in zip(class_names, class_weights.tolist())
+                },
+                "counts": None if counts is None else {
+                    c: int(n) for c, n in zip(class_names, counts.tolist())
+                },
+            },
             "seed": args.seed,
             "epochs": epochs,
             "batch_size": train_cfg["BATCH_SIZE"],
@@ -340,6 +426,19 @@ def main(cfg, gpu, save_dir, args):
             "best_epoch": best_epoch,
             "train_time": time.strftime("%H:%M:%S", elapsed),
             "final_stats": stats,
+            "provenance": {
+                "config": args.cfg,
+                "config_sha256": sha256(args.cfg),
+                "code_commit": commit,
+                "torch": torch.__version__,
+                "gpu": torch.cuda.get_device_name(0) if torch.cuda.is_available() else "cpu",
+                "deterministic": bool(train_cfg.get("DETERMINISTIC", False)),
+                "train_split_sha256": sha256(Path(dataset_cfg["ROOT"]) / "train.txt"),
+                "eval_split_file_sha256": sha256(Path(dataset_cfg["ROOT"]) / "test.txt"),
+                "n_train": len(trainset),
+                "n_eval": len(valset),
+                "started_utc": time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime(start)),
+            },
         }
         (save_dir / "metrics.json").write_text(json.dumps(summary, indent=2))
         results_dir = Path("results") / save_dir.name

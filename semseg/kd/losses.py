@@ -69,7 +69,7 @@ class RecoverabilityKD(nn.Module):
         the conservative target.
     mode:
         ``recoverability`` (full method), ``uniform`` (ablation: r == 1),
-        ``conservative_only`` (ablation: always use the conservative target),
+        ``conservative_only`` (ablation: r == 0, always the conservative target),
         ``hard`` (ablation: hard-label distillation).
     """
 
@@ -147,6 +147,8 @@ class RecoverabilityKD(nn.Module):
             if r_map.shape[-2:] != p_t.shape[-2:]:
                 r_map = F.interpolate(r_map, size=p_t.shape[-2:], mode="bilinear", align_corners=False)
             r_map = r_map.clamp(0.0, 1.0)
+        if self.mode == "conservative_only":
+            r_map = torch.zeros_like(r_map)
 
         eps = self.eps_max * (1.0 - r_map)
 
