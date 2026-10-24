@@ -4,7 +4,7 @@
 
 | run | epoch | best mIoU | best ep | last mIoU |
 |---|---|---|---|---|
-| p1_finish | 494/500 | 60.100 | 375 | 59.660 |
+| p1_finish | 500/500 | 60.100 | 375 | 59.760 |
 | p1_v2_s3408_final | 500/500 | 60.680 | 300 | 59.920 |
 | p0_uniform | 500/500 | 59.950 | 375 | 59.630 |
 
@@ -19,6 +19,7 @@
 | MFNet_CMNeXt-B2_it_recoverability_s3408_v2 | 60.68 | 71.18 |
 | MFNet_CMNeXt-B2_it_recoverability_s3407 | 60.49 | 69.23 |
 | MFNet_CMNeXt-B2_it_recoverability_s3407_v2 | 60.10 | 69.66 |
+| MFNet_CMNeXt-B2_it_recoverability_s3409_v2 | 60.09 | 70.22 |
 | MFNet_CMNeXt-B2_it_teacher_s3409 | 60.01 | 68.52 |
 | MFNet_CMNeXt-B2_it_uniform_s3407 | 59.95 | 69.48 |
 | MFNet_CMNeXt-B2_it_recoverability_s3407_eps02 | 59.62 | 68.63 |
