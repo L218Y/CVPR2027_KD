@@ -61,8 +61,7 @@ say "release id $REL_ID"
 UPLOAD="https://uploads.github.com/repos/$REPO/releases/$REL_ID/assets"
 
 upload() {
-  local f="$1" name
-  name=$(basename "$f")
+  local f="$1" name="$2"
   if curl -s -H "$(auth)" "$API/releases/$REL_ID/assets?per_page=100" \
       | grep -q "\"name\": \"$name\""; then
     say "skip (present) $name"
@@ -79,14 +78,14 @@ upload() {
 
 # 3. Upload in priority order.
 for d in output/*/; do
-  [ -f "$d/best.pth" ] && upload "$d/best.pth"
+  [ -f "$d/best.pth" ] && upload "$d/best.pth" "$(basename "$d")_best.pth"
 done
-upload "$DATA_TAR"
+upload "$DATA_TAR" "$(basename "$DATA_TAR")"
 for d in output/*/; do
-  [ -f "$d/probe.pth" ] && upload "$d/probe.pth"
+  [ -f "$d/probe.pth" ] && upload "$d/probe.pth" "$(basename "$d")_probe.pth"
 done
 for d in output/*/; do
-  [ -f "$d/last.pth" ] && upload "$d/last.pth"
+  [ -f "$d/last.pth" ] && upload "$d/last.pth" "$(basename "$d")_last.pth"
 done
 
 # 4. Verify every asset's size against the local file.
@@ -98,8 +97,9 @@ bad = 0
 for a in assets:
     local = None
     for root, _, files in os.walk("output"):
-        if a["name"] in files:
-            local = os.path.join(root, a["name"])
+        base = a["name"].rsplit("_", 1)[0]
+        if os.path.basename(root) == base and os.path.exists(os.path.join(root, a["name"].rsplit("_", 1)[1])):
+            local = os.path.join(root, a["name"].rsplit("_", 1)[1])
             break
     if local is None:
         path = os.path.join("..", a["name"])
