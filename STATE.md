@@ -36,6 +36,23 @@ recreated: `scripts/prepare_mfnet.py` for the data, the HuggingFace URL in
 `README_KD.md` for the backbone, and the teacher runs must be retrained
 (3.7 h each) before any distillation run.
 
+**As of 2026-10-24 nothing has to be retrained.** Every checkpoint, probe and
+the extracted dataset are published as release assets:
+<https://github.com/L218Y/CVPR2027_KD/releases/tag/artifacts-2026-10-24>
+(17 assets, 1.79 GB, sha256 in `results/ARTIFACTS.sha256`, details in
+`MANIFEST.md`). After a wipe:
+
+```bash
+git clone https://github.com/L218Y/CVPR2027_KD && cd CVPR2027_KD
+bash scripts/restore_artifacts.sh
+tar -C data -xzf data/MFNet_dataset.tar.gz
+bash scripts/prepare_mfnet.py        # rebuilds data/MFNet/train.txt, test.txt
+```
+
+The restore script re-creates `output/<run>/{best,last,probe}.pth` and verifies
+each file against the checksum manifest; the frozen split is also in
+`results/splits/` if `prepare_mfnet.py` ever changes its sampling.
+
 ## What is safely in git
 
 - all code (`semseg/kd`, `tools/`, `scripts/`, `configs/`, `tests/`)
