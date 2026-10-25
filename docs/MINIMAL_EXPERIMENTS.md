@@ -119,6 +119,24 @@ python3 scripts/smoke_pipeline.py --workers 2
 
 ---
 
+### 4.2 第二轮事故：CE 基线被训成双流模型（2026-10-25）
+
+第一次完整跑 wave1 时，`ce` 与 `cbce` 的训练日志显示 epoch 120 mIoU 56.19 / 56.77，
+而固定轮次协议评测同一 checkpoint 只得 10.01 / 11.09。原因是两个 bug 叠加：
+
+1. `configs/min/ce.yaml` 保留了 `KD.TEACHER_MODALS: [img, thermal]`，而
+   `train_kd.py` 在 KD 关闭时用 `student_modals = teacher_modals`，于是"纯 RGB 基线"
+   实际是 **896 张量**的双流模型（单流 348）。
+2. `load_state()` 只报 missing、不报 unexpected，并以 `strict=False` 装载。896 张量装进
+   348 张量模型时丢掉 548 个张量，却打印 `loaded 348/348 (missing 0)`，评测跑在一个
+   近乎未训练的网络上。
+
+修法：KD 关闭时 `student_modals` 取 `DATASET.MODALS`；`load_state` 统计 unexpected 并在
+strict 下报错；smoke 增加 `student_modals == ['img']` 断言；新增 `tests/test_load_state.py`。
+
+教训（写进流程，不写进论文）：**"训练日志好看"不是管线正确的证据**。模态/架构一致性
+必须由断言检查，因为它的失败方式是静默的——数字照常产出，只是毫无意义。
+
 ## 5. 两阶段预算
 
 ### 阶段二：机制筛选（便宜，只用来排序与排错）
