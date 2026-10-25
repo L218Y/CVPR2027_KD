@@ -39,6 +39,7 @@ from semseg.kd import (
     FeatureProbe,
     RecoverabilityHead,
     RecoverabilityKD,
+    PrivilegedInjector,
     TaskAwareKD,
     UniformKD,
     class_balance_weights,
@@ -190,6 +191,20 @@ def main(cfg, gpu, save_dir, args):
             "train label weights: "
             + json.dumps({c: round(float(w), 4) for c, w in zip(class_names, class_weights.tolist())})
         )
+    injector, injector_drop = None, 0.0
+    inject_cfg = kd_cfg.get("PRIV_INJECT") or {}
+    if use_kd and bool(inject_cfg.get("ENABLE", False)):
+        # Training-time side channel only: absent at inference, so the deployed
+        # student stays RGB-only. Gate starts at zero so the run begins as the
+        # RGB baseline and adopts the side channel only if it pays for itself.
+        injector = PrivilegedInjector(
+            teacher.backbone.channels[-1],
+            student.backbone.channels[-1],
+            gate_init=float(inject_cfg.get("GATE_INIT", 0.0)),
+        ).to(device)
+        injector_drop = float(inject_cfg.get("DROP_PROB", 0.5))
+        logger.info(f"privileged injection enabled (drop_prob={injector_drop})")
+
     if use_kd:
         t_dim = teacher.backbone.channels[-1]
         # The probe is only meaningful for the recoverability family; task-level
@@ -220,6 +235,8 @@ def main(cfg, gpu, save_dir, args):
     iters_per_epoch = len(trainset) // train_cfg["BATCH_SIZE"] // world
     ce_loss = get_loss(loss_cfg["NAME"], trainset.ignore_label, class_weights if balance_on else None)
     optimizer = get_optimizer(student, optim_cfg["NAME"], lr, optim_cfg["WEIGHT_DECAY"])
+    if injector is not None:
+        optimizer.add_param_group({"params": list(injector.parameters())})
     probe_params = (list(probe.parameters()) if probe else []) + (list(rec_head.parameters()) if rec_head else [])
     probe_optimizer = None
     if probe_params:
@@ -285,7 +302,7 @@ def main(cfg, gpu, save_dir, args):
         if distributed:
             sampler.set_epoch(epoch)
 
-        running = {"loss": 0.0, "kd": 0.0, "r": 0.0, "probe": 0.0, "sel": 0.0}
+        running = {"loss": 0.0, "kd": 0.0, "r": 0.0, "probe": 0.0, "sel": 0.0, "inj": 0.0}
         # task-level gates need no warm-up: they depend on the label and the
         # teacher posterior, not on a probe that has to learn first.
         use_rec = True if kd_mode == "task_aware" else epoch >= warmup
@@ -302,6 +319,16 @@ def main(cfg, gpu, save_dir, args):
             with _autocast(train_cfg.get("AMP", False)):
                 model_ref = student.module if distributed else student
                 s_feats = model_ref.backbone(sample if not use_kd else rgb)
+                t_feats, t_logits, injected = None, None, False
+                if use_kd:
+                    with torch.no_grad():
+                        t_feats = teacher.backbone(sample)
+                        t_logits = teacher.decode_head(t_feats)
+                        t_logits = F.interpolate(t_logits, size=lbl.shape[-2:], mode="bilinear", align_corners=False)
+                    if injector is not None and torch.rand((), device=device) >= injector_drop:
+                        injector_module = injector.module if distributed else injector
+                        s_feats[-1] = s_feats[-1] + injector_module(t_feats[-1].detach(), s_feats[-1])
+                        injected = True
                 logits = model_ref.decode_head(s_feats)
                 logits = F.interpolate(logits, size=lbl.shape[-2:], mode="bilinear", align_corners=False)
                 loss = ce_loss(logits, lbl)
@@ -309,10 +336,6 @@ def main(cfg, gpu, save_dir, args):
                 probe_mse = torch.zeros((), device=device)
                 r_small, r_map = None, None
                 if use_kd:
-                    with torch.no_grad():
-                        t_feats = teacher.backbone(sample)
-                        t_logits = teacher.decode_head(t_feats)
-                        t_logits = F.interpolate(t_logits, size=lbl.shape[-2:], mode="bilinear", align_corners=False)
                     probe_module = (probe.module if distributed else probe) if probe is not None else None
                     if probe_module is not None:
                         r_small, probe_mse = probe_module(s_feats[-1].detach(), t_feats[-1])
@@ -347,6 +370,7 @@ def main(cfg, gpu, save_dir, args):
             running["r"] += float(kd_out["r_mean"]) if "r_mean" in kd_out else 0.0
             running["sel"] += float(kd_out.get("select_frac", torch.zeros(())))
             running["probe"] += float(probe_mse.detach())
+            running["inj"] += 1.0 if injected else 0.0
             if args.max_iters and (it + 1) >= args.max_iters:
                 break
             if it % 10 == 0:
@@ -414,6 +438,11 @@ def main(cfg, gpu, save_dir, args):
             "eps_max": kd_cfg.get("EPS_MAX", 0.5),
             "lambda_kd": lambda_kd,
             "lambda_feat": lambda_feat,
+            "priv_inject": {
+                "enabled": injector is not None,
+                "drop_prob": injector_drop,
+                "gate": None if injector is None else float(injector.gate.detach()),
+            },
             "class_balance": {
                 "enabled": balance_on,
                 "beta": float(balance_cfg.get("BETA", 0.5)),
