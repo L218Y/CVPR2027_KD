@@ -423,7 +423,9 @@ def main(cfg, gpu, save_dir, args):
             "last10_miou": float(sum(m for _, m in eval_history[-10:]) / max(len(eval_history[-10:]), 1)),
             "eval_history": eval_history,
             "mAcc": best_macc,
-            "acc_per_class": [round(float(x), 2) for x in best_acc],
+            "acc_per_class": [round(float(x), 2) for x in best_acc]
+            if isinstance(best_acc, (list, tuple))
+            else [],
             "best_epoch": best_epoch,
             "train_time": time.strftime("%H:%M:%S", elapsed),
             "final_stats": stats,

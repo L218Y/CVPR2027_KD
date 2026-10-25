@@ -284,3 +284,6 @@ __pycache__/
 configs/seeds/
 
 !results/**/probe.pth
+
+# The dataset lives outside the repo; a committed absolute-path symlink breaks clones.
+/data

@@ -1,0 +1,66 @@
+DEVICE: cuda
+SAVE_DIR: output/min/cbce
+MODEL:
+  NAME: CMNeXt
+  BACKBONE: CMNeXt-B2
+  PRETRAINED: checkpoints/pretrained/segformer/mit_b2.pth
+  RESUME: ''
+DATASET:
+  NAME: MFNet
+  ROOT: data/MFNet
+  IGNORE_LABEL: 255
+  MODALS:
+  - img
+TRAIN:
+  IMAGE_SIZE:
+  - 480
+  - 640
+  BATCH_SIZE: 8
+  EPOCHS: 500
+  EVAL_START: 50
+  EVAL_INTERVAL: 25
+  AMP: true
+  DDP: true
+  DETERMINISTIC: true
+LOSS:
+  NAME: CrossEntropy
+  CLS_WEIGHTS: false
+  CLASS_BALANCE:
+    ENABLE: true
+    BETA: 0.5
+    CAP: 5.0
+OPTIMIZER:
+  NAME: adamw
+  LR: 6.0e-05
+  WEIGHT_DECAY: 0.01
+SCHEDULER:
+  NAME: warmuppolylr
+  POWER: 0.9
+  WARMUP: 10
+  WARMUP_RATIO: 0.1
+KD:
+  ENABLE: false
+  ALLOW_RANDOM_TEACHER: false
+  MODE: uniform
+  TEACHER_MODALS:
+  - img
+  - thermal
+  TEACHER_BACKBONE: CMNeXt-B2
+  TEACHER_PATH: output/MFNet_CMNeXt-B2_it_teacher_s3407/best.pth
+  TAU: 2.0
+  LAMBDA_KD: 1.0
+  LAMBDA_FEAT: 0.0
+  WARMUP_EPOCHS: 0
+  GATE: none
+  FOREGROUND_ONLY: false
+EVAL:
+  MODEL_PATH: output/min/cbce/best.pth
+  IMAGE_SIZE:
+  - 480
+  - 640
+  BATCH_SIZE: 4
+  MSF:
+    ENABLE: false
+    FLIP: false
+    SCALES:
+    - 1.0

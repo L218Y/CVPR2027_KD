@@ -55,12 +55,17 @@ set is 1176 originals split 784 train / 392 val. The split itself is frozen in
 
 ```bash
 git clone https://github.com/L218Y/CVPR2027_KD && cd CVPR2027_KD
-bash scripts/restore_artifacts.sh          # downloads and checksums every asset
-tar -C data -xzf data/MFNet_dataset.tar.gz # 784 train / 392 val images
+bash scripts/restore_artifacts.sh   # downloads, unpacks and checksums everything
 ```
 
-`restore_artifacts.sh` verifies each file against `results/ARTIFACTS.sha256`
-and refuses to continue on a mismatch.
+`restore_artifacts.sh` fetches every release asset, unpacks
+`data/MFNet_dataset.tar.gz` into `data/MFNet/` (784 train / 392 val images),
+copies the frozen split from `results/splits/`, and verifies each file against
+`results/ARTIFACTS.sha256`, refusing to continue on a mismatch.
+
+`data/` is deliberately **not** tracked: an earlier revision committed it as an
+absolute-path symlink, which became self-referential whenever the repository was
+cloned to that exact path. Do not re-add it.
 
 ## Where the numbers live
 
