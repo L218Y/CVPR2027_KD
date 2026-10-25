@@ -90,10 +90,17 @@ def load_state(path, model, strict=True):
             mapped[tgt[nk]] = v
             used.add(nk)
     missing = [k for k in tgt if k not in used]
+    unused = [k for k in ckpt if norm(k) not in tgt or target[tgt[norm(k)]].shape != ckpt[k].shape]
     if missing and strict:
         raise RuntimeError(f"checkpoint '{path}' is missing {len(missing)} tensors, e.g. {missing[:4]}")
+    if unused and strict:
+        raise RuntimeError(
+            f"checkpoint '{path}' has {len(unused)} tensors the model cannot take, e.g. {unused[:4]}; "
+            "this usually means the checkpoint was built with different modalities"
+        )
     model.load_state_dict(mapped, strict=False)
-    return f"loaded {len(mapped)}/{len(target)} tensors (missing {len(missing)})"
+    return (f"loaded {len(mapped)}/{len(target)} tensors "
+            f"(missing {len(missing)}, unexpected {len(unused)})")
 
 
 def build_model(cfg, n_classes, modals, backbone=None, pretrained=None):
@@ -124,7 +131,10 @@ def main(cfg, gpu, save_dir, args):
 
     teacher_modals = kd_cfg.get("TEACHER_MODALS", dataset_cfg["MODALS"])
     use_kd = bool(kd_cfg.get("ENABLE", True))
-    student_modals = ["img"] if use_kd else list(teacher_modals)
+    # With KD off there is no teacher: the student must follow the dataset's own
+    # modality list. Using teacher_modals here silently built a two-stream student
+    # for CE baselines whose config still carried KD.TEACHER_MODALS.
+    student_modals = ["img"] if use_kd else list(dataset_cfg["MODALS"])
     assert teacher_modals[0] == "img", "the first modality must be RGB"
 
     traintransform = get_train_augmentation(train_cfg["IMAGE_SIZE"], seg_fill=dataset_cfg["IGNORE_LABEL"])

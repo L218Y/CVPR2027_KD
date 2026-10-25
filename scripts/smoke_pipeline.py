@@ -134,8 +134,15 @@ def main() -> int:
         elif len(written) != 1:
             problems.append(f"expected exactly 1 new metrics.json, got {len(written)}")
         else:
-            stats = json.loads(written[0].read_text()).get("final_stats", {})
+            metrics = json.loads(written[0].read_text())
+            stats = metrics.get("final_stats", {})
             problems += check(stats, exp, cfg_path.stem)
+            # Deployment constraint: every arm is scored on RGB alone, so the
+            # trained student must be single-stream. A CE config that still
+            # carries KD.TEACHER_MODALS once produced a two-stream student that
+            # looked fine during training and collapsed when evaluated as RGB.
+            if metrics.get("student_modals") != ["img"]:
+                problems.append(f"student_modals={metrics.get('student_modals')!r}, expected ['img']")
             if not (written[0].parent / "last.pth").is_file():
                 problems.append("last.pth missing")
 
