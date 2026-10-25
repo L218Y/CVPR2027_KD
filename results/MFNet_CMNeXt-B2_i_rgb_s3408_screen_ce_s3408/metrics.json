@@ -1,0 +1,89 @@
+{
+  "experiment": "MFNet_CMNeXt-B2_i_rgb_s3408_screen_ce_s3408",
+  "dataset": "MFNet",
+  "backbone": "CMNeXt-B2",
+  "teacher_backbone": "CMNeXt-B2",
+  "teacher_path": "",
+  "teacher_sha256": null,
+  "modals": [
+    "img",
+    "thermal"
+  ],
+  "student_modals": [
+    "img"
+  ],
+  "kd_mode": "none",
+  "gate": "none",
+  "rare_protect": 0.0,
+  "tau": 2.0,
+  "eps_max": 0.5,
+  "lambda_kd": 1.0,
+  "lambda_feat": 0.0,
+  "priv_inject": {
+    "enabled": false,
+    "drop_prob": 0.0,
+    "gate": null
+  },
+  "class_balance": {
+    "enabled": false,
+    "beta": 0.5,
+    "cap": 5.0,
+    "weights": null,
+    "counts": null
+  },
+  "seed": 3408,
+  "epochs": 120,
+  "batch_size": 8,
+  "world_size": 1,
+  "best_miou": 56.18,
+  "last10_miou": 55.50666666666667,
+  "eval_history": [
+    [
+      75,
+      54.56
+    ],
+    [
+      100,
+      55.78
+    ],
+    [
+      120,
+      56.18
+    ]
+  ],
+  "mAcc": 64.88,
+  "acc_per_class": [
+    98.97,
+    90.26,
+    67.31,
+    84.34,
+    38.66,
+    45.51,
+    38.36,
+    65.63,
+    54.86
+  ],
+  "best_epoch": 120,
+  "train_time": "00:30:16",
+  "final_stats": {
+    "loss": 0.05179602445616406,
+    "kd": 0.0,
+    "r": 0.0,
+    "probe": 0.0,
+    "sel": 0.0,
+    "inj": 0.0
+  },
+  "provenance": {
+    "config": "configs/min/ce.yaml",
+    "config_sha256": "1d292341303a01e891bfd7dbd908f0302ac18e36ea173403740154926a7ca923",
+    "code_commit": "9c4f633545af2d57c7c047c19fa052ce8ad92bb7",
+    "torch": "2.11.0+cu128",
+    "gpu": "NVIDIA GeForce RTX 4090",
+    "deterministic": true,
+    "train_split_sha256": "4bb4c7a698c6e2dfad0f40089830f58546523ac513e24e0dae8c2aaa7c857d91",
+    "eval_split_file_sha256": "446e9dbcee6a66bb95331dc704a2e184b723e5dd8aded861dbf76c9968879180",
+    "n_train": 784,
+    "n_eval": 392,
+    "started_utc": "2026-10-25T14:01:53Z"
+  }
+}

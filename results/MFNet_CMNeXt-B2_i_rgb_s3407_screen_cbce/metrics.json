@@ -1,0 +1,103 @@
+{
+  "experiment": "MFNet_CMNeXt-B2_i_rgb_s3407_screen_cbce",
+  "dataset": "MFNet",
+  "backbone": "CMNeXt-B2",
+  "teacher_backbone": "CMNeXt-B2",
+  "teacher_path": "",
+  "teacher_sha256": null,
+  "modals": [
+    "img",
+    "thermal"
+  ],
+  "student_modals": [
+    "img"
+  ],
+  "kd_mode": "none",
+  "gate": "none",
+  "rare_protect": 0.0,
+  "tau": 2.0,
+  "eps_max": 0.5,
+  "lambda_kd": 1.0,
+  "lambda_feat": 0.0,
+  "class_balance": {
+    "enabled": true,
+    "beta": 0.5,
+    "cap": 5.0,
+    "weights": {
+      "unlabeled": 0.3478,
+      "car": 1.5667,
+      "person": 2.8372,
+      "bike": 5.0,
+      "curve": 4.1567,
+      "car_stop": 4.5134,
+      "guardrail": 5.0,
+      "color_cone": 5.0,
+      "bump": 5.0
+    },
+    "counts": {
+      "unlabeled": 221252408,
+      "car": 10902426,
+      "person": 3324364,
+      "bike": 1027788,
+      "curve": 1548814,
+      "car_stop": 1313666,
+      "guardrail": 363618,
+      "color_cone": 422237,
+      "bump": 689479
+    }
+  },
+  "seed": 3407,
+  "epochs": 120,
+  "batch_size": 8,
+  "world_size": 1,
+  "best_miou": 56.3,
+  "last10_miou": 54.61333333333332,
+  "eval_history": [
+    [
+      75,
+      51.96
+    ],
+    [
+      100,
+      55.58
+    ],
+    [
+      120,
+      56.3
+    ]
+  ],
+  "mAcc": 76.35,
+  "acc_per_class": [
+    97.46,
+    93.59,
+    81.21,
+    89.44,
+    52.55,
+    61.65,
+    65.99,
+    81.66,
+    63.59
+  ],
+  "best_epoch": 120,
+  "train_time": "00:28:05",
+  "final_stats": {
+    "loss": 0.10809017877493586,
+    "kd": 0.0,
+    "r": 0.0,
+    "probe": 0.0,
+    "sel": 0.0
+  },
+  "provenance": {
+    "config": "configs/min/cbce.yaml",
+    "config_sha256": "d01631fe1bfc1671ec6c45c31225b58158e41e2c0be4f1dfc543b988e25b41d3",
+    "code_commit": "28e58d525d4d2d85295573e1ee9407923c8c6680",
+    "torch": "2.11.0+cu128",
+    "gpu": "NVIDIA GeForce RTX 4090",
+    "deterministic": true,
+    "train_split_sha256": "4bb4c7a698c6e2dfad0f40089830f58546523ac513e24e0dae8c2aaa7c857d91",
+    "eval_split_file_sha256": "446e9dbcee6a66bb95331dc704a2e184b723e5dd8aded861dbf76c9968879180",
+    "n_train": 784,
+    "n_eval": 392,
+    "started_utc": "2026-10-25T12:20:37Z"
+  }
+}

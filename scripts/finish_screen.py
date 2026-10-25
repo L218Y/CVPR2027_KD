@@ -122,6 +122,21 @@ def main() -> int:
         cwd=REPO, check=False,
     )
 
+    # The decisive contrast is not against ce: cbce_kd and cbce share the CE
+    # treatment, so their difference is the only clean estimate of what the
+    # teacher adds. Report its interval separately.
+    subprocess.run(
+        [sys.executable, "scripts/compare_protocol.py",
+         "--ref", f"cbce={out_dir}/MIN_cbce_{args.seed}_e{args.epochs}.json",
+         "--arm", f"cbce_kd={out_dir}/MIN_cbce_kd_{args.seed}_e{args.epochs}.json",
+         "--out", str(out_dir / f"MIN_decisive_{args.seed}_e{args.epochs}.md")],
+        cwd=REPO, check=False,
+    )
+    decisive = out_dir / f"MIN_decisive_{args.seed}_e{args.epochs}.md"
+    if decisive.is_file():
+        print("\n--- cbce_kd - cbce (decisive) ---")
+        print(decisive.read_text())
+
     if args.no_push:
         return 0
 

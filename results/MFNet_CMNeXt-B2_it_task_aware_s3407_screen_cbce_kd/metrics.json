@@ -1,0 +1,103 @@
+{
+  "experiment": "MFNet_CMNeXt-B2_it_task_aware_s3407_screen_cbce_kd",
+  "dataset": "MFNet",
+  "backbone": "CMNeXt-B2",
+  "teacher_backbone": "CMNeXt-B2",
+  "teacher_path": "output/MFNet_CMNeXt-B2_it_teacher_s3407/best.pth",
+  "teacher_sha256": "f1ea918197b26affa7b7f6631554c09242526127af8b9fac1680a092b97b0d8d",
+  "modals": [
+    "img",
+    "thermal"
+  ],
+  "student_modals": [
+    "img"
+  ],
+  "kd_mode": "task_aware",
+  "gate": "class_balance",
+  "rare_protect": 0.0,
+  "tau": 2.0,
+  "eps_max": 0.5,
+  "lambda_kd": 1.0,
+  "lambda_feat": 0.0,
+  "class_balance": {
+    "enabled": true,
+    "beta": 0.5,
+    "cap": 5.0,
+    "weights": {
+      "unlabeled": 0.3478,
+      "car": 1.5667,
+      "person": 2.8372,
+      "bike": 5.0,
+      "curve": 4.1567,
+      "car_stop": 4.5134,
+      "guardrail": 5.0,
+      "color_cone": 5.0,
+      "bump": 5.0
+    },
+    "counts": {
+      "unlabeled": 221252408,
+      "car": 10902426,
+      "person": 3324364,
+      "bike": 1027788,
+      "curve": 1548814,
+      "car_stop": 1313666,
+      "guardrail": 363618,
+      "color_cone": 422237,
+      "bump": 689479
+    }
+  },
+  "seed": 3407,
+  "epochs": 120,
+  "batch_size": 8,
+  "world_size": 1,
+  "best_miou": 56.73,
+  "last10_miou": 56.11666666666667,
+  "eval_history": [
+    [
+      75,
+      55.28
+    ],
+    [
+      100,
+      56.34
+    ],
+    [
+      120,
+      56.73
+    ]
+  ],
+  "mAcc": 71.57,
+  "acc_per_class": [
+    98.07,
+    92.8,
+    78.77,
+    88.21,
+    48.36,
+    55.23,
+    42.26,
+    77.61,
+    62.86
+  ],
+  "best_epoch": 120,
+  "train_time": "00:40:09",
+  "final_stats": {
+    "loss": 0.3090898415872029,
+    "kd": 0.19118984864682567,
+    "r": 1.0,
+    "probe": 0.0,
+    "sel": 0.5731772302973027
+  },
+  "provenance": {
+    "config": "configs/min/cbce_kd.yaml",
+    "config_sha256": "a8732b9b441b52da199f0da0b3591808d039817110718f1ed2faf29640e82ef7",
+    "code_commit": "28e58d525d4d2d85295573e1ee9407923c8c6680",
+    "torch": "2.11.0+cu128",
+    "gpu": "NVIDIA GeForce RTX 4090",
+    "deterministic": true,
+    "train_split_sha256": "4bb4c7a698c6e2dfad0f40089830f58546523ac513e24e0dae8c2aaa7c857d91",
+    "eval_split_file_sha256": "446e9dbcee6a66bb95331dc704a2e184b723e5dd8aded861dbf76c9968879180",
+    "n_train": 784,
+    "n_eval": 392,
+    "started_utc": "2026-10-25T11:39:39Z"
+  }
+}

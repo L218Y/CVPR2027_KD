@@ -1,0 +1,89 @@
+{
+  "experiment": "MFNet_CMNeXt-B2_it_uniform_s3407_screen2_priv_inject",
+  "dataset": "MFNet",
+  "backbone": "CMNeXt-B2",
+  "teacher_backbone": "CMNeXt-B2",
+  "teacher_path": "output/MFNet_CMNeXt-B2_it_teacher_s3407/best.pth",
+  "teacher_sha256": "f1ea918197b26affa7b7f6631554c09242526127af8b9fac1680a092b97b0d8d",
+  "modals": [
+    "img",
+    "thermal"
+  ],
+  "student_modals": [
+    "img"
+  ],
+  "kd_mode": "uniform",
+  "gate": "none",
+  "rare_protect": 0.0,
+  "tau": 2.0,
+  "eps_max": 0.5,
+  "lambda_kd": 0.0,
+  "lambda_feat": 0.0,
+  "priv_inject": {
+    "enabled": true,
+    "drop_prob": 0.5,
+    "gate": 0.17664483189582825
+  },
+  "class_balance": {
+    "enabled": false,
+    "beta": 0.5,
+    "cap": 5.0,
+    "weights": null,
+    "counts": null
+  },
+  "seed": 3407,
+  "epochs": 120,
+  "batch_size": 8,
+  "world_size": 1,
+  "best_miou": 54.89,
+  "last10_miou": 53.26333333333334,
+  "eval_history": [
+    [
+      75,
+      50.84
+    ],
+    [
+      100,
+      54.06
+    ],
+    [
+      120,
+      54.89
+    ]
+  ],
+  "mAcc": 63.62,
+  "acc_per_class": [
+    98.91,
+    91.21,
+    66.53,
+    81.64,
+    36.87,
+    42.09,
+    45.78,
+    64.57,
+    44.96
+  ],
+  "best_epoch": 120,
+  "train_time": "00:40:10",
+  "final_stats": {
+    "loss": 0.05305929670148358,
+    "kd": 0.1821400071969446,
+    "r": 1.0,
+    "probe": 0.0,
+    "sel": 0.0,
+    "inj": 0.5306122448979592
+  },
+  "provenance": {
+    "config": "configs/min/priv_inject.yaml",
+    "config_sha256": "596b0d11b049a9794d0c24413d523fe04c7cb9312c7ca910a077e79e9430fe64",
+    "code_commit": "6ceaeeb58fecf89f147723053e7770cbfbde2032",
+    "torch": "2.11.0+cu128",
+    "gpu": "NVIDIA GeForce RTX 4090",
+    "deterministic": true,
+    "train_split_sha256": "4bb4c7a698c6e2dfad0f40089830f58546523ac513e24e0dae8c2aaa7c857d91",
+    "eval_split_file_sha256": "446e9dbcee6a66bb95331dc704a2e184b723e5dd8aded861dbf76c9968879180",
+    "n_train": 784,
+    "n_eval": 392,
+    "started_utc": "2026-10-25T14:47:52Z"
+  }
+}

@@ -1,0 +1,850 @@
+{
+  "reference": "ce",
+  "arms": {
+    "ce": {
+      "miou_official": 55.32178806502644,
+      "miou_foreground": 50.086179517519895,
+      "day_miou": 54.829288240761244,
+      "night_miou": 51.8625223265264,
+      "night_person_iou": 45.427,
+      "person_iou": 55.731,
+      "guardrail_iou": 29.275,
+      "per_class_iou": {
+        "unlabeled": 97.207,
+        "car": 83.644,
+        "person": 55.731,
+        "bike": 70.042,
+        "curve": 31.12,
+        "car_stop": 32.998,
+        "guardrail": 29.275,
+        "color_cone": 55.957,
+        "bump": 41.922
+      },
+      "delta_vs_ref": {
+        "mean": 0.0,
+        "lo": 0.0,
+        "hi": 0.0,
+        "significant": false
+      },
+      "checkpoint": "/data/lab/kd_work/output/min/ce/MFNet_CMNeXt-B2_i_rgb_s3407_screen_ce/last.pth",
+      "checkpoint_sha256": "f6286e6cac28dbebadbae5865be40ae5b561110a09465289b7213f1d067b2017",
+      "epoch": 120,
+      "pairing": {
+        "all": {
+          "valid": 120422400,
+          "both_right": 116235609,
+          "teacher_only": 1219906,
+          "student_only": 773731,
+          "both_wrong": 2193154,
+          "by_class": {
+            "unlabeled": {
+              "valid": 110824522,
+              "both_right": 109276222,
+              "teacher_only": 466193,
+              "student_only": 431679,
+              "both_wrong": 650428
+            },
+            "car": {
+              "valid": 4219671,
+              "both_right": 3712852,
+              "teacher_only": 130731,
+              "student_only": 117627,
+              "both_wrong": 258461
+            },
+            "person": {
+              "valid": 1106006,
+              "both_right": 707642,
+              "teacher_only": 188228,
+              "student_only": 37680,
+              "both_wrong": 172456
+            },
+            "bike": {
+              "valid": 2122305,
+              "both_right": 1710491,
+              "teacher_only": 112069,
+              "student_only": 48881,
+              "both_wrong": 250864
+            },
+            "curve": {
+              "valid": 684884,
+              "both_right": 232360,
+              "teacher_only": 93959,
+              "student_only": 27482,
+              "both_wrong": 331083
+            },
+            "bump": {
+              "valid": 529341,
+              "both_right": 208369,
+              "teacher_only": 124185,
+              "student_only": 25556,
+              "both_wrong": 171231
+            },
+            "car_stop": {
+              "valid": 499275,
+              "both_right": 146267,
+              "teacher_only": 59704,
+              "student_only": 52333,
+              "both_wrong": 240971
+            },
+            "color_cone": {
+              "valid": 361079,
+              "both_right": 211102,
+              "teacher_only": 24180,
+              "student_only": 24759,
+              "both_wrong": 101038
+            },
+            "guardrail": {
+              "valid": 75317,
+              "both_right": 30304,
+              "teacher_only": 20657,
+              "student_only": 7734,
+              "both_wrong": 16622
+            }
+          }
+        },
+        "foreground": {
+          "valid": 9597878,
+          "both_right": 6959387,
+          "teacher_only": 753713,
+          "student_only": 342052,
+          "both_wrong": 112367248,
+          "by_class": {
+            "car": {
+              "valid": 4219671,
+              "both_right": 3712852,
+              "teacher_only": 130731,
+              "student_only": 117627,
+              "both_wrong": 258461
+            },
+            "person": {
+              "valid": 1106006,
+              "both_right": 707642,
+              "teacher_only": 188228,
+              "student_only": 37680,
+              "both_wrong": 172456
+            },
+            "bike": {
+              "valid": 2122305,
+              "both_right": 1710491,
+              "teacher_only": 112069,
+              "student_only": 48881,
+              "both_wrong": 250864
+            },
+            "curve": {
+              "valid": 684884,
+              "both_right": 232360,
+              "teacher_only": 93959,
+              "student_only": 27482,
+              "both_wrong": 331083
+            },
+            "bump": {
+              "valid": 529341,
+              "both_right": 208369,
+              "teacher_only": 124185,
+              "student_only": 25556,
+              "both_wrong": 171231
+            },
+            "car_stop": {
+              "valid": 499275,
+              "both_right": 146267,
+              "teacher_only": 59704,
+              "student_only": 52333,
+              "both_wrong": 240971
+            },
+            "color_cone": {
+              "valid": 361079,
+              "both_right": 211102,
+              "teacher_only": 24180,
+              "student_only": 24759,
+              "both_wrong": 101038
+            },
+            "guardrail": {
+              "valid": 75317,
+              "both_right": 30304,
+              "teacher_only": 20657,
+              "student_only": 7734,
+              "both_wrong": 16622
+            }
+          }
+        }
+      },
+      "teacher_only_frac": 0.010130224941539116
+    },
+    "cbce": {
+      "miou_official": 56.300761807155205,
+      "miou_foreground": 51.28244579396963,
+      "day_miou": 53.66388115451484,
+      "night_miou": 53.40252862328469,
+      "night_person_iou": 42.9,
+      "person_iou": 50.977,
+      "guardrail_iou": 33.852,
+      "per_class_iou": {
+        "unlabeled": 96.447,
+        "car": 81.511,
+        "person": 50.977,
+        "bike": 65.075,
+        "curve": 31.517,
+        "car_stop": 40.45,
+        "guardrail": 33.852,
+        "color_cone": 51.403,
+        "bump": 55.475
+      },
+      "delta_vs_ref": {
+        "mean": 0.9583149495384098,
+        "lo": -0.5151151789789665,
+        "hi": 2.4961302590080243,
+        "significant": false
+      },
+      "checkpoint": "/data/lab/kd_work/output/min/cbce/MFNet_CMNeXt-B2_i_rgb_s3407_screen_cbce/last.pth",
+      "checkpoint_sha256": "28151ccf72903c7166d3fa9270a1bc0982908354396a1510194d595d84d1e401",
+      "epoch": 120,
+      "pairing": {
+        "all": {
+          "valid": 120422400,
+          "both_right": 115253435,
+          "teacher_only": 2202080,
+          "student_only": 849922,
+          "both_wrong": 2116963,
+          "by_class": {
+            "unlabeled": {
+              "valid": 110824522,
+              "both_right": 107865796,
+              "teacher_only": 1876619,
+              "student_only": 143270,
+              "both_wrong": 938837
+            },
+            "car": {
+              "valid": 4219671,
+              "both_right": 3758289,
+              "teacher_only": 85294,
+              "student_only": 190826,
+              "both_wrong": 185262
+            },
+            "person": {
+              "valid": 1106006,
+              "both_right": 812396,
+              "teacher_only": 83474,
+              "student_only": 85769,
+              "both_wrong": 124367
+            },
+            "bike": {
+              "valid": 2122305,
+              "both_right": 1791586,
+              "teacher_only": 30974,
+              "student_only": 106513,
+              "both_wrong": 193232
+            },
+            "curve": {
+              "valid": 684884,
+              "both_right": 283163,
+              "teacher_only": 43156,
+              "student_only": 76733,
+              "both_wrong": 281832
+            },
+            "bump": {
+              "valid": 529341,
+              "both_right": 285091,
+              "teacher_only": 47463,
+              "student_only": 51542,
+              "both_wrong": 145245
+            },
+            "car_stop": {
+              "valid": 499275,
+              "both_right": 185678,
+              "teacher_only": 20293,
+              "student_only": 122147,
+              "both_wrong": 171157
+            },
+            "color_cone": {
+              "valid": 361079,
+              "both_right": 231273,
+              "teacher_only": 4009,
+              "student_only": 63581,
+              "both_wrong": 62216
+            },
+            "guardrail": {
+              "valid": 75317,
+              "both_right": 40163,
+              "teacher_only": 10798,
+              "student_only": 9541,
+              "both_wrong": 14815
+            }
+          }
+        },
+        "foreground": {
+          "valid": 9597878,
+          "both_right": 7387639,
+          "teacher_only": 325461,
+          "student_only": 706652,
+          "both_wrong": 112002648,
+          "by_class": {
+            "car": {
+              "valid": 4219671,
+              "both_right": 3758289,
+              "teacher_only": 85294,
+              "student_only": 190826,
+              "both_wrong": 185262
+            },
+            "person": {
+              "valid": 1106006,
+              "both_right": 812396,
+              "teacher_only": 83474,
+              "student_only": 85769,
+              "both_wrong": 124367
+            },
+            "bike": {
+              "valid": 2122305,
+              "both_right": 1791586,
+              "teacher_only": 30974,
+              "student_only": 106513,
+              "both_wrong": 193232
+            },
+            "curve": {
+              "valid": 684884,
+              "both_right": 283163,
+              "teacher_only": 43156,
+              "student_only": 76733,
+              "both_wrong": 281832
+            },
+            "bump": {
+              "valid": 529341,
+              "both_right": 285091,
+              "teacher_only": 47463,
+              "student_only": 51542,
+              "both_wrong": 145245
+            },
+            "car_stop": {
+              "valid": 499275,
+              "both_right": 185678,
+              "teacher_only": 20293,
+              "student_only": 122147,
+              "both_wrong": 171157
+            },
+            "color_cone": {
+              "valid": 361079,
+              "both_right": 231273,
+              "teacher_only": 4009,
+              "student_only": 63581,
+              "both_wrong": 62216
+            },
+            "guardrail": {
+              "valid": 75317,
+              "both_right": 40163,
+              "teacher_only": 10798,
+              "student_only": 9541,
+              "both_wrong": 14815
+            }
+          }
+        }
+      },
+      "teacher_only_frac": 0.018286298894557823
+    },
+    "uniform_kd": {
+      "miou_official": 55.54644386948709,
+      "miou_foreground": 50.337727174896166,
+      "day_miou": 56.16140970451389,
+      "night_miou": 51.33163889888229,
+      "night_person_iou": 45.663,
+      "person_iou": 56.176,
+      "guardrail_iou": 29.67,
+      "per_class_iou": {
+        "unlabeled": 97.216,
+        "car": 83.382,
+        "person": 56.176,
+        "bike": 70.003,
+        "curve": 28.59,
+        "car_stop": 34.236,
+        "guardrail": 29.67,
+        "color_cone": 57.339,
+        "bump": 43.306
+      },
+      "delta_vs_ref": {
+        "mean": 0.19288231666050126,
+        "lo": -0.7202980828366019,
+        "hi": 1.0510374951526906,
+        "significant": false
+      },
+      "checkpoint": "/data/lab/kd_work/output/min/uniform_kd/MFNet_CMNeXt-B2_it_uniform_s3407_screen_uniform_kd/last.pth",
+      "checkpoint_sha256": "ac62514b13471a21b608e81390833b852d88e528dc564144f2b20a15f29cd3ad",
+      "epoch": 120,
+      "pairing": {
+        "all": {
+          "valid": 120422400,
+          "both_right": 116295517,
+          "teacher_only": 1159998,
+          "student_only": 732043,
+          "both_wrong": 2234842,
+          "by_class": {
+            "unlabeled": {
+              "valid": 110824522,
+              "both_right": 109327021,
+              "teacher_only": 415394,
+              "student_only": 410079,
+              "both_wrong": 672028
+            },
+            "car": {
+              "valid": 4219671,
+              "both_right": 3704856,
+              "teacher_only": 138727,
+              "student_only": 103121,
+              "both_wrong": 272967
+            },
+            "person": {
+              "valid": 1106006,
+              "both_right": 712019,
+              "teacher_only": 183851,
+              "student_only": 37588,
+              "both_wrong": 172548
+            },
+            "bike": {
+              "valid": 2122305,
+              "both_right": 1728473,
+              "teacher_only": 94087,
+              "student_only": 53598,
+              "both_wrong": 246147
+            },
+            "curve": {
+              "valid": 684884,
+              "both_right": 212809,
+              "teacher_only": 113510,
+              "student_only": 17904,
+              "both_wrong": 340661
+            },
+            "bump": {
+              "valid": 529341,
+              "both_right": 217794,
+              "teacher_only": 114760,
+              "student_only": 23081,
+              "both_wrong": 173706
+            },
+            "car_stop": {
+              "valid": 499275,
+              "both_right": 142658,
+              "teacher_only": 63313,
+              "student_only": 53373,
+              "both_wrong": 239931
+            },
+            "color_cone": {
+              "valid": 361079,
+              "both_right": 217598,
+              "teacher_only": 17684,
+              "student_only": 28021,
+              "both_wrong": 97776
+            },
+            "guardrail": {
+              "valid": 75317,
+              "both_right": 32289,
+              "teacher_only": 18672,
+              "student_only": 5278,
+              "both_wrong": 19078
+            }
+          }
+        },
+        "foreground": {
+          "valid": 9597878,
+          "both_right": 6968496,
+          "teacher_only": 744604,
+          "student_only": 321964,
+          "both_wrong": 112387336,
+          "by_class": {
+            "car": {
+              "valid": 4219671,
+              "both_right": 3704856,
+              "teacher_only": 138727,
+              "student_only": 103121,
+              "both_wrong": 272967
+            },
+            "person": {
+              "valid": 1106006,
+              "both_right": 712019,
+              "teacher_only": 183851,
+              "student_only": 37588,
+              "both_wrong": 172548
+            },
+            "bike": {
+              "valid": 2122305,
+              "both_right": 1728473,
+              "teacher_only": 94087,
+              "student_only": 53598,
+              "both_wrong": 246147
+            },
+            "curve": {
+              "valid": 684884,
+              "both_right": 212809,
+              "teacher_only": 113510,
+              "student_only": 17904,
+              "both_wrong": 340661
+            },
+            "bump": {
+              "valid": 529341,
+              "both_right": 217794,
+              "teacher_only": 114760,
+              "student_only": 23081,
+              "both_wrong": 173706
+            },
+            "car_stop": {
+              "valid": 499275,
+              "both_right": 142658,
+              "teacher_only": 63313,
+              "student_only": 53373,
+              "both_wrong": 239931
+            },
+            "color_cone": {
+              "valid": 361079,
+              "both_right": 217598,
+              "teacher_only": 17684,
+              "student_only": 28021,
+              "both_wrong": 97776
+            },
+            "guardrail": {
+              "valid": 75317,
+              "both_right": 32289,
+              "teacher_only": 18672,
+              "student_only": 5278,
+              "both_wrong": 19078
+            }
+          }
+        }
+      },
+      "teacher_only_frac": 0.009632742745535714
+    },
+    "cbce_kd": {
+      "miou_official": 56.72763779374884,
+      "miou_foreground": 51.710276476675176,
+      "day_miou": 55.569169009704844,
+      "night_miou": 53.31833766161964,
+      "night_person_iou": 45.384,
+      "person_iou": 54.537,
+      "guardrail_iou": 25.729,
+      "per_class_iou": {
+        "unlabeled": 96.867,
+        "car": 82.538,
+        "person": 54.537,
+        "bike": 67.574,
+        "curve": 33.087,
+        "car_stop": 39.028,
+        "guardrail": 25.729,
+        "color_cone": 55.764,
+        "bump": 55.424
+      },
+      "delta_vs_ref": {
+        "mean": 1.4623294715812614,
+        "lo": 0.085861937288319,
+        "hi": 3.0161707281989174,
+        "significant": true
+      },
+      "checkpoint": "/data/lab/kd_work/output/min/cbce_kd/MFNet_CMNeXt-B2_it_task_aware_s3407_screen_cbce_kd/last.pth",
+      "checkpoint_sha256": "814a011b536288d3c20d3b35868d3baec85b96fbd5b8d6ef5b6f73438fb8b59b",
+      "epoch": 120,
+      "pairing": {
+        "all": {
+          "valid": 120422400,
+          "both_right": 115817284,
+          "teacher_only": 1638231,
+          "student_only": 779533,
+          "both_wrong": 2187352,
+          "by_class": {
+            "unlabeled": {
+              "valid": 110824522,
+              "both_right": 108491130,
+              "teacher_only": 1251285,
+              "student_only": 194963,
+              "both_wrong": 887144
+            },
+            "car": {
+              "valid": 4219671,
+              "both_right": 3751250,
+              "teacher_only": 92333,
+              "student_only": 164511,
+              "both_wrong": 211577
+            },
+            "person": {
+              "valid": 1106006,
+              "both_right": 797243,
+              "teacher_only": 98627,
+              "student_only": 73914,
+              "both_wrong": 136222
+            },
+            "bike": {
+              "valid": 2122305,
+              "both_right": 1782864,
+              "teacher_only": 39696,
+              "student_only": 89191,
+              "both_wrong": 210554
+            },
+            "curve": {
+              "valid": 684884,
+              "both_right": 276128,
+              "teacher_only": 50191,
+              "student_only": 55075,
+              "both_wrong": 303490
+            },
+            "bump": {
+              "valid": 529341,
+              "both_right": 280437,
+              "teacher_only": 52117,
+              "student_only": 52294,
+              "both_wrong": 144493
+            },
+            "car_stop": {
+              "valid": 499275,
+              "both_right": 179967,
+              "teacher_only": 26004,
+              "student_only": 95792,
+              "both_wrong": 197512
+            },
+            "color_cone": {
+              "valid": 361079,
+              "both_right": 230340,
+              "teacher_only": 4942,
+              "student_only": 49887,
+              "both_wrong": 75910
+            },
+            "guardrail": {
+              "valid": 75317,
+              "both_right": 27925,
+              "teacher_only": 23036,
+              "student_only": 3906,
+              "both_wrong": 20450
+            }
+          }
+        },
+        "foreground": {
+          "valid": 9597878,
+          "both_right": 7326154,
+          "teacher_only": 386946,
+          "student_only": 584570,
+          "both_wrong": 112124730,
+          "by_class": {
+            "car": {
+              "valid": 4219671,
+              "both_right": 3751250,
+              "teacher_only": 92333,
+              "student_only": 164511,
+              "both_wrong": 211577
+            },
+            "person": {
+              "valid": 1106006,
+              "both_right": 797243,
+              "teacher_only": 98627,
+              "student_only": 73914,
+              "both_wrong": 136222
+            },
+            "bike": {
+              "valid": 2122305,
+              "both_right": 1782864,
+              "teacher_only": 39696,
+              "student_only": 89191,
+              "both_wrong": 210554
+            },
+            "curve": {
+              "valid": 684884,
+              "both_right": 276128,
+              "teacher_only": 50191,
+              "student_only": 55075,
+              "both_wrong": 303490
+            },
+            "bump": {
+              "valid": 529341,
+              "both_right": 280437,
+              "teacher_only": 52117,
+              "student_only": 52294,
+              "both_wrong": 144493
+            },
+            "car_stop": {
+              "valid": 499275,
+              "both_right": 179967,
+              "teacher_only": 26004,
+              "student_only": 95792,
+              "both_wrong": 197512
+            },
+            "color_cone": {
+              "valid": 361079,
+              "both_right": 230340,
+              "teacher_only": 4942,
+              "student_only": 49887,
+              "both_wrong": 75910
+            },
+            "guardrail": {
+              "valid": 75317,
+              "both_right": 27925,
+              "teacher_only": 23036,
+              "student_only": 3906,
+              "both_wrong": 20450
+            }
+          }
+        }
+      },
+      "teacher_only_frac": 0.013604038783482143
+    },
+    "correctness_kd": {
+      "miou_official": 57.31983639903264,
+      "miou_foreground": 52.40934743271316,
+      "day_miou": 55.265719887383966,
+      "night_miou": 53.82960561709287,
+      "night_person_iou": 41.079,
+      "person_iou": 51.29,
+      "guardrail_iou": 31.403,
+      "per_class_iou": {
+        "unlabeled": 96.604,
+        "car": 81.051,
+        "person": 51.29,
+        "bike": 67.544,
+        "curve": 33.48,
+        "car_stop": 39.614,
+        "guardrail": 31.403,
+        "color_cone": 57.598,
+        "bump": 57.294
+      },
+      "delta_vs_ref": {
+        "mean": 1.9418150226471775,
+        "lo": 0.043040664101063275,
+        "hi": 3.5742440571442273,
+        "significant": true
+      },
+      "checkpoint": "/data/lab/kd_work/output/min/correctness_kd/MFNet_CMNeXt-B2_it_task_aware_s3407_screen_correctness_kd/last.pth",
+      "checkpoint_sha256": "f6fc5f1ff82730c1f98034ed12ec30e81bf511cd9619d68f71556b593ce5dea1",
+      "epoch": 120,
+      "pairing": {
+        "all": {
+          "valid": 120422400,
+          "both_right": 115456502,
+          "teacher_only": 1999013,
+          "student_only": 851400,
+          "both_wrong": 2115485,
+          "by_class": {
+            "unlabeled": {
+              "valid": 110824522,
+              "both_right": 108037820,
+              "teacher_only": 1704595,
+              "student_only": 170720,
+              "both_wrong": 911387
+            },
+            "car": {
+              "valid": 4219671,
+              "both_right": 3784940,
+              "teacher_only": 58643,
+              "student_only": 208362,
+              "both_wrong": 167726
+            },
+            "person": {
+              "valid": 1106006,
+              "both_right": 803083,
+              "teacher_only": 92787,
+              "student_only": 75690,
+              "both_wrong": 134446
+            },
+            "bike": {
+              "valid": 2122305,
+              "both_right": 1787216,
+              "teacher_only": 35344,
+              "student_only": 95707,
+              "both_wrong": 204038
+            },
+            "curve": {
+              "valid": 684884,
+              "both_right": 292646,
+              "teacher_only": 33673,
+              "student_only": 72507,
+              "both_wrong": 286058
+            },
+            "bump": {
+              "valid": 529341,
+              "both_right": 300367,
+              "teacher_only": 32187,
+              "student_only": 60322,
+              "both_wrong": 136465
+            },
+            "car_stop": {
+              "valid": 499275,
+              "both_right": 184176,
+              "teacher_only": 21795,
+              "student_only": 119043,
+              "both_wrong": 174261
+            },
+            "color_cone": {
+              "valid": 361079,
+              "both_right": 227008,
+              "teacher_only": 8274,
+              "student_only": 44696,
+              "both_wrong": 81101
+            },
+            "guardrail": {
+              "valid": 75317,
+              "both_right": 39246,
+              "teacher_only": 11715,
+              "student_only": 4353,
+              "both_wrong": 20003
+            }
+          }
+        },
+        "foreground": {
+          "valid": 9597878,
+          "both_right": 7418682,
+          "teacher_only": 294418,
+          "student_only": 680680,
+          "both_wrong": 112028620,
+          "by_class": {
+            "car": {
+              "valid": 4219671,
+              "both_right": 3784940,
+              "teacher_only": 58643,
+              "student_only": 208362,
+              "both_wrong": 167726
+            },
+            "person": {
+              "valid": 1106006,
+              "both_right": 803083,
+              "teacher_only": 92787,
+              "student_only": 75690,
+              "both_wrong": 134446
+            },
+            "bike": {
+              "valid": 2122305,
+              "both_right": 1787216,
+              "teacher_only": 35344,
+              "student_only": 95707,
+              "both_wrong": 204038
+            },
+            "curve": {
+              "valid": 684884,
+              "both_right": 292646,
+              "teacher_only": 33673,
+              "student_only": 72507,
+              "both_wrong": 286058
+            },
+            "bump": {
+              "valid": 529341,
+              "both_right": 300367,
+              "teacher_only": 32187,
+              "student_only": 60322,
+              "both_wrong": 136465
+            },
+            "car_stop": {
+              "valid": 499275,
+              "both_right": 184176,
+              "teacher_only": 21795,
+              "student_only": 119043,
+              "both_wrong": 174261
+            },
+            "color_cone": {
+              "valid": 361079,
+              "both_right": 227008,
+              "teacher_only": 8274,
+              "student_only": 44696,
+              "both_wrong": 81101
+            },
+            "guardrail": {
+              "valid": 75317,
+              "both_right": 39246,
+              "teacher_only": 11715,
+              "student_only": 4353,
+              "both_wrong": 20003
+            }
+          }
+        }
+      },
+      "teacher_only_frac": 0.016600009632759354
+    }
+  }
+}

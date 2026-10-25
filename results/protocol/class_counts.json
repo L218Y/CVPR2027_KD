@@ -1,0 +1,25 @@
+{
+  "key": "/data/lab/kd_audit/data/MFNet::784::00001D::01001N",
+  "classes": [
+    "unlabeled",
+    "car",
+    "person",
+    "bike",
+    "curve",
+    "car_stop",
+    "guardrail",
+    "color_cone",
+    "bump"
+  ],
+  "counts": [
+    221252408,
+    10902426,
+    3324364,
+    1027788,
+    1548814,
+    1313666,
+    363618,
+    422237,
+    689479
+  ]
+}

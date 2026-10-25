@@ -1,0 +1,83 @@
+{
+  "experiment": "MFNet_CMNeXt-B2_i_rgb_s3407_screen_ce",
+  "dataset": "MFNet",
+  "backbone": "CMNeXt-B2",
+  "teacher_backbone": "CMNeXt-B2",
+  "teacher_path": "",
+  "teacher_sha256": null,
+  "modals": [
+    "img",
+    "thermal"
+  ],
+  "student_modals": [
+    "img"
+  ],
+  "kd_mode": "none",
+  "gate": "none",
+  "rare_protect": 0.0,
+  "tau": 2.0,
+  "eps_max": 0.5,
+  "lambda_kd": 1.0,
+  "lambda_feat": 0.0,
+  "class_balance": {
+    "enabled": false,
+    "beta": 0.5,
+    "cap": 5.0,
+    "weights": null,
+    "counts": null
+  },
+  "seed": 3407,
+  "epochs": 120,
+  "batch_size": 8,
+  "world_size": 1,
+  "best_miou": 55.32,
+  "last10_miou": 54.303333333333335,
+  "eval_history": [
+    [
+      75,
+      52.93
+    ],
+    [
+      100,
+      54.66
+    ],
+    [
+      120,
+      55.32
+    ]
+  ],
+  "mAcc": 64.2,
+  "acc_per_class": [
+    98.99,
+    90.78,
+    67.39,
+    82.9,
+    37.94,
+    39.78,
+    50.5,
+    65.32,
+    44.19
+  ],
+  "best_epoch": 120,
+  "train_time": "00:31:11",
+  "final_stats": {
+    "loss": 0.061152168834696013,
+    "kd": 0.0,
+    "r": 0.0,
+    "probe": 0.0,
+    "sel": 0.0
+  },
+  "provenance": {
+    "config": "configs/min/ce.yaml",
+    "config_sha256": "1d292341303a01e891bfd7dbd908f0302ac18e36ea173403740154926a7ca923",
+    "code_commit": "28e58d525d4d2d85295573e1ee9407923c8c6680",
+    "torch": "2.11.0+cu128",
+    "gpu": "NVIDIA GeForce RTX 4090",
+    "deterministic": true,
+    "train_split_sha256": "4bb4c7a698c6e2dfad0f40089830f58546523ac513e24e0dae8c2aaa7c857d91",
+    "eval_split_file_sha256": "446e9dbcee6a66bb95331dc704a2e184b723e5dd8aded861dbf76c9968879180",
+    "n_train": 784,
+    "n_eval": 392,
+    "started_utc": "2026-10-25T12:20:37Z"
+  }
+}
