@@ -1,5 +1,20 @@
 # Recoverability-Aware Privileged Distillation (RAPD)
 
+> **Status, 2026-10-25.** On MFNet the recoverability gate did not separate from uniform KD.
+> At epoch 500, seed 3407, evaluated by one protocol: CE **59.82**, RAPD-v2 **59.70**,
+> uniform **59.63**, with the image-bootstrap intervals all crossing zero. Class-level probe
+> scores span only 0.829–0.929 and the back-off is attenuated twice
+> (`alpha = eps_max (1 - r)^2`), so the mechanism is weak by construction, not merely
+> untuned. `docs/MINIMAL_EXPERIMENTS.md` defines the controlled comparison that replaces
+> hyper-parameter search; `scripts/check_config_parity.py` enforces that only the manipulated
+> factor differs between arms. The earlier batch compared configs that differed in
+> `TRAIN.DETERMINISTIC` and in `LAMBDA_FEAT`, which is why those deltas could not be
+> attributed to the gate.
+>
+> The negative accuracy result does **not** generalise to "privileged evidence cannot be
+> distilled". Two findings still hold: the night-pedestrian gap (teacher 65.74 vs student
+> 47.62 person IoU) and the thermal-shuffle ablation (65.74 → 16.77).
+
 Train with multimodal sensors, deploy with RGB only. This repository is a fork of
 [CMNeXt / DELIVER](https://github.com/jamycheung/DELIVER) (Apache-2.0) that adds a
 privileged-modality distillation framework: a frozen multimodal teacher supervises an
