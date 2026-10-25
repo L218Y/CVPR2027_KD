@@ -1,6 +1,6 @@
 {
  "meta": {
-  "checkpoint": "output/min/cbce/MFNet_CMNeXt-B2_i_rgb_s3407_screen_cbce/last.pth",
+  "checkpoint": "/data/lab/kd_work/output/min/cbce/MFNet_CMNeXt-B2_i_rgb_s3407_screen_cbce/last.pth",
   "checkpoint_sha256": "28151ccf72903c7166d3fa9270a1bc0982908354396a1510194d595d84d1e401",
   "checkpoint_epoch": 120,
   "load": "loaded 348/348 tensors (missing 0, unexpected 0)",
@@ -21,7 +21,7 @@
   ],
   "batch_size": 4,
   "tta": false,
-  "code_commit": "28e58d525d4d2d85295573e1ee9407923c8c6680",
+  "code_commit": "48856b9cda65e1c3cf686c87a3e7031b9431b5df",
   "torch": "2.11.0+cu128",
   "device": "NVIDIA GeForce RTX 4090",
   "classes": [
