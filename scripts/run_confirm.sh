@@ -14,7 +14,11 @@ TAG="${TAG:-confirm}"
 mkdir -p logs_screen
 
 run() { # gpu arm seed
-  local gpu="$1" arm="$2" seed="$3" name="${TAG}_${arm}_s${seed}" rc
+  local gpu="$1"
+  local arm="$2"
+  local seed="$3"
+  local name rc
+  name="${TAG}_${arm}_s${seed}"
   CUDA_VISIBLE_DEVICES="$gpu" PYTHONPATH=.:tools \
     python3 tools/train_kd.py --cfg "configs/min/$arm.yaml" \
       --seed "$seed" --epochs "$EPOCHS" --tag "$name" \
