@@ -58,6 +58,7 @@ KD:
     ENABLE: true
     DROP_PROB: 0.5
     GATE_INIT: 0.0
+    LR: 0.001
 EVAL:
   MODEL_PATH: output/min/priv_inject/best.pth
   IMAGE_SIZE:

@@ -235,14 +235,19 @@ def main(cfg, gpu, save_dir, args):
     iters_per_epoch = len(trainset) // train_cfg["BATCH_SIZE"] // world
     ce_loss = get_loss(loss_cfg["NAME"], trainset.ignore_label, class_weights if balance_on else None)
     optimizer = get_optimizer(student, optim_cfg["NAME"], lr, optim_cfg["WEIGHT_DECAY"])
-    if injector is not None:
-        optimizer.add_param_group({"params": list(injector.parameters())})
-    probe_params = (list(probe.parameters()) if probe else []) + (list(rec_head.parameters()) if rec_head else [])
+
+    # The injector's gate is a single scalar on top of a batch-normalised
+    # projection. On the main optimiser (6e-5) it moved only 0.044 in 120 epochs,
+    # which is not enough to test the mechanism, so it gets its own step size.
+    probe_params = (
+        (list(probe.parameters()) if probe else [])
+        + (list(rec_head.parameters()) if rec_head else [])
+        + (list(injector.parameters()) if injector is not None else [])
+    )
+    side_lr = float(inject_cfg.get("LR", kd_cfg.get("PROBE_LR", 1e-3)))
     probe_optimizer = None
     if probe_params:
-        probe_optimizer = torch.optim.AdamW(
-            probe_params, lr=kd_cfg.get("PROBE_LR", 1e-3), weight_decay=0.01
-        )
+        probe_optimizer = torch.optim.AdamW(probe_params, lr=side_lr, weight_decay=0.01)
     scheduler = get_scheduler(
         sched_cfg["NAME"], optimizer, int((epochs + 1) * iters_per_epoch),
         sched_cfg["POWER"], iters_per_epoch * sched_cfg["WARMUP"], sched_cfg["WARMUP_RATIO"],
@@ -360,7 +365,12 @@ def main(cfg, gpu, save_dir, args):
 
             scaler.scale(loss).backward()
             scaler.step(optimizer)
-            if probe_optimizer is not None:
+            # The side optimiser only holds the probe / injector. On an iteration
+            # where the injection was dropped and no probe exists, those tensors
+            # received no gradient, and GradScaler refuses to step an optimiser it
+            # never recorded an inf-check for.
+            side_used = injected or probe is not None or rec_head is not None
+            if probe_optimizer is not None and side_used:
                 scaler.step(probe_optimizer)
             scaler.update()
             scheduler.step()
