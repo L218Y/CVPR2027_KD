@@ -16,6 +16,11 @@ git clone https://github.com/L218Y/CVPR2027_KD.git && cd CVPR2027_KD
 bash scripts/restore_artifacts.sh     # 下载 release、解包数据、校验 sha256（bash 3.2 兼容）
 ```
 
+两个 release：`artifacts-2026-10-24`（教师、14 个 P0 checkpoint、数据集）与
+`artifacts-2026-10-25`（五臂屏筛 + 两轮注入 + 两个第二 seed 基线的 checkpoint）。
+后者不在 `ARTIFACTS.sha256` 里，需要时按名下载即可：`output/min/<arm>/<exp>_last.pth` 命名规则
+为 `<arm>_<实验全名>_last.pth`。
+
 `restore_artifacts.sh` 会：替换历史上那个自指的 `data` 符号链接、下载 17 个 release 资产、
 解包 `data/MFNet/`（784 train / 392 val）、拷贝 `results/splits/`、逐个校验 sha256。
 **不要**再手工 `tar -C data`，也不要重新提交 `data`。
@@ -81,6 +86,6 @@ python3 scripts/finish_confirm.py      # 等九次结束，逐臂评测、按 ±
 | 项 | 状态 |
 |---|---|
 | 三 seed 确认的 9 次训练 | 中断于 epoch 45/500，**无 checkpoint**，需重跑 |
-| 120 轮五臂与两轮注入的 checkpoint | 只在本机 `output/`，未上传 release（单文件 ~103 MB，需要时用 `gh release upload` 补） |
+| 120 轮五臂、两轮注入、两个第二 seed 基线 | ✅ 已上传 release `artifacts-2026-10-25`（9 个文件，0.93 GB） |
 | 逐图评测 JSON | ✅ 已入库（这是证据本体，可脱离 checkpoint 复核） |
 | P1（10-25 早）四个臂的 checkpoint | ❌ 早已丢失，无法恢复（见审核报告 §1.3） |
