@@ -59,7 +59,13 @@ while read -r name url; do
 done < "$listing"
 
 echo "verifying checksums"
-sha256sum -c results/ARTIFACTS.sha256 --quiet
+# ARTIFACTS.sha256 was written from inside results/ for the checkpoints but from
+# inside data/ for the dataset archive (hence a `../` prefix). Normalise the
+# paths so one check from the repo root covers every entry.
+norm="$(mktemp)"
+trap 'rm -f "$listing" "$norm"' EXIT
+awk '{p=$2; sub(/^\.\.\//, "data/", p); print $1 "  " p}' results/ARTIFACTS.sha256 > "$norm"
+sha256sum -c "$norm" --quiet
 
 if [ -f data/MFNet_dataset.tar.gz ] && [ ! -d data/MFNet/rgb ]; then
   echo "unpacking prepared dataset"
