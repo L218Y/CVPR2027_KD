@@ -1,0 +1,118 @@
+{
+  "experiment": "MFNet_CMNeXt-B2_it_teacher_s3407_personbal",
+  "dataset": "MFNet",
+  "backbone": "CMNeXt-B2",
+  "teacher_backbone": "CMNeXt-B2",
+  "teacher_path": "",
+  "teacher_sha256": null,
+  "modals": [
+    "img",
+    "thermal"
+  ],
+  "student_modals": [
+    "img",
+    "thermal"
+  ],
+  "kd_mode": "none",
+  "gate": "none",
+  "rare_protect": 0.0,
+  "tau": 2.0,
+  "eps_max": 0.5,
+  "lambda_kd": 1.0,
+  "lambda_feat": 0.0,
+  "priv_inject": {
+    "enabled": false,
+    "drop_prob": 0.0,
+    "gate": null
+  },
+  "class_balance": {
+    "enabled": true,
+    "beta": 0.5,
+    "cap": 5.0,
+    "weights": {
+      "unlabeled": 0.3478,
+      "car": 1.5667,
+      "person": 2.8372,
+      "bike": 5.0,
+      "curve": 4.1567,
+      "car_stop": 4.5134,
+      "guardrail": 5.0,
+      "color_cone": 5.0,
+      "bump": 5.0
+    },
+    "counts": {
+      "unlabeled": 221252408,
+      "car": 10902426,
+      "person": 3324364,
+      "bike": 1027788,
+      "curve": 1548814,
+      "car_stop": 1313666,
+      "guardrail": 363618,
+      "color_cone": 422237,
+      "bump": 689479
+    }
+  },
+  "seed": 3407,
+  "modality_dropout": {
+    "train_replace_prob": 0.0,
+    "eval_replace_aux": false
+  },
+  "epochs": 120,
+  "batch_size": 8,
+  "world_size": 2,
+  "best_miou": 53.58,
+  "last10_miou": 51.974999999999994,
+  "eval_history": [
+    [
+      60,
+      49.88
+    ],
+    [
+      80,
+      51.21
+    ],
+    [
+      100,
+      53.23
+    ],
+    [
+      120,
+      53.58
+    ]
+  ],
+  "mAcc": 75.52,
+  "acc_per_class": [
+    96.87,
+    94.04,
+    86.12,
+    89.3,
+    61.88,
+    59.05,
+    63.62,
+    82.05,
+    46.73
+  ],
+  "best_epoch": 120,
+  "train_time": "00:29:04",
+  "final_stats": {
+    "loss": 0.12372673409325737,
+    "kd": 0.0,
+    "r": 0.0,
+    "probe": 0.0,
+    "sel": 0.0,
+    "inj": 0.0
+  },
+  "provenance": {
+    "config": "configs/min/lr4_personbal.yaml",
+    "config_sha256": "73e0a74947c0a1afabc3742319740f8539e44811234d028e413d8b71b5a46d6f",
+    "code_commit": "6921ed5381e2e607524e52e986cddefe9ca8a5f8",
+    "torch": "2.11.0+cu128",
+    "gpu": "NVIDIA GeForce RTX 4090",
+    "deterministic": true,
+    "train_split_sha256": "4bb4c7a698c6e2dfad0f40089830f58546523ac513e24e0dae8c2aaa7c857d91",
+    "eval_split_file_sha256": "446e9dbcee6a66bb95331dc704a2e184b723e5dd8aded861dbf76c9968879180",
+    "n_train": 784,
+    "n_eval": 392,
+    "started_utc": "2026-10-26T16:40:22Z"
+  }
+}

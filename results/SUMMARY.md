@@ -29,6 +29,7 @@
 | MFNet | MFNet_CMNeXt-B2_it_teacher_s3407_p0_s3407 | teacher | 55.00 | 53.93 | 63.73 | — | 120 |
 | MFNet | MFNet_CMNeXt-B2_it_teacher_s3407_p0lr2_s3407 | teacher | 55.39 | 54.81 | 64.33 | — | 100 |
 | MFNet | MFNet_CMNeXt-B2_it_teacher_s3407_p0lr_s3407 | teacher | 55.80 | 55.28 | 65.40 | — | 120 |
+| MFNet | MFNet_CMNeXt-B2_it_teacher_s3407_personbal | teacher | 53.58 | 51.97 | 75.52 | — | 120 |
 | MFNet | MFNet_CMNeXt-B2_it_teacher_s3408 | teacher | 58.57 | 57.43 | 67.36 | — | 375 |
 | MFNet | MFNet_CMNeXt-B2_it_teacher_s3408_p0_s3408 | teacher | 52.56 | 51.77 | 61.00 | — | 100 |
 | MFNet | MFNet_CMNeXt-B2_it_teacher_s3409 | teacher | 60.01 | 59.38 | 68.52 | — | 400 |
@@ -43,6 +44,7 @@
 | MFNet | MFNet_CMNeXt-B2_it_teacher_s3407_p0_s3407 | teacher | 55.00 | 53.93 | 63.73 | — | 120 |
 | MFNet | MFNet_CMNeXt-B2_it_teacher_s3408_p0_s3408 | teacher | 52.56 | 51.77 | 61.00 | — | 100 |
 | MFNet | MFNet_CMNeXt-B2_it_teacher_s3407_p0lr2_s3407 | teacher | 55.39 | 54.81 | 64.33 | — | 100 |
+| MFNet | MFNet_CMNeXt-B2_it_teacher_s3407_personbal | teacher | 53.58 | 51.97 | 75.52 | — | 120 |
 | MFNet | MFNet_CMNeXt-B2_it_teacher_s3407_p0lr_s3407 | teacher | 55.80 | 55.28 | 65.40 | — | 120 |
 | MFNet | MFNet_CMNeXt-B2_it_teacher_s3407_p0lr_s3407 | teacher | 55.92 | 54.88 | 65.16 | — | 100 |
 | MFNet | MFNet_CMNeXt-B2_it_teacher_s3407_p0_s3407 | teacher | 51.91 | 47.68 | 59.90 | — | 120 |
