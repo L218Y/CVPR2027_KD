@@ -57,11 +57,12 @@ def main() -> None:
     results.mkdir(parents=True, exist_ok=True)
     rows = []
 
-    for metrics_path in sorted(Path(args.output).glob("*/metrics.json")):
+    for metrics_path in sorted(Path(args.output).rglob("metrics.json")):
         payload = read_json(metrics_path)
         if not payload:
             continue
-        exp = metrics_path.parent.name
+        rel = metrics_path.parent.relative_to(Path(args.output))
+        exp = str(rel).replace(os.sep, "__")
         dst = results / exp
         dst.mkdir(parents=True, exist_ok=True)
         shutil.copy2(metrics_path, dst / "metrics.json")
@@ -97,7 +98,11 @@ def main() -> None:
             writer.writeheader()
             writer.writerows(rows)
 
-    now = dt.datetime.now(dt.timezone.utc).strftime("%Y-%m-%d %H:%M:%S UTC")
+    # Use the newest metrics.json mtime, not wall-clock time, so a watchdog
+    # that re-collects unchanged runs does not create a commit every cycle.
+    latest = max((p.stat().st_mtime for p in Path(args.output).rglob("metrics.json")), default=0)
+    now = (dt.datetime.fromtimestamp(latest, dt.timezone.utc).strftime("%Y-%m-%d %H:%M:%S UTC")
+           if latest else "no runs yet")
     lines = [
         "# Experiment status",
         "",

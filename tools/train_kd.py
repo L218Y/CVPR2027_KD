@@ -104,6 +104,28 @@ def load_state(path, model, strict=True):
             f"(missing {len(missing)}, unexpected {len(unused)})")
 
 
+class ModalReplaceLoader:
+    """Replace every auxiliary modality with RGB at evaluation time.
+
+    Used for the modality-dropout teacher probe: the model is trained with the
+    auxiliary stream randomly replaced by RGB and is evaluated with the same
+    replacement, so the deployed input is RGB only (fed to both branches).
+    """
+
+    def __init__(self, loader):
+        self.loader = loader
+
+    def __iter__(self):
+        for sample, label in self.loader:
+            sample = list(sample)
+            for i in range(1, len(sample)):
+                sample[i] = sample[0]
+            yield sample, label
+
+    def __len__(self):
+        return len(self.loader)
+
+
 def build_model(cfg, n_classes, modals, backbone=None, pretrained=None):
     backbone = backbone or cfg["MODEL"]["BACKBONE"]
     model = eval(cfg["MODEL"]["NAME"])(backbone, n_classes, modals)
@@ -276,6 +298,10 @@ def main(cfg, gpu, save_dir, args):
         valset, batch_size=eval_cfg["BATCH_SIZE"], num_workers=args.workers,
         pin_memory=True, sampler=None,
     )
+    eval_replace_aux = bool(eval_cfg.get("MODAL_DROPOUT", False))
+    if eval_replace_aux and len(student_modals) > 1:
+        valloader = ModalReplaceLoader(valloader)
+    train_replace_aux = float(train_cfg.get("MODAL_DROPOUT_P", 0.0))
 
     scaler = _scaler(train_cfg.get("AMP", False))
     writer = None
@@ -316,6 +342,14 @@ def main(cfg, gpu, save_dir, args):
         for it, (sample, lbl) in pbar:
             sample = [x.to(device, non_blocking=True) for x in sample]
             lbl = lbl.to(device, non_blocking=True)
+            if train_replace_aux > 0 and len(sample) > 1:
+                # Modality dropout: replace each auxiliary stream with RGB. This
+                # keeps the input in-distribution (unlike zeroing) and forces the
+                # fusion to stay useful when the privileged stream carries no
+                # extra information. At eval the same replacement is applied.
+                for mi in range(1, len(sample)):
+                    if torch.rand((), device=device) < train_replace_aux:
+                        sample[mi] = sample[0]
             rgb = sample[:1]
             optimizer.zero_grad(set_to_none=True)
             if probe_optimizer is not None:
@@ -465,6 +499,10 @@ def main(cfg, gpu, save_dir, args):
                 },
             },
             "seed": args.seed,
+            "modality_dropout": {
+                "train_replace_prob": train_replace_aux,
+                "eval_replace_aux": eval_replace_aux,
+            },
             "epochs": epochs,
             "batch_size": train_cfg["BATCH_SIZE"],
             "world_size": world,

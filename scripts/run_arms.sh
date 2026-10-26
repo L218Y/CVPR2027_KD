@@ -43,3 +43,6 @@ if [ $((i % 2)) -eq 0 ]; then
 fi
 
 echo "[$(date -u +%H:%M:%S)] all requested arms done"
+if [ "${AUTOPUBLISH:-1}" = "1" ]; then
+  bash scripts/autopublish.sh --status 0 --note "run_arms $*" || true
+fi

@@ -21,8 +21,7 @@ echo "run: $CFG started at $START"
 python3 tools/train_kd.py --cfg "$CFG" "$@"
 STATUS=$?
 
-python3 scripts/collect_results.py --status "$STATUS" --note "$NOTE" || true
-bash scripts/sync_results.sh "$NOTE" || echo "sync failed (exit $?)" >&2
+bash scripts/autopublish.sh --status "$STATUS" --note "$NOTE" || echo "publish failed (exit $?)" >&2
 
 echo "run: finished with status $STATUS"
 exit "$STATUS"
