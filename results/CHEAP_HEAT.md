@@ -49,3 +49,17 @@ LR8/LR4 are 3 gate-training seeds with the same frozen experts; LR2 is one seed.
 - The gate uses two frozen B2 models; compute is not yet matched to a single model.
 - MFNet only; no second dataset or real low-resolution capture yet.
 - The gate is selected on a held-out split of `train.txt`; the 392-image test is touched once.
+
+## Compute (RTX 4090, 480x640, batch 1)
+
+| component | params (M) | GFLOPs | latency (ms) |
+|---|---:|---:|---:|
+| RGB expert | 25.8 | 46.2 | 11.01 |
+| thermal expert | 58.7 | 74.3 | 29.78 |
+| gate | 1.9 | 45.6 | 3.25 |
+| joint pipeline | 86.4 | 166.0 | 42.57 |
+
+The budget claim is about **sensor pixels**, not compute: the two-expert pipeline is
+about 2.6x the RGB-only latency (42.6 vs 11.0 ms). A compute-matched single-model
+variant and a native low-resolution thermal branch are future work.
+

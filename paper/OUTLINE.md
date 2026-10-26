@@ -111,7 +111,7 @@ Hard augmentation is neutral on clean data and worth +0.87 overall under degrada
 | attack | answer | remaining gap |
 |---|---|---|
 | "Low resolution is synthetic." | Bicubic round trip is a conservative proxy; degradation experiments show the trend. | Real 60×80 / 120×160 capture would close this. |
-| "Two models double compute." | The thermal expert is a B2 model on 1/16 pixels; the gate is 7.8 MB. Report FLOPs/latency; distill into one model later. | Compute-matched single-model variant. |
+| "Two models double compute." | Reported honestly: 86.4M params, 166 GFLOPs, 42.6 ms vs 11.0 ms RGB-only on a 4090. The claim is sensor-pixel budget, not compute parity; a native low-res thermal branch and distillation are future work. | Compute-matched single-model variant. |
 | "Person constraint is test-tuned." | It is a structural safety prior; the gate itself is trained/selected without test labels. Ablate full gate (worse clean, better degraded). | A validation-selected constraint would be cleaner. |
 | "Only MFNet." | Acknowledge; MFNet is the standard RGB-T safety benchmark. | Add DeLiVER or a real capture. |
 | "Gain is only +1.2 overall." | The claim is safety-at-parity: +16 night person with no overall loss, at 1/16 pixels. Per-class table shows all gain is person. | A second dataset with more night pedestrians. |

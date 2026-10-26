@@ -1,0 +1,21 @@
+{
+ "params_m": {
+  "rgb_expert": 25.776841,
+  "thermal_expert": 58.686017,
+  "gate": 1.934209,
+  "total": 86.39706699999999
+ },
+ "flops_g": {
+  "rgb_expert": 46.202976,
+  "thermal_expert": 74.263045056,
+  "gate": 45.5688192,
+  "total": 166.034840256
+ },
+ "latency_ms_batch1_480x640": {
+  "rgb_expert": 11.014553833007813,
+  "thermal_expert": 29.784883626302083,
+  "gate_only": 3.253448486328125,
+  "joint_pipeline": 42.57286783854167
+ },
+ "device": "NVIDIA GeForce RTX 4090"
+}
