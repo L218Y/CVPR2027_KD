@@ -1,3 +1,5 @@
 experiment,dataset,backbone,teacher,modals,kd_mode,seed,epochs,best_miou,best_epoch,train_time
+min__hallu__MFNet_CMNeXt-B2_it_teacher_s3407_p0_s3407,MFNet,CMNeXt-B2,CMNeXt-B2,img-thermal,none,3407,120,55.0,120,00:49:48
+min__hallu__MFNet_CMNeXt-B2_it_teacher_s3408_p0_s3408,MFNet,CMNeXt-B2,CMNeXt-B2,img-thermal,none,3408,120,52.56,100,00:50:29
 min__md_teacher__MFNet_CMNeXt-B2_it_teacher_s3407_p0_s3407,MFNet,CMNeXt-B2,CMNeXt-B2,img-thermal,none,3407,120,51.91,120,00:52:25
 min__rgb2_teacher__MFNet_CMNeXt-B2_ii_teacher_s3407_p0_s3407,MFNet,CMNeXt-B2,CMNeXt-B2,img-img,none,3407,120,53.6,120,00:53:09
