@@ -7,8 +7,8 @@ Gate protocol: trained on a 627/157 split of `train.txt` with hard-condition aug
 | thermal | pixels | official | fg | night person |
 |---|---:|---:|---:|---:|
 | none (CE120) | 0 | 56.38 | 51.28 | 45.24 |
-| LR8 60x80 | 1/64 | 57.38 ± 0.04 | 52.40 ± 0.04 | 58.46 ± 0.11 |
-| LR4 120x160 | 1/16 | 57.57 ± 0.07 | 52.61 ± 0.08 | 61.36 ± 0.32 |
+| LR8 60x80 | 1/64 | 57.38 ± 0.04 | 52.40 ± 0.05 | 58.46 ± 0.14 |
+| LR4 120x160 | 1/16 | 57.57 ± 0.08 | 52.61 ± 0.09 | 61.36 ± 0.40 |
 | LR2 240x320 | 1/4 | 57.45 ± 0.00 | 52.47 ± 0.00 | 61.01 ± 0.00 |
 | full-res teacher | 1 | 61.28 | — | 65.74 |
 
@@ -60,6 +60,6 @@ LR8/LR4 are 3 gate-training seeds with the same frozen experts; LR2 is one seed.
 | joint pipeline | 86.4 | 166.0 | 42.57 |
 
 The budget claim is about **sensor pixels**, not compute: the two-expert pipeline is
-about 2.6x the RGB-only latency (42.6 vs 11.0 ms). A compute-matched single-model
+about 3.9x the RGB-only latency (42.6 vs 11.0 ms). A compute-matched single-model
 variant and a native low-resolution thermal branch are future work.
 
