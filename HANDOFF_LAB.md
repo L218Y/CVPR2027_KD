@@ -77,7 +77,9 @@ python3 scripts/train_unet_gate.py \
 # model_b=build_model(..., ['thermal']), load epoch100, fb=flops(b,[th]), joint pb=b([th]).
 ```
 
-Checkpoints are not in git (99 MB each). If the lab disk is lost, retrain each with:
+Checkpoints are archived in GitHub release `thermalonly-2026-10-26` (assets:
+`thermalonly_lr{8,4,2}_*.pth`, `rgb_ce120_best.pth`, `gate_lr4_s340{7,8,9}.pth`).
+They are not in git. If the lab disk is lost, retrain each with:
 
 ```bash
 bash scripts/run_thermalonly.sh 8
