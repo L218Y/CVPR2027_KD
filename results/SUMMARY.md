@@ -3,9 +3,16 @@
 | dataset | run | role | mIoU | last-10 | mAcc | PGR | best epoch |
 |---|---|---|---|---|---|---|---|---|
 | MFNet | MFNet_CMNeXt-B2_i_rgb_s3407 | rgb | 61.72 | 59.99 | 70.68 | 0.000 | 275 |
+| MFNet | MFNet_CMNeXt-B2_i_rgb_s3407_screen_cbce | rgb | 56.30 | 54.61 | 76.35 | 0.000 | 120 |
+| MFNet | MFNet_CMNeXt-B2_i_rgb_s3407_screen_ce | rgb | 55.32 | 54.30 | 64.20 | 0.000 | 120 |
 | MFNet | MFNet_CMNeXt-B2_i_rgb_s3408 | rgb | 59.27 | 58.17 | 69.01 | 0.000 | 175 |
+| MFNet | MFNet_CMNeXt-B2_i_rgb_s3408_screen_cbce_s3408 | rgb | 54.23 | 53.90 | 72.89 | 0.000 | 120 |
+| MFNet | MFNet_CMNeXt-B2_i_rgb_s3408_screen_ce_s3408 | rgb | 56.18 | 55.51 | 64.88 | 0.000 | 120 |
 | MFNet | MFNet_CMNeXt-B2_i_rgb_s3409 | rgb | 59.58 | 58.56 | 69.51 | 0.000 | 400 |
 | MFNet | MFNet_CMNeXt-B2_it_uniform_s3407 | uniform | 59.95 | 59.21 | 69.48 | — | 375 |
+| MFNet | MFNet_CMNeXt-B2_it_uniform_s3407_screen2_priv_inject | uniform | 54.89 | 53.26 | 63.62 | — | 120 |
+| MFNet | MFNet_CMNeXt-B2_it_uniform_s3407_screen_priv_inject | uniform | 54.21 | 53.01 | 63.02 | — | 120 |
+| MFNet | MFNet_CMNeXt-B2_it_uniform_s3407_screen_uniform_kd | uniform | 55.55 | 54.64 | 64.15 | — | 120 |
 | MFNet | MFNet_CMNeXt-B2_it_uniform_s3408 | uniform | 60.79 | 60.24 | 69.80 | — | 350 |
 | MFNet | MFNet_CMNeXt-B2_it_conservative_only_s3407 | conservative_only | 61.01 | 58.57 | 71.23 | — | 275 |
 | MFNet | MFNet_CMNeXt-B2_it_recoverability_s3407 | recoverability | 60.49 | 59.35 | 69.23 | — | 350 |
@@ -13,6 +20,10 @@
 | MFNet | MFNet_CMNeXt-B2_it_recoverability_s3407_v2 | recoverability | 60.10 | 59.01 | 69.66 | — | 375 |
 | MFNet | MFNet_CMNeXt-B2_it_recoverability_s3408_v2 | recoverability | 60.68 | 60.08 | 71.18 | — | 300 |
 | MFNet | MFNet_CMNeXt-B2_it_recoverability_s3409_v2 | recoverability | 60.09 | 59.65 | 70.22 | — | 300 |
+| MFNet | MFNet_CMNeXt-B2_ii_teacher_s3407_p0_s3407 | teacher | 53.60 | 53.04 | 62.79 | — | 120 |
+| MFNet | MFNet_CMNeXt-B2_it_task_aware_s3407_screen_cbce_kd | task_aware | 56.73 | 56.12 | 71.57 | — | 120 |
+| MFNet | MFNet_CMNeXt-B2_it_task_aware_s3407_screen_correctness_kd | task_aware | 57.32 | 55.83 | 75.09 | — | 120 |
 | MFNet | MFNet_CMNeXt-B2_it_teacher_s3407 | teacher | 61.28 | 59.61 | 71.28 | — | 225 |
 | MFNet | MFNet_CMNeXt-B2_it_teacher_s3408 | teacher | 58.57 | 57.43 | 67.36 | — | 375 |
 | MFNet | MFNet_CMNeXt-B2_it_teacher_s3409 | teacher | 60.01 | 59.38 | 68.52 | — | 400 |
+| MFNet | MFNet_CMNeXt-B2_ii_teacher_s3407_p0_s3407 | teacher | 53.60 | 53.04 | 62.79 | — | 120 |
