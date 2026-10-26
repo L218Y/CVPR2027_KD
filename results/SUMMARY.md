@@ -3,12 +3,14 @@
 | dataset | run | role | mIoU | last-10 | mAcc | PGR | best epoch |
 |---|---|---|---|---|---|---|---|---|
 | MFNet | MFNet_CMNeXt-B2_i_rgb_s3407 | rgb | 61.72 | 59.99 | 70.68 | 0.000 | 275 |
+| MFNet | MFNet_CMNeXt-B2_i_rgb_s3407_p0ce120_s3407 | rgb | 56.38 | 53.99 | 65.52 | 0.000 | 120 |
 | MFNet | MFNet_CMNeXt-B2_i_rgb_s3407_screen_cbce | rgb | 56.30 | 54.61 | 76.35 | 0.000 | 120 |
 | MFNet | MFNet_CMNeXt-B2_i_rgb_s3407_screen_ce | rgb | 55.32 | 54.30 | 64.20 | 0.000 | 120 |
 | MFNet | MFNet_CMNeXt-B2_i_rgb_s3408 | rgb | 59.27 | 58.17 | 69.01 | 0.000 | 175 |
 | MFNet | MFNet_CMNeXt-B2_i_rgb_s3408_screen_cbce_s3408 | rgb | 54.23 | 53.90 | 72.89 | 0.000 | 120 |
 | MFNet | MFNet_CMNeXt-B2_i_rgb_s3408_screen_ce_s3408 | rgb | 56.18 | 55.51 | 64.88 | 0.000 | 120 |
 | MFNet | MFNet_CMNeXt-B2_i_rgb_s3409 | rgb | 59.58 | 58.56 | 69.51 | 0.000 | 400 |
+| MFNet | MFNet_CMNeXt-B2_i_rgb_s3407_p0ce120_s3407 | rgb | 56.38 | 53.99 | 65.52 | 0.000 | 120 |
 | MFNet | MFNet_CMNeXt-B2_it_uniform_s3407 | uniform | 59.95 | 59.21 | 69.48 | — | 375 |
 | MFNet | MFNet_CMNeXt-B2_it_uniform_s3407_screen2_priv_inject | uniform | 54.89 | 53.26 | 63.62 | — | 120 |
 | MFNet | MFNet_CMNeXt-B2_it_uniform_s3407_screen_priv_inject | uniform | 54.21 | 53.01 | 63.02 | — | 120 |
