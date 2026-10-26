@@ -1,5 +1,5 @@
 {
-  "key": "/data/lab/kd_audit/data/MFNet::784::00001D::01001N",
+  "key": "/data/lab/CVPR2027_KD/data/MFNet_lr4::784::00001D::01001N",
   "classes": [
     "unlabeled",
     "car",
