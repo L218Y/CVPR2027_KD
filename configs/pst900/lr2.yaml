@@ -1,0 +1,49 @@
+DEVICE: cuda
+SAVE_DIR: output/pst900/lr2
+MODEL:
+  NAME: CMNeXt
+  BACKBONE: CMNeXt-B2
+  PRETRAINED: checkpoints/pretrained/segformer/mit_b2.pth
+  RESUME: ''
+DATASET:
+  NAME: PST900
+  ROOT: data/PST900_lr2
+  IGNORE_LABEL: 255
+  MODALS:
+  - thermal
+TRAIN:
+  IMAGE_SIZE:
+  - 480
+  - 640
+  BATCH_SIZE: 8
+  EPOCHS: 120
+  EVAL_START: 40
+  EVAL_INTERVAL: 10
+  AMP: true
+  DDP: true
+  DETERMINISTIC: true
+LOSS:
+  NAME: CrossEntropy
+  CLS_WEIGHTS: false
+OPTIMIZER:
+  NAME: adamw
+  LR: 6.0e-05
+  WEIGHT_DECAY: 0.01
+SCHEDULER:
+  NAME: warmuppolylr
+  POWER: 0.9
+  WARMUP: 5
+  WARMUP_RATIO: 0.1
+KD:
+  ENABLE: false
+EVAL:
+  MODEL_PATH: output/pst900/lr2/PST900_CMNeXt-B2_t/best.pth
+  IMAGE_SIZE:
+  - 480
+  - 640
+  BATCH_SIZE: 4
+  MSF:
+    ENABLE: false
+    FLIP: false
+    SCALES:
+    - 1.0
