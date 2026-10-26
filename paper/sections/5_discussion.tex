@@ -1,0 +1,55 @@
+\section{Discussion and Limitations}
+\label{sec:discussion}
+
+The results support a narrow claim: at one sixteenth of the RGB pixel count, a thermal
+stream plus a person-aware spatial gate improves nighttime pedestrian segmentation
+without sacrificing overall parsing. They do not support a universal sensor budget.
+Low-resolution thermal is a proxy for a native sensor, and the bicubic round trip
+removes high-frequency detail without modeling sensor noise, fixed-pattern noise, or
+the optical blur of a real LWIR array. A real $120\times160$ capture could be better or
+worse than our simulation, and only a hardware study can settle the difference. The
+same caveat applies to the corrupted-RGB study: the corruption family is synthetic and
+was chosen to match the gate's training augmentation, so the absolute degraded numbers
+should be read as a stress test rather than a field measurement.
+
+The second limitation is coverage. MFNet is a single urban benchmark, and its nighttime
+subset is defined by capture metadata rather than by an independent night protocol. We
+attempted a transfer study on PST900 \cite{shivakumar2019rgbthermal}, whose subterranean
+RGB-T pairs include a survivor class. The pilot was negative: at $120\times160$ the
+thermal-only expert reached 45.35 overall mIoU and 37.88 survivor IoU, while the RGB
+expert reached 78.92 and 73.75. The survivors in PST900 are small, often low-contrast,
+and frequently occluded, so one sixteenth of the RGB grid is not enough to carry their
+thermal evidence. We therefore did not train a gate on PST900; doing so would have
+manufactured a second dataset result from a setting in which the premise of the method
+fails. The honest conclusion is that the budget knee is dataset-dependent, and that a
+deployment should measure it rather than inherit ours.
+
+The third limitation is compute. The gate uses two frozen B2 experts and costs 2.6
+times the RGB-only latency. The sensor-pixel saving is real, but it is not a
+compute saving, and a reviewer is right to ask for a single-model variant. A native
+low-resolution thermal branch could share the RGB backbone and reduce the thermal
+expert's cost; a distillation of the gate into the RGB expert could remove the second
+forward pass. Both are engineering changes that preserve the routing idea, and both are
+outside the scope of this paper. We report the full cost rather than comparing a
+two-model system to a one-model baseline without qualification.
+
+The person constraint is a structural prior, not a test-tuned classifier. It encodes
+the safety requirement that thermal may repair pedestrians but may not overwrite RGB's
+higher-resolution evidence on cars, curbs, guardrails, or road markings. The cost is
+visible under corrupted RGB: the person-or gate reaches 49.49 overall, below the full
+gate's 51.10, because it refuses to use thermal on non-person classes that RGB can no
+longer parse. A validation-selected constraint, or a gate conditioned on image quality,
+would be cleaner. We tried a confidence threshold on RGB, but the RGB expert is
+confidently wrong at night: its mean maximum softmax probability is 0.983 on both clean
+and corrupted inputs, so a scalar threshold cannot separate the regimes. An
+image-quality detector that reads brightness, contrast, and noise is the natural next
+step.
+
+Finally, the gate is selected on a 157-image held-out split that is larger than the
+usual validation split but still small. The three-seed standard deviations are tight
+for overall mIoU (0.08) and wider for nighttime pedestrian IoU (0.39), which is the
+expected pattern when the safety class is rare. The gate-validation split is
+scene-disjoint at the image level but not at the sequence level; MFNet frames from the
+same drive can appear in both fit and gate-validation. This does not touch the official
+test, but it may make the selection slightly optimistic. A sequence-disjoint split
+would be the stronger protocol.

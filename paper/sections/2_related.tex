@@ -1,0 +1,71 @@
+\section{Related Work}
+
+\subsection{RGB-Thermal Semantic Segmentation}
+
+RGB-T segmentation fuses a visible image with a thermal image so that the thermal
+stream can supply evidence when visible illumination fails. MFNet introduced the first
+aligned day/night benchmark and a two-stream encoder for real-time driving scenes
+\cite{ha2017mfnet}; RTFNet scaled the idea with deeper encoders and a lightweight
+decoder \cite{sun2019rtfnet}. Later work replaced hand-designed fusion with
+cross-modal attention and transformer blocks. CMX exchanges features between an RGB
+backbone and an auxiliary modality through a Cross-Modal Feature Rectification Module
+and a Feature Fusion Module \cite{zhang2022crossmodal}, while CMNeXt and the DeLiVER
+benchmark extend the recipe to an arbitrary set of modalities and to missing-modality
+inference \cite{zhang2023delivering}. Recent variants add spectral-aware global
+fusion \cite{zhang2025spectralaware}, state-space models for real-time wild-scene
+segmentation \cite{guo2025crossmodal}, modality-aware pre-training and rectification
+\cite{guo2025tuni}, language guidance \cite{zhao2025unveiling}, frequency-guided
+fusion \cite{cantez2026frequencyguided}, and broader RGB-X fusion
+\cite{cao2026multimodal,zhang2026crossweaver,reddy2026seeing}. Across this line of
+work, the thermal stream is assumed to be full resolution and always available; the
+sensor-cost question is not part of the architecture search.
+
+\subsection{Thermal Benchmarks and Low-Light Perception}
+
+MFNet remains the reference for daytime/nighttime urban RGB-T segmentation and is the
+benchmark on which most fusion architectures report \cite{ha2017mfnet}. PST900 targets
+subterranean robot perception with synchronized RGB-thermal pairs and four object
+classes \cite{shivakumar2019rgbthermal}, and Freiburg Thermal targets the day-night
+domain gap with a large unlabeled capture and a small annotated test set
+\cite{vertens2020heatnet}. Thermal-only benchmarks such as SODA provide day and night
+annotations without paired RGB \cite{li2019soda}. These datasets make clear that
+thermal imagery is valuable precisely when visible evidence is weak, but they do not
+isolate the resolution of the thermal stream: the sensor is either full resolution or
+absent. Our budget sweep fills that gap by treating thermal resolution as the
+controlled variable and measuring the safety class separately from the other classes.
+
+\subsection{Cross-Modal Transfer and Routing}
+
+A natural alternative to carrying a thermal sensor is to transfer its knowledge into
+RGB. Multimodal distillation and prototype-based transfer have been used to compress
+or robustify multimodal segmentation \cite{tan2025rmmss,wu2024fusionthendistillation},
+and complementary masking trains RGB-T models to survive missing modalities
+\cite{shin2023complementary}. Our diagnosis differs from these efforts in target: we
+ask whether the nighttime pedestrian advantage itself can be moved, and we find that it
+cannot. The result is consistent with the broader observation that a student cannot
+recover information that is absent from its input, no matter how the distillation loss
+is shaped.
+
+Routing between experts is a separate line of work. Learning-to-defer methods learn
+when a classifier should abstain in favor of a human or another model, with
+theoretical guarantees for single- and multi-expert settings
+\cite{mao2023principled,montreuil2025onestage,liu2026when}. Mixture-of-experts models
+learn input-dependent gates over specialized predictors and have been analyzed for
+softmax gating and expert underfitting \cite{bariletto2026bayesian,nguyen2025convergence}.
+Our gate borrows the deferral view but operates per pixel and between two dense
+segmentation experts, and it is trained only on disagreement pixels with a
+safety-class weight. The person constraint is a structural prior, not a learned
+classifier, which keeps the thermal expert from touching the eight classes on which
+RGB is stronger.
+
+\subsection{Calibration and Reliability}
+
+A gate that reads confidence must reckon with miscalibration. Modern networks are
+often overconfident, and temperature scaling or related post-hoc corrections are the
+standard remedy \cite{guo2017calibration}. In our setting, the RGB expert is
+confidently wrong at night: its mean maximum softmax probability is 0.983 on both clean
+and degraded inputs, so a threshold on RGB confidence cannot separate the two regimes.
+The gate therefore reads the full probability maps, their entropy, and the thermal
+image, rather than a single confidence scalar. This design choice is also why the gate
+degrades gracefully: when RGB is corrupted, the thermal expert's probability map
+becomes the more informative input, and the gate can route accordingly.

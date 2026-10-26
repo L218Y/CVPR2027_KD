@@ -1,0 +1,37 @@
+\documentclass[10pt,twocolumn]{article}
+\usepackage[T1]{fontenc}
+\usepackage{times}
+\usepackage{microtype}
+\usepackage[margin=0.75in]{geometry}
+\usepackage{graphicx}
+\usepackage{booktabs}
+\usepackage{amsmath,amssymb}
+\usepackage[numbers,sort&compress]{natbib}
+\usepackage[hidelinks]{hyperref}
+\usepackage{placeins}
+\usepackage{subcaption}
+\usepackage{tikz}
+\usetikzlibrary{arrows.meta,positioning,fit}
+
+\newcommand{\method}{CheapHeat}
+\newcommand{\lr}[1]{\textsc{lr#1}}
+
+\title{\method: Budgeted Thermal Sensing with a Person-Aware Reliability Gate for Nighttime RGB-T Segmentation}
+\author{Anonymous CVPR submission}
+\date{}
+
+\begin{document}
+\maketitle
+
+\input{sections/0_abstract}
+\input{sections/1_intro}
+\input{sections/2_related}
+\input{sections/3_method}
+\input{sections/4_experiments}
+\input{sections/5_discussion}
+\input{sections/6_conclusion}
+
+\bibliographystyle{plainnat}
+\bibliography{refs}
+
+\end{document}

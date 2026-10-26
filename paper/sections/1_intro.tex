@@ -1,0 +1,75 @@
+\section{Introduction}
+
+Thermal infrared cameras are the standard remedy for the failure of visible-spectrum
+perception at night. In RGB-Thermal (RGB-T) semantic segmentation, a thermal stream
+recovers pedestrians, cyclists, and unlit obstacles that RGB misses, and a decade of
+fusion architectures has turned this observation into accurate daytime and nighttime
+scene parsing \cite{ha2017mfnet,sun2019rtfnet,zhang2022crossmodal,zhang2023delivering}.
+The recipe, however, assumes a thermal sensor that is neither cheap nor plentiful.
+Long-wave infrared arrays are coarser and more expensive than their RGB counterparts,
+and the bandwidth and storage of a full thermal stream are difficult to justify on a
+low-cost robot, a delivery vehicle, or a wearable \cite{shivakumar2019rgbthermal}.
+The community has responded by treating thermal as either a full-resolution input or
+as something to be distilled away. Both responses sidestep the budget question: how
+many thermal pixels are actually needed, and which pixels should carry thermal
+evidence?
+
+This paper answers that question empirically on MFNet \cite{ha2017mfnet}, the standard
+day/night RGB-T benchmark. We first test whether the thermal advantage can be moved
+into an RGB-only student. Logit distillation, modality dropout, and thermal
+hallucination all fail: the nighttime pedestrian gain of a full-resolution thermal
+teacher does not survive the transfer, and the night-person teacher-consistency
+efficiency (TCE) is approximately $-0.08$. The evidence is not a representation that
+RGB can learn to imitate; it is carried by the thermal photons themselves. This
+negative result motivates a sensor-budget study rather than another distillation
+objective.
+
+We then sweep the thermal stream from $60\times80$ to $240\times320$ while holding the
+RGB stream, backbone, schedule, and evaluation protocol fixed. The resulting curve has
+a clear knee at $120\times160$, one sixteenth of the RGB pixel count: this budget
+recovers 81\% of the full-resolution teacher's nighttime pedestrian gain at a cost of
+only 0.58 overall mIoU relative to a 120-epoch RGB-only model. Pushing to $60\times80$
+loses 3.4 points of nighttime pedestrian IoU for a negligible further saving, while
+$240\times320$ buys only 0.6 additional points. The knee is therefore a useful
+operating point, not an arbitrary compromise.
+
+A low-resolution thermal stream cannot simply be fused globally. At $120\times160$ the
+thermal expert is better than RGB on pedestrians but worse on cars, curbs, guardrails,
+and road markings; a globally fused model inherits both effects and ends at 55.80
+overall mIoU, below the RGB-only 56.38. A per-class gate selected on training accuracy
+does not repair this: the training split is much easier than the official test split,
+and the selector collapses to the thermal expert on every class. The failure is
+instructive. The routing decision is spatial and condition-dependent, and it must be
+selected on data that resembles the deployment distribution, not on clean training
+accuracy.
+
+We introduce a person-aware reliability gate that makes the budget usable. Two frozen
+experts---a 120-epoch RGB model and a thermal-only model on the $120\times160$
+stream---propose dense labels. A small U-Net reads the RGB image, the thermal image,
+both probability maps, and their confidence and entropy, and predicts a per-pixel
+reliability logit for the thermal expert. At deployment, the gate may override RGB only
+where the experts disagree and either expert predicts a pedestrian. The constraint is
+structural: pedestrians are the safety-critical class, and the eight other classes
+should keep RGB's higher-resolution evidence. The gate is trained on a 627-image
+subset of the training split with hard-condition augmentation, selected on the
+remaining 157 images, and the official 392-image test is touched once.
+
+With three gate-training seeds, the gate reaches $57.57\pm0.07$ overall mIoU and
+$61.36\pm0.32$ nighttime pedestrian IoU, against 56.38 and 45.24 for RGB-only and
+55.80 and 61.88 for the thermal expert alone. The entire gain is the pedestrian class:
+all other classes change by at most 0.37 IoU. Under synthetic low-light, blur, and
+noise, RGB collapses from 56.38 to 47.95 overall, while the gate holds 51.10 and the
+thermal expert holds 62.02 nighttime pedestrian IoU. A compute measurement closes the
+accounting: the two-expert system costs 42.6 ms per $480\times640$ frame on an RTX
+4090, 2.6 times the RGB-only 11.0 ms. The contribution is a sensor-pixel budget, not a
+compute budget, and we report the difference rather than hiding it.
+
+Our contributions are: (i) a negative diagnosis showing that the nighttime pedestrian
+advantage is modality-borne and does not distil into RGB; (ii) a thermal sensor-budget
+curve with a $120\times160$ knee and a per-class explanation of why global
+low-resolution fusion is insufficient; (iii) a person-aware reliability gate with a
+train-internal selection protocol and three-seed evidence of safety-at-parity; and
+(iv) a degradation study showing when the gate and the thermal expert remain useful
+after RGB is corrupted. We do not claim state-of-the-art overall mIoU, real-sensor
+validation, single-model compute parity, or generalization beyond MFNet; those are
+explicit limitations, and we return to them in Section~\ref{sec:discussion}.
