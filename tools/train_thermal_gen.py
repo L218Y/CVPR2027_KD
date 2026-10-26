@@ -12,6 +12,8 @@ few hundred lines, not tuned until it flatters the paper.
 """
 
 import argparse
+import fcntl
+import random
 import time
 from pathlib import Path
 
@@ -75,7 +77,24 @@ def main() -> None:
     ap.add_argument("--lr", type=float, default=2e-4)
     ap.add_argument("--workers", type=int, default=6)
     ap.add_argument("--out", default="output/gen/thermal_unet.pth")
+    ap.add_argument("--seed", type=int, default=3407)
+    ap.add_argument("--force", action="store_true", help="retrain even if --out exists")
     args = ap.parse_args()
+
+    random.seed(args.seed)
+    np.random.seed(args.seed)
+    torch.manual_seed(args.seed)
+    torch.cuda.manual_seed_all(args.seed)
+
+    out_path = ROOT / args.out
+    out_path.parent.mkdir(parents=True, exist_ok=True)
+    # One trainer at a time. If another GPU already produced the checkpoint,
+    # reuse it instead of training a duplicate on this GPU.
+    lock = open(out_path.with_suffix(out_path.suffix + ".lock"), "w")
+    fcntl.flock(lock, fcntl.LOCK_EX)
+    if out_path.exists() and not args.force:
+        print(f"reusing {out_path} (pass --force to retrain)")
+        return
 
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
     train = DataLoader(Pairs("train"), batch_size=args.batch_size, shuffle=True,
