@@ -25,11 +25,17 @@ echo "[$(date -u +%H:%M:%S)] stage 1: md_teacher on GPU0, rgb2_teacher on GPU1"
 CUDA_VISIBLE_DEVICES=0 python3 tools/train_kd.py --cfg configs/min/md_teacher.yaml \
   --seed "$SEED_A" --epochs "$EPOCHS" --tag p0_s${SEED_A} > logs_p0/md_teacher.log 2>&1 &
 A=$!
-CUDA_VISIBLE_DEVICES=1 python3 tools/train_kd.py --cfg configs/min/rgb2_teacher.yaml \
-  --seed "$SEED_A" --epochs "$EPOCHS" --tag p0_s${SEED_A} > logs_p0/rgb2_teacher.log 2>&1 &
-B=$!
+if [ "${SKIP_RGB2:-0}" = "1" ]; then
+  echo "[$(date -u +%H:%M:%S)] skip rgb2_teacher (already complete)"
+  B=""
+else
+  CUDA_VISIBLE_DEVICES=1 python3 tools/train_kd.py --cfg configs/min/rgb2_teacher.yaml \
+    --seed "$SEED_A" --epochs "$EPOCHS" --tag p0_s${SEED_A} > logs_p0/rgb2_teacher.log 2>&1 &
+  B=$!
+fi
 wait "$A"; RA=$?
-wait "$B"; RB=$?
+RB=0
+[ -n "$B" ] && wait "$B"; RB=$?
 echo "[$(date -u +%H:%M:%S)] stage 1 done rc=$RA/$RB"
 
 echo "[$(date -u +%H:%M:%S)] stage 2: RGB->thermal generator"
