@@ -1,0 +1,190 @@
+{
+ "meta": {
+  "cfg_a": "configs/min/ce.yaml",
+  "ckpt_a": "output/MFNet_CMNeXt-B2_i_rgb_s3407/last.pth",
+  "cfg_b": "configs/min/lr8_teacher.yaml",
+  "ckpt_b": "output/min/lr8_teacher/MFNet_CMNeXt-B2_it_teacher_s3407_p0lr_s3407/last.pth",
+  "root": "data/MFNet_lr8",
+  "n_train": 784,
+  "n_test": 392,
+  "gate": "per-class model selection by train per-class IoU"
+ },
+ "train": {
+  "A": {
+   "miou_official": 90.20581840344127,
+   "miou_foreground": 89.06886711897187,
+   "per_class_iou": {
+    "unlabeled": 99.301,
+    "car": 96.431,
+    "person": 82.392,
+    "bike": 87.891,
+    "curve": 86.372,
+    "car_stop": 90.955,
+    "guardrail": 94.572,
+    "color_cone": 81.334,
+    "bump": 92.604
+   },
+   "present": 9
+  },
+  "B": {
+   "miou_official": 81.32522624349619,
+   "miou_foreground": 79.14267323918305,
+   "per_class_iou": {
+    "unlabeled": 98.786,
+    "car": 93.464,
+    "person": 77.238,
+    "bike": 75.015,
+    "curve": 69.198,
+    "car_stop": 82.034,
+    "guardrail": 89.157,
+    "color_cone": 66.717,
+    "bump": 80.318
+   },
+   "present": 9
+  },
+  "choices": {
+   "unlabeled": false,
+   "car": false,
+   "person": false,
+   "bike": false,
+   "curve": false,
+   "car_stop": false,
+   "guardrail": false,
+   "color_cone": false,
+   "bump": false
+  },
+  "per_class_iou_A": {
+   "unlabeled": 99.301,
+   "car": 96.431,
+   "person": 82.392,
+   "bike": 87.891,
+   "curve": 86.372,
+   "car_stop": 90.955,
+   "guardrail": 94.572,
+   "color_cone": 81.334,
+   "bump": 92.604
+  },
+  "per_class_iou_B": {
+   "unlabeled": 98.786,
+   "car": 93.464,
+   "person": 77.238,
+   "bike": 75.015,
+   "curve": 69.198,
+   "car_stop": 82.034,
+   "guardrail": 89.157,
+   "color_cone": 66.717,
+   "bump": 80.318
+  }
+ },
+ "test": {
+  "A": {
+   "miou_official": 59.81806676805289,
+   "miou_foreground": 55.11073547688519,
+   "per_class_iou": {
+    "unlabeled": 97.477,
+    "car": 84.635,
+    "person": 58.083,
+    "bike": 71.818,
+    "curve": 36.484,
+    "car_stop": 34.7,
+    "guardrail": 45.737,
+    "color_cone": 59.82,
+    "bump": 49.61
+   },
+   "present": 9
+  },
+  "B": {
+   "miou_official": 55.833097740746716,
+   "miou_foreground": 50.66278616277374,
+   "per_class_iou": {
+    "unlabeled": 97.196,
+    "car": 82.458,
+    "person": 64.218,
+    "bike": 69.634,
+    "curve": 32.976,
+    "car_stop": 28.546,
+    "guardrail": 39.777,
+    "color_cone": 55.885,
+    "bump": 31.809
+   },
+   "present": 9
+  },
+  "gate": {
+   "miou_official": 59.81806676805289,
+   "miou_foreground": 55.11073547688519,
+   "per_class_iou": {
+    "unlabeled": 97.477,
+    "car": 84.635,
+    "person": 58.083,
+    "bike": 71.818,
+    "curve": 36.484,
+    "car_stop": 34.7,
+    "guardrail": 45.737,
+    "color_cone": 59.82,
+    "bump": 49.61
+   },
+   "present": 9
+  },
+  "gate_by_condition": {
+   "day": {
+    "miou_official": 59.191539804082225,
+    "miou_foreground": 54.31909394261733,
+    "per_class_iou": {
+     "unlabeled": 98.171,
+     "car": 90.237,
+     "person": 66.718,
+     "bike": 54.912,
+     "curve": 39.173,
+     "car_stop": 47.291,
+     "guardrail": 0.0,
+     "color_cone": 76.769,
+     "bump": 59.454
+    },
+    "present": 9
+   },
+   "night": {
+    "miou_official": 54.82512414270511,
+    "miou_foreground": 49.58940373337438,
+    "per_class_iou": {
+     "unlabeled": 96.711,
+     "car": 76.066,
+     "person": 47.617,
+     "bike": 74.711,
+     "curve": 26.566,
+     "car_stop": 31.489,
+     "guardrail": 49.209,
+     "color_cone": 56.914,
+     "bump": 34.144
+    },
+    "present": 9
+   }
+  },
+  "oracle_per_class_analytic": {
+   "miou_official": 60.499680055783074,
+   "miou_foreground": 55.87755042558163,
+   "per_class_iou": {
+    "unlabeled": 97.477,
+    "car": 84.635,
+    "person": 64.218,
+    "bike": 71.818,
+    "curve": 36.484,
+    "car_stop": 34.7,
+    "guardrail": 45.737,
+    "color_cone": 59.82,
+    "bump": 49.61
+   }
+  },
+  "per_class_iou_gate": {
+   "unlabeled": 97.477,
+   "car": 84.635,
+   "person": 58.083,
+   "bike": 71.818,
+   "curve": 36.484,
+   "car_stop": 34.7,
+   "guardrail": 45.737,
+   "color_cone": 59.82,
+   "bump": 49.61
+  }
+ },
+ "per_image": null
+}

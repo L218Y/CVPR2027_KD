@@ -77,6 +77,8 @@ def main():
     ap.add_argument("--batch-size", type=int, default=4)
     ap.add_argument("--workers", type=int, default=6)
     ap.add_argument("--save-per-image", action="store_true")
+    ap.add_argument("--gate-classes", nargs="*", default=None,
+                    help="force these class names on (B); bypass train selection")
     args = ap.parse_args()
 
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
@@ -104,6 +106,8 @@ def main():
         h_b = np.zeros((n_classes, n_classes), np.int64)
         h_g = np.zeros((n_classes, n_classes), np.int64)
         cond_g = {c: np.zeros((n_classes, n_classes), np.int64) for c in ("day", "night")}
+        cond_a = {c: np.zeros((n_classes, n_classes), np.int64) for c in ("day", "night")}
+        cond_b = {c: np.zeros((n_classes, n_classes), np.int64) for c in ("day", "night")}
         per_image = []
         cursor = 0
         with torch.no_grad():
@@ -128,8 +132,12 @@ def main():
                 for b in range(label_np.shape[0]):
                     stem = ds.files[cursor + b]
                     cond = condition_of(stem)
-                    h_a += hist_of(pred_a[b], label_np[b], n_classes)
-                    h_b += hist_of(pred_b[b], label_np[b], n_classes)
+                    ha = hist_of(pred_a[b], label_np[b], n_classes)
+                    hb = hist_of(pred_b[b], label_np[b], n_classes)
+                    h_a += ha
+                    h_b += hb
+                    cond_a[cond] += ha
+                    cond_b[cond] += hb
                     if pred_g is not None:
                         hg = hist_of(pred_g[b], label_np[b], n_classes)
                         h_g += hg
@@ -138,21 +146,24 @@ def main():
                             per_image.append({"name": Path(stem).name, "condition": cond,
                                               "hist": hg.ravel().tolist()})
                 cursor += label_np.shape[0]
-        return h_a, h_b, h_g, cond_g, per_image
+        return h_a, h_b, h_g, cond_g, cond_a, cond_b, per_image
 
     print(f"train: {len(ds_train)} images; test: {len(ds_test)} images")
-    h_a_tr, h_b_tr, _, _, _ = run_split(ds_train)
+    h_a_tr, h_b_tr, _, _, cond_a_tr, cond_b_tr, _ = run_split(ds_train)
     iou_a_tr, iou_b_tr = iou_table(h_a_tr), iou_table(h_b_tr)
     choices = []
     for c in range(n_classes):
         a = 0.0 if np.isnan(iou_a_tr[c]) else float(iou_a_tr[c])
         b = 0.0 if np.isnan(iou_b_tr[c]) else float(iou_b_tr[c])
         choices.append(bool(b > a))
+    if args.gate_classes:
+        forced = {CLASSES.index(c) for c in args.gate_classes}
+        choices = [c in forced for c in range(n_classes)]
     print("train per-class IoU A/B:", {c: (round(iou_a_tr[i], 2), round(iou_b_tr[i], 2))
                                       for i, c in enumerate(CLASSES)})
     print("choices (True=low-res RGB-T):", {c: choices[i] for i, c in enumerate(CLASSES)})
 
-    h_a_te, h_b_te, h_g_te, cond_g_te, per_image = run_split(
+    h_a_te, h_b_te, h_g_te, cond_g_te, _, _, per_image = run_split(
         ds_test, choices=choices, collect_per_image=args.save_per_image)
 
     iou_a_te, iou_b_te = iou_table(h_a_te), iou_table(h_b_te)
@@ -173,6 +184,9 @@ def main():
                                 for c, v in zip(CLASSES, iou_a_tr)},
             "per_class_iou_B": {c: (None if np.isnan(v) else round(float(v), 3))
                                 for c, v in zip(CLASSES, iou_b_tr)},
+            "by_condition": {
+                cond: {"A": summarise(cond_a_tr[cond]), "B": summarise(cond_b_tr[cond])}
+                for cond in ("day", "night")},
         },
         "test": {
             "A": summarise(h_a_te), "B": summarise(h_b_te),
