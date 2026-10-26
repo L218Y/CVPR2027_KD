@@ -1,0 +1,36 @@
+{
+ "run": "min/ce120/MFNet_CMNeXt-B2_i_rgb_s3407_p0ce120_s3407",
+ "tag": "run-min__ce120__mfnet_cmnext-b2_i_rgb_s3407_p0ce120_s3407-20261026T1319",
+ "dataset": "MFNet",
+ "kd_mode": "none",
+ "seed": 3407,
+ "best_miou": 56.38,
+ "last10_miou": 53.99249999999999,
+ "assets": [
+  {
+   "name": "min__ce120__mfnet_cmnext-b2_i_rgb_s3407_p0ce120_s3407_best.pth",
+   "size": 103213921,
+   "status": "ok",
+   "detail": "103213921 bytes"
+  },
+  {
+   "name": "min__ce120__mfnet_cmnext-b2_i_rgb_s3407_p0ce120_s3407_last.pth",
+   "size": 103213985,
+   "status": "ok",
+   "detail": "103213985 bytes"
+  },
+  {
+   "name": "min__ce120__mfnet_cmnext-b2_i_rgb_s3407_p0ce120_s3407_metrics.json",
+   "size": 1911,
+   "status": "ok",
+   "detail": "1911 bytes"
+  },
+  {
+   "name": "min__ce120__mfnet_cmnext-b2_i_rgb_s3407_p0ce120_s3407_train.log",
+   "size": 2929,
+   "status": "ok",
+   "detail": "2929 bytes"
+  }
+ ],
+ "errors": []
+}
