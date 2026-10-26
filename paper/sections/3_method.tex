@@ -73,8 +73,7 @@ and Adam with a learning rate of $10^{-3}$; the gate has 1.9M parameters.
 
 The official MFNet test split is used once per model. To select the gate and its
 hyperparameters without touching that split, we partition the 784 training images into
-627 fit images and 157 gate-validation images, stratified by day/night and by the
-presence of pedestrians. The gate is trained on the 627 fit images with hard-condition
+627 fit images and 157 gate-validation images, stratified by day/night condition. The gate is trained on the 627 fit images with hard-condition
 augmentation and selected on the 157 gate-validation images under the same hard
 augmentation. The selection score is the gate-validation mIoU plus half the
 gate-validation pedestrian IoU, which balances overall parsing and the safety class.
