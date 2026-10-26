@@ -20,7 +20,7 @@ TRAIN:
   EVAL_START: 40
   EVAL_INTERVAL: 10
   AMP: true
-  DDP: false
+  DDP: true
   DETERMINISTIC: true
 LOSS:
   NAME: CrossEntropy
