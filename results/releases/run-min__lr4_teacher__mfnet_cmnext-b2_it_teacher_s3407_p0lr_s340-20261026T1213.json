@@ -1,0 +1,36 @@
+{
+ "run": "min/lr4_teacher/MFNet_CMNeXt-B2_it_teacher_s3407_p0lr_s3407",
+ "tag": "run-min__lr4_teacher__mfnet_cmnext-b2_it_teacher_s3407_p0lr_s340-20261026T1213",
+ "dataset": "MFNet",
+ "kd_mode": "none",
+ "seed": 3407,
+ "best_miou": 55.8,
+ "last10_miou": 55.2775,
+ "assets": [
+  {
+   "name": "min__lr4_teacher__mfnet_cmnext-b2_it_teacher_s3407_p0lr_s3407_best.pth",
+   "size": 235111917,
+   "status": "ok",
+   "detail": "235111917 bytes"
+  },
+  {
+   "name": "min__lr4_teacher__mfnet_cmnext-b2_it_teacher_s3407_p0lr_s3407_last.pth",
+   "size": 235112045,
+   "status": "ok",
+   "detail": "235112045 bytes"
+  },
+  {
+   "name": "min__lr4_teacher__mfnet_cmnext-b2_it_teacher_s3407_p0lr_s3407_metrics.json",
+   "size": 1920,
+   "status": "ok",
+   "detail": "1920 bytes"
+  },
+  {
+   "name": "min__lr4_teacher__mfnet_cmnext-b2_it_teacher_s3407_p0lr_s3407_train.log",
+   "size": 2934,
+   "status": "ok",
+   "detail": "2934 bytes"
+  }
+ ],
+ "errors": []
+}
