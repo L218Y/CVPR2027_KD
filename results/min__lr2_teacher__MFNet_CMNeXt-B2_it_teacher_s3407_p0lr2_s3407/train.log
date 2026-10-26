@@ -1,0 +1,103 @@
+20261026 13:19:25 - root - INFO: - {
+  "DEVICE": "cuda",
+  "SAVE_DIR": "output/min/lr2_teacher",
+  "MODEL": {
+    "NAME": "CMNeXt",
+    "BACKBONE": "CMNeXt-B2",
+    "PRETRAINED": "checkpoints/pretrained/segformer/mit_b2.pth",
+    "RESUME": ""
+  },
+  "DATASET": {
+    "NAME": "MFNet",
+    "ROOT": "data/MFNet_lr2",
+    "IGNORE_LABEL": 255,
+    "MODALS": [
+      "img",
+      "thermal"
+    ]
+  },
+  "TRAIN": {
+    "IMAGE_SIZE": [
+      480,
+      640
+    ],
+    "BATCH_SIZE": 8,
+    "EPOCHS": 120,
+    "EVAL_START": 50,
+    "EVAL_INTERVAL": 20,
+    "AMP": true,
+    "DDP": true,
+    "DETERMINISTIC": true,
+    "MODAL_DROPOUT_P": 0.0
+  },
+  "LOSS": {
+    "NAME": "CrossEntropy",
+    "CLS_WEIGHTS": false
+  },
+  "OPTIMIZER": {
+    "NAME": "adamw",
+    "LR": 6e-05,
+    "WEIGHT_DECAY": 0.01
+  },
+  "SCHEDULER": {
+    "NAME": "warmuppolylr",
+    "POWER": 0.9,
+    "WARMUP": 10,
+    "WARMUP_RATIO": 0.1
+  },
+  "KD": {
+    "ENABLE": false,
+    "TEACHER_MODALS": [
+      "img",
+      "thermal"
+    ]
+  },
+  "EVAL": {
+    "MODEL_PATH": "output/min/lr2_teacher/best.pth",
+    "IMAGE_SIZE": [
+      480,
+      640
+    ],
+    "BATCH_SIZE": 4,
+    "MODAL_DROPOUT": false,
+    "MSF": {
+      "ENABLE": false,
+      "FLIP": false,
+      "SCALES": [
+        1.0
+      ]
+    }
+  }
+}
+20261026 13:46:44 - root - INFO: - epoch 60 mIoU 54.320 mAcc 63.950 best 0.000
+20261026 13:46:44 - root - INFO: - 
+Class   	IoU     	Acc     
+1 unlabeled	96.97	98.96
+2 car   	78.11	83.16
+3 person	63.79	79.24
+4 bike  	68.39	78.82
+5 curve 	32.43	43.07
+6 car_stop	24.68	29.57
+7 guardrail	28.76	47.91
+8 color_cone	48.39	56.23
+9 bump  	47.38	58.55
+== Epoch:  	59	mean_IoU	54.32	mean_Acc	63.95
+20261026 13:56:01 - root - INFO: - epoch 80 mIoU 54.300 mAcc 63.700 best 54.320
+20261026 14:04:51 - root - INFO: - epoch 100 mIoU 55.390 mAcc 64.330 best 54.320
+20261026 14:04:52 - root - INFO: - 
+Class   	IoU     	Acc     
+1 unlabeled	97.19	98.98
+2 car   	81.73	88.69
+3 person	65.62	79.88
+4 bike  	69.83	81.72
+5 curve 	32.18	40.08
+6 car_stop	25.64	31.95
+7 guardrail	31.57	53.20
+8 color_cone	50.98	55.48
+9 bump  	43.74	48.98
+== Epoch:  	99	mean_IoU	55.39	mean_Acc	64.33
+20261026 14:13:17 - root - INFO: - epoch 120 mIoU 55.240 mAcc 64.390 best 55.390
+20261026 14:13:17 - root - INFO: - ---------  --------
+Best mIoU  55.39
+Time       00:53:57
+---------  --------

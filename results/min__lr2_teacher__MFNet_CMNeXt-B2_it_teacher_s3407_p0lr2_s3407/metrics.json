@@ -1,0 +1,98 @@
+{
+  "experiment": "MFNet_CMNeXt-B2_it_teacher_s3407_p0lr2_s3407",
+  "dataset": "MFNet",
+  "backbone": "CMNeXt-B2",
+  "teacher_backbone": "CMNeXt-B2",
+  "teacher_path": "",
+  "teacher_sha256": null,
+  "modals": [
+    "img",
+    "thermal"
+  ],
+  "student_modals": [
+    "img",
+    "thermal"
+  ],
+  "kd_mode": "none",
+  "gate": "none",
+  "rare_protect": 0.0,
+  "tau": 2.0,
+  "eps_max": 0.5,
+  "lambda_kd": 1.0,
+  "lambda_feat": 0.0,
+  "priv_inject": {
+    "enabled": false,
+    "drop_prob": 0.0,
+    "gate": null
+  },
+  "class_balance": {
+    "enabled": false,
+    "beta": 0.5,
+    "cap": 5.0,
+    "weights": null,
+    "counts": null
+  },
+  "seed": 3407,
+  "modality_dropout": {
+    "train_replace_prob": 0.0,
+    "eval_replace_aux": false
+  },
+  "epochs": 120,
+  "batch_size": 8,
+  "world_size": 1,
+  "best_miou": 55.39,
+  "last10_miou": 54.8125,
+  "eval_history": [
+    [
+      60,
+      54.32
+    ],
+    [
+      80,
+      54.3
+    ],
+    [
+      100,
+      55.39
+    ],
+    [
+      120,
+      55.24
+    ]
+  ],
+  "mAcc": 64.33,
+  "acc_per_class": [
+    98.98,
+    88.69,
+    79.88,
+    81.72,
+    40.08,
+    31.95,
+    53.2,
+    55.48,
+    48.98
+  ],
+  "best_epoch": 100,
+  "train_time": "00:53:57",
+  "final_stats": {
+    "loss": 0.04090516132359602,
+    "kd": 0.0,
+    "r": 0.0,
+    "probe": 0.0,
+    "sel": 0.0,
+    "inj": 0.0
+  },
+  "provenance": {
+    "config": "configs/min/lr2_teacher.yaml",
+    "config_sha256": "c31dc4d02f227bc836cd9071a2887c4784b00b17a7594e811c6003985291494c",
+    "code_commit": "c1c824318417e56e9005d35e300e33f04c64fc7c",
+    "torch": "2.11.0+cu128",
+    "gpu": "NVIDIA GeForce RTX 4090",
+    "deterministic": true,
+    "train_split_sha256": "4bb4c7a698c6e2dfad0f40089830f58546523ac513e24e0dae8c2aaa7c857d91",
+    "eval_split_file_sha256": "446e9dbcee6a66bb95331dc704a2e184b723e5dd8aded861dbf76c9968879180",
+    "n_train": 784,
+    "n_eval": 392,
+    "started_utc": "2026-10-26T13:19:19Z"
+  }
+}
