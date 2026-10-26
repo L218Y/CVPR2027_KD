@@ -14,7 +14,7 @@ DATASET:
 TRAIN:
   IMAGE_SIZE:
   - 480
-  - 640
+  - 864
   BATCH_SIZE: 8
   EPOCHS: 120
   EVAL_START: 40
@@ -40,7 +40,7 @@ EVAL:
   MODEL_PATH: output/pst900/lr2/PST900_CMNeXt-B2_t/best.pth
   IMAGE_SIZE:
   - 480
-  - 640
+  - 864
   BATCH_SIZE: 4
   MSF:
     ENABLE: false

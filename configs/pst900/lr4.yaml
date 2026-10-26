@@ -14,13 +14,13 @@ DATASET:
 TRAIN:
   IMAGE_SIZE:
   - 480
-  - 640
+  - 864
   BATCH_SIZE: 8
   EPOCHS: 120
   EVAL_START: 40
   EVAL_INTERVAL: 10
   AMP: true
-  DDP: true
+  DDP: false
   DETERMINISTIC: true
 LOSS:
   NAME: CrossEntropy
@@ -40,7 +40,7 @@ EVAL:
   MODEL_PATH: output/pst900/lr4/PST900_CMNeXt-B2_t/best.pth
   IMAGE_SIZE:
   - 480
-  - 640
+  - 864
   BATCH_SIZE: 4
   MSF:
     ENABLE: false
