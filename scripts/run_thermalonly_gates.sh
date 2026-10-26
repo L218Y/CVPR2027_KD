@@ -8,7 +8,7 @@ mkdir -p logs_p0 results/protocol
 
 RGB_CKPT="output/min/ce120/MFNet_CMNeXt-B2_i_rgb_s3407_p0ce120_s3407/best.pth"
 for s in 4 8 2; do
-  B_CKPT="$(find "output/min/lr${s}_thermalonly" -name '*epoch120*.pth' ! -name '*checkpoint*' | head -1)"
+  B_CKPT="$(find "output/min/lr${s}_thermalonly" -name '*.pth' ! -name '*checkpoint*' | head -1)"
   if [ -z "$B_CKPT" ]; then echo "missing thermal-only LR${s} checkpoint"; continue; fi
   for seed in 3407 3408 3409; do
     tag="thermalonly_lr${s}_s${seed}"
