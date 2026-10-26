@@ -287,3 +287,14 @@ configs/seeds/
 
 # The dataset lives outside the repo; a committed absolute-path symlink breaks clones.
 /data
+
+# LaTeX build artifacts
+paper/*.aux
+paper/*.bbl
+paper/*.blg
+paper/*.fdb_latexmk
+paper/*.fls
+paper/*.log
+paper/*.out
+paper/*.synctex.gz
+paper/main.pdf
