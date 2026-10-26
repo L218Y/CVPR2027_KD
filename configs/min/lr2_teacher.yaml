@@ -1,0 +1,54 @@
+DEVICE          : cuda
+SAVE_DIR        : 'output/min/lr2_teacher'
+
+MODEL:
+  NAME          : CMNeXt
+  BACKBONE      : CMNeXt-B2
+  PRETRAINED    : 'checkpoints/pretrained/segformer/mit_b2.pth'
+  RESUME        : ''
+
+DATASET:
+  NAME          : MFNet
+  ROOT          : 'data/MFNet_lr2'
+  IGNORE_LABEL  : 255
+  MODALS        : ['img', 'thermal']
+
+TRAIN:
+  IMAGE_SIZE    : [480, 640]
+  BATCH_SIZE    : 8
+  EPOCHS        : 120
+  EVAL_START    : 50
+  EVAL_INTERVAL : 20
+  AMP           : true
+  DDP           : true
+  DETERMINISTIC : true
+  MODAL_DROPOUT_P: 0.0
+
+LOSS:
+  NAME          : CrossEntropy
+  CLS_WEIGHTS   : false
+
+OPTIMIZER:
+  NAME          : adamw
+  LR            : 0.00006
+  WEIGHT_DECAY  : 0.01
+
+SCHEDULER:
+  NAME          : warmuppolylr
+  POWER         : 0.9
+  WARMUP        : 10
+  WARMUP_RATIO  : 0.1
+
+KD:
+  ENABLE        : false
+  TEACHER_MODALS: ['img', 'thermal']
+
+EVAL:
+  MODEL_PATH    : 'output/min/lr2_teacher/best.pth'
+  IMAGE_SIZE    : [480, 640]
+  BATCH_SIZE    : 4
+  MODAL_DROPOUT : false
+  MSF:
+    ENABLE      : false
+    FLIP        : false
+    SCALES      : [1.0]
