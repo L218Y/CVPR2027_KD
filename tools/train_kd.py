@@ -125,6 +125,11 @@ class ModalReplaceLoader:
     def __len__(self):
         return len(self.loader)
 
+    def __getattr__(self, name):
+        # val_mm.evaluate reads dataloader.dataset.n_classes / ignore_label.
+        # Delegate every other attribute to the wrapped DataLoader.
+        return getattr(self.loader, name)
+
 
 def build_model(cfg, n_classes, modals, backbone=None, pretrained=None):
     backbone = backbone or cfg["MODEL"]["BACKBONE"]
