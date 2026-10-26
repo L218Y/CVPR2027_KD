@@ -43,6 +43,9 @@ def main():
     ap.add_argument("--batch-size", type=int, default=2)
     ap.add_argument("--workers", type=int, default=5)
     ap.add_argument("--degrade", action="store_true")
+    ap.add_argument("--b-modals", nargs="+", default=["img", "thermal"])
+    ap.add_argument("--conf-thresh", type=float, default=None,
+                    help="if set, use full gate on images whose RGB confidence is below this")
     args = ap.parse_args()
 
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
@@ -53,7 +56,7 @@ def main():
     n_classes = ds.n_classes
 
     model_a = build_model(cfg_a, n_classes, ["img"]).to(device)
-    model_b = build_model(cfg_b, n_classes, ["img", "thermal"]).to(device)
+    model_b = build_model(cfg_b, n_classes, args.b_modals).to(device)
     print("A:", load_state(args.ckpt_a, model_a, strict=True))
     print("B:", load_state(args.ckpt_b, model_b, strict=True))
     model_a.eval(); model_b.eval()
@@ -64,6 +67,8 @@ def main():
     gate.eval()
 
     variants = ("A", "B", "full", "person_or", "person_b", "person_prob")
+    if args.conf_thresh is not None:
+        variants = variants + ("adaptive",)
     h = {k: np.zeros((n_classes, n_classes), np.int64) for k in variants}
     cond = {k: {c: np.zeros((n_classes, n_classes), np.int64) for c in ("day", "night")} for k in variants}
     cursor = 0
@@ -76,7 +81,7 @@ def main():
             if args.degrade:
                 sample[0], sample[1] = hard_aug(sample[0], sample[1], p_hard=1.0, train=False)
             pa = model_a([sample[0]]).softmax(1)
-            pb = model_b([sample[0], sample[1]]).softmax(1)
+            pb = model_b(([sample[1]] if args.b_modals == ["thermal"] else [sample[0], sample[1]])).softmax(1)
             score = gate(features(pa, pb, sample[0], sample[1])).squeeze(1)
             pa_p, pb_p = pa.argmax(1), pb.argmax(1)
             dis = pa_p != pb_p
@@ -88,6 +93,10 @@ def main():
                 "person_b": dis & (score > 0) & (pb_p == 2),
                 "person_prob": dis & (score > 0) & (pb[:, 2] > 0.5),
             }
+            if args.conf_thresh is not None:
+                conf = pa.max(1).values.mean(dim=(1, 2))
+                use_full = conf < args.conf_thresh
+                masks["adaptive"] = torch.where(use_full.view(-1, 1, 1), masks["full"], masks["person_or"])
             lab = label.squeeze(1).cpu().numpy()
             for b in range(lab.shape[0]):
                 c = condition_of(ds.files[cursor + b])

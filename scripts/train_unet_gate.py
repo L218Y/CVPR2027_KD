@@ -151,6 +151,7 @@ def main():
     ap.add_argument("--workers", type=int, default=6)
     ap.add_argument("--lr", type=float, default=1e-3)
     ap.add_argument("--p-hard", type=float, default=0.5)
+    ap.add_argument("--b-modals", nargs="+", default=["img", "thermal"])
     ap.add_argument("--seed", type=int, default=3407)
     args = ap.parse_args()
 
@@ -165,7 +166,7 @@ def main():
     n_classes = ds_tr.n_classes
 
     model_a = build_model(cfg_a, n_classes, ["img"]).to(device)
-    model_b = build_model(cfg_b, n_classes, ["img", "thermal"]).to(device)
+    model_b = build_model(cfg_b, n_classes, args.b_modals).to(device)
     print("A:", load_state(args.ckpt_a, model_a, strict=True))
     print("B:", load_state(args.ckpt_b, model_b, strict=True))
     model_a.eval()
@@ -187,7 +188,7 @@ def main():
         if hard:
             rgb, therm = hard_aug(rgb, therm, p_hard=1.0, train=False)
         pa = model_a([rgb]).softmax(1)
-        pb = model_b([rgb, therm]).softmax(1)
+        pb = model_b(([therm] if args.b_modals == ["thermal"] else [rgb, therm])).softmax(1)
         score = gate(features(pa, pb, rgb, therm)).squeeze(1)
         pa_p = pa.argmax(1)
         pb_p = pb.argmax(1)
@@ -228,7 +229,7 @@ def main():
             rgb, therm = hard_aug(sample[0], sample[1], p_hard=args.p_hard, train=True)
             with torch.no_grad():
                 pa = model_a([rgb]).softmax(1)
-                pb = model_b([rgb, therm]).softmax(1)
+                pb = model_b(([therm] if args.b_modals == ["thermal"] else [rgb, therm])).softmax(1)
             feats = features(pa, pb, rgb, therm)
             logit = gate(feats).squeeze(1)
             lab = label.squeeze(1)
