@@ -1,0 +1,202 @@
+{
+ "gate": "output/gate/unet_lr8_ce120/best_gate.pth",
+ "root": "data/MFNet_lr8",
+ "variants": {
+  "full": {
+   "overall": {
+    "miou_official": 57.04853985338951,
+    "miou_foreground": 52.021210143828085,
+    "per_class_iou": {
+     "unlabeled": 97.267,
+     "car": 83.074,
+     "person": 63.64,
+     "bike": 70.259,
+     "curve": 32.519,
+     "car_stop": 31.636,
+     "guardrail": 40.672,
+     "color_cone": 57.072,
+     "bump": 37.296
+    }
+   },
+   "conditions": {
+    "day": {
+     "miou_official": 55.597044070371496,
+     "miou_foreground": 50.31710696500506,
+     "per_class_iou": {
+      "unlabeled": 97.837,
+      "car": 88.265,
+      "person": 67.77,
+      "bike": 51.926,
+      "curve": 34.426,
+      "car_stop": 41.925,
+      "guardrail": 0.0,
+      "color_cone": 76.109,
+      "bump": 42.117
+     }
+    },
+    "night": {
+     "miou_official": 53.78930815463936,
+     "miou_foreground": 48.43332427765695,
+     "per_class_iou": {
+      "unlabeled": 96.637,
+      "car": 75.059,
+      "person": 58.312,
+      "bike": 73.25,
+      "curve": 25.228,
+      "car_stop": 28.44,
+      "guardrail": 43.626,
+      "color_cone": 53.79,
+      "bump": 29.763
+     }
+    }
+   }
+  },
+  "person_or": {
+   "overall": {
+    "miou_official": 57.3454803853868,
+    "miou_foreground": 52.35330287247141,
+    "per_class_iou": {
+     "unlabeled": 97.283,
+     "car": 83.933,
+     "person": 63.64,
+     "bike": 69.826,
+     "curve": 30.129,
+     "car_stop": 36.127,
+     "guardrail": 33.589,
+     "color_cone": 55.617,
+     "bump": 45.966
+    }
+   },
+   "conditions": {
+    "day": {
+     "miou_official": 55.88960376904965,
+     "miou_foreground": 50.643631117835696,
+     "per_class_iou": {
+      "unlabeled": 97.857,
+      "car": 88.895,
+      "person": 67.77,
+      "bike": 50.408,
+      "curve": 32.326,
+      "car_stop": 40.625,
+      "guardrail": 0.0,
+      "color_cone": 73.266,
+      "bump": 51.86
+     }
+    },
+    "night": {
+     "miou_official": 54.16832238486298,
+     "miou_foreground": 48.85850983573013,
+     "per_class_iou": {
+      "unlabeled": 96.647,
+      "car": 76.427,
+      "person": 58.312,
+      "bike": 73.054,
+      "curve": 21.649,
+      "car_stop": 34.656,
+      "guardrail": 37.26,
+      "color_cone": 52.554,
+      "bump": 36.955
+     }
+    }
+   }
+  },
+  "person_b": {
+   "overall": {
+    "miou_official": 57.17513354345369,
+    "miou_foreground": 52.163782133858994,
+    "per_class_iou": {
+     "unlabeled": 97.266,
+     "car": 83.925,
+     "person": 62.38,
+     "bike": 69.818,
+     "curve": 30.129,
+     "car_stop": 36.128,
+     "guardrail": 33.592,
+     "color_cone": 55.372,
+     "bump": 45.966
+    }
+   },
+   "conditions": {
+    "day": {
+     "miou_official": 55.792191976078534,
+     "miou_foreground": 50.53547260728693,
+     "per_class_iou": {
+      "unlabeled": 97.846,
+      "car": 88.889,
+      "person": 66.913,
+      "bike": 50.32,
+      "curve": 32.327,
+      "car_stop": 40.628,
+      "guardrail": 0.0,
+      "color_cone": 73.349,
+      "bump": 51.86
+     }
+    },
+    "night": {
+     "miou_official": 53.94909079412377,
+     "miou_foreground": 48.614763196277664,
+     "per_class_iou": {
+      "unlabeled": 96.624,
+      "car": 76.419,
+      "person": 56.665,
+      "bike": 73.058,
+      "curve": 21.649,
+      "car_stop": 34.656,
+      "guardrail": 37.26,
+      "color_cone": 52.256,
+      "bump": 36.955
+     }
+    }
+   }
+  },
+  "person_prob": {
+   "overall": {
+    "miou_official": 57.15728643385697,
+    "miou_foreground": 52.14389193909617,
+    "per_class_iou": {
+     "unlabeled": 97.264,
+     "car": 83.924,
+     "person": 62.276,
+     "bike": 69.804,
+     "curve": 30.128,
+     "car_stop": 36.092,
+     "guardrail": 33.588,
+     "color_cone": 55.373,
+     "bump": 45.966
+    }
+   },
+   "conditions": {
+    "day": {
+     "miou_official": 55.78807503732068,
+     "miou_foreground": 50.53086124390841,
+     "per_class_iou": {
+      "unlabeled": 97.846,
+      "car": 88.881,
+      "person": 66.95,
+      "bike": 50.298,
+      "curve": 32.325,
+      "car_stop": 40.572,
+      "guardrail": 0.0,
+      "color_cone": 73.361,
+      "bump": 51.86
+     }
+    },
+    "night": {
+     "miou_official": 53.916115892650026,
+     "miou_foreground": 48.578039530691896,
+     "per_class_iou": {
+      "unlabeled": 96.621,
+      "car": 76.425,
+      "person": 56.4,
+      "bike": 73.058,
+      "curve": 21.649,
+      "car_stop": 34.625,
+      "guardrail": 37.259,
+      "color_cone": 52.254,
+      "bump": 36.955
+     }
+    }
+   }
+  }
+ }
+}
