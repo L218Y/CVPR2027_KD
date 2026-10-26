@@ -1,0 +1,36 @@
+{
+ "run": "min/hallu/MFNet_CMNeXt-B2_it_teacher_s3408_p0_s3408",
+ "tag": "run-min__hallu__mfnet_cmnext-b2_it_teacher_s3408_p0_s3408-20261026T0938",
+ "dataset": "MFNet",
+ "kd_mode": "none",
+ "seed": 3408,
+ "best_miou": 52.56,
+ "last10_miou": 51.77,
+ "assets": [
+  {
+   "name": "min__hallu__mfnet_cmnext-b2_it_teacher_s3408_p0_s3408_best.pth",
+   "size": 235111917,
+   "status": "ok",
+   "detail": "235111917 bytes"
+  },
+  {
+   "name": "min__hallu__mfnet_cmnext-b2_it_teacher_s3408_p0_s3408_last.pth",
+   "size": 235112045,
+   "status": "ok",
+   "detail": "235112045 bytes"
+  },
+  {
+   "name": "min__hallu__mfnet_cmnext-b2_it_teacher_s3408_p0_s3408_metrics.json",
+   "size": 1875,
+   "status": "ok",
+   "detail": "1875 bytes"
+  },
+  {
+   "name": "min__hallu__mfnet_cmnext-b2_it_teacher_s3408_p0_s3408_train.log",
+   "size": 2561,
+   "status": "ok",
+   "detail": "2561 bytes"
+  }
+ ],
+ "errors": []
+}
