@@ -28,7 +28,7 @@ sys.path.insert(0, str(REPO / "scripts"))
 import semseg.datasets as D  # noqa: E402
 from semseg.augmentations_mm import get_val_augmentation  # noqa: E402
 from train_kd import build_model, load_state  # noqa: E402
-from train_unet_gate import UNetGate, features, hist_of, summarise, condition_of  # noqa: E402
+from train_unet_gate import UNetGate, features, hist_of, summarise, condition_of, hard_aug  # noqa: E402
 
 
 def main():
@@ -42,6 +42,7 @@ def main():
     ap.add_argument("--out", required=True)
     ap.add_argument("--batch-size", type=int, default=2)
     ap.add_argument("--workers", type=int, default=5)
+    ap.add_argument("--degrade", action="store_true")
     args = ap.parse_args()
 
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
@@ -62,7 +63,7 @@ def main():
     gate.load_state_dict(ck["gate"])
     gate.eval()
 
-    variants = ("full", "person_or", "person_b", "person_prob")
+    variants = ("A", "B", "full", "person_or", "person_b", "person_prob")
     h = {k: np.zeros((n_classes, n_classes), np.int64) for k in variants}
     cond = {k: {c: np.zeros((n_classes, n_classes), np.int64) for c in ("day", "night")} for k in variants}
     cursor = 0
@@ -72,12 +73,16 @@ def main():
         for sample, label in loader:
             sample = [x.to(device, non_blocking=True) for x in sample]
             label = label.to(device, non_blocking=True)
+            if args.degrade:
+                sample[0], sample[1] = hard_aug(sample[0], sample[1], p_hard=1.0, train=False)
             pa = model_a([sample[0]]).softmax(1)
             pb = model_b([sample[0], sample[1]]).softmax(1)
             score = gate(features(pa, pb, sample[0], sample[1])).squeeze(1)
             pa_p, pb_p = pa.argmax(1), pb.argmax(1)
             dis = pa_p != pb_p
             masks = {
+                "A": torch.zeros_like(dis),
+                "B": torch.ones_like(dis),
                 "full": dis & (score > 0),
                 "person_or": dis & (score > 0) & ((pa_p == 2) | (pb_p == 2)),
                 "person_b": dis & (score > 0) & (pb_p == 2),
