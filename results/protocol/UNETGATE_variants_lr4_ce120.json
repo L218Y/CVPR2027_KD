@@ -2,6 +2,104 @@
  "gate": "output/gate/unet_lr4_ce120/best_gate.pth",
  "root": "data/MFNet_lr4",
  "variants": {
+  "A": {
+   "overall": {
+    "miou_official": 56.37993250721572,
+    "miou_foreground": 51.276909178238164,
+    "per_class_iou": {
+     "unlabeled": 97.204,
+     "car": 83.914,
+     "person": 55.791,
+     "bike": 69.73,
+     "curve": 30.121,
+     "car_stop": 35.763,
+     "guardrail": 33.587,
+     "color_cone": 55.342,
+     "bump": 45.966
+    }
+   },
+   "conditions": {
+    "day": {
+     "miou_official": 55.36107102172673,
+     "miou_foreground": 50.05259162424278,
+     "per_class_iou": {
+      "unlabeled": 97.829,
+      "car": 88.885,
+      "person": 64.424,
+      "bike": 50.235,
+      "curve": 32.316,
+      "car_stop": 39.601,
+      "guardrail": 0.0,
+      "color_cone": 73.101,
+      "bump": 51.86
+     }
+    },
+    "night": {
+     "miou_official": 52.639337545831516,
+     "miou_foreground": 47.15517173267487,
+     "per_class_iou": {
+      "unlabeled": 96.513,
+      "car": 76.396,
+      "person": 45.241,
+      "bike": 73.012,
+      "curve": 21.649,
+      "car_stop": 34.481,
+      "guardrail": 37.258,
+      "color_cone": 52.249,
+      "bump": 36.955
+     }
+    }
+   }
+  },
+  "B": {
+   "overall": {
+    "miou_official": 55.79573997076827,
+    "miou_foreground": 50.62196490800346,
+    "per_class_iou": {
+     "unlabeled": 97.186,
+     "car": 82.322,
+     "person": 66.005,
+     "bike": 69.424,
+     "curve": 33.093,
+     "car_stop": 28.377,
+     "guardrail": 39.34,
+     "color_cone": 55.444,
+     "bump": 30.972
+    }
+   },
+   "conditions": {
+    "day": {
+     "miou_official": 55.07671145819674,
+     "miou_foreground": 49.73473736293763,
+     "per_class_iou": {
+      "unlabeled": 97.813,
+      "car": 87.834,
+      "person": 69.093,
+      "bike": 54.272,
+      "curve": 35.236,
+      "car_stop": 37.61,
+      "guardrail": 0.0,
+      "color_cone": 74.374,
+      "bump": 39.459
+     }
+    },
+    "night": {
+     "miou_official": 51.924632723963256,
+     "miou_foreground": 46.35354636425214,
+     "per_class_iou": {
+      "unlabeled": 96.493,
+      "car": 73.85,
+      "person": 61.881,
+      "bike": 71.828,
+      "curve": 24.792,
+      "car_stop": 25.379,
+      "guardrail": 43.281,
+      "color_cone": 52.126,
+      "bump": 17.69
+     }
+    }
+   }
+  },
   "full": {
    "overall": {
     "miou_official": 56.20039800717078,

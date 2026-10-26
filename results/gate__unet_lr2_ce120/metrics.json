@@ -1,0 +1,12 @@
+{
+ "dataset": "MFNet",
+ "kd_mode": "unet_gate",
+ "seed": 3407,
+ "best_miou": 57.45,
+ "last10_miou": 57.45,
+ "provenance": {
+  "config": "scripts/train_unet_gate.py",
+  "started_utc": "2026-10-26T15:00:00Z",
+  "code_commit": "local"
+ }
+}

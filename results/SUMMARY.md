@@ -32,6 +32,14 @@
 | MFNet | MFNet_CMNeXt-B2_it_teacher_s3408 | teacher | 58.57 | 57.43 | 67.36 | — | 375 |
 | MFNet | MFNet_CMNeXt-B2_it_teacher_s3408_p0_s3408 | teacher | 52.56 | 51.77 | 61.00 | — | 100 |
 | MFNet | MFNet_CMNeXt-B2_it_teacher_s3409 | teacher | 60.01 | 59.38 | 68.52 | — | 400 |
+| MFNet | gate__unet_lr2_ce120 | unet_gate | 57.45 | 57.45 | — | — | — |
+| MFNet | gate__unet_lr4_ce120 | unet_gate | 57.53 | 57.53 | — | — | — |
+| MFNet | gate__unet_lr4_ce120_nohard | unet_gate | 55.63 | 55.63 | — | — | — |
+| MFNet | gate__unet_lr4_ce120_s3408 | unet_gate | 57.67 | 57.67 | — | — | — |
+| MFNet | gate__unet_lr4_ce120_s3409 | unet_gate | 57.52 | 57.52 | — | — | — |
+| MFNet | gate__unet_lr8_ce120 | unet_gate | 57.35 | 57.35 | — | — | — |
+| MFNet | gate__unet_lr8_ce120_s3408 | unet_gate | 57.43 | 57.43 | — | — | — |
+| MFNet | gate__unet_lr8_ce120_s3409 | unet_gate | 57.37 | 57.37 | — | — | — |
 | MFNet | MFNet_CMNeXt-B2_it_teacher_s3407_p0_s3407 | teacher | 55.00 | 53.93 | 63.73 | — | 120 |
 | MFNet | MFNet_CMNeXt-B2_it_teacher_s3408_p0_s3408 | teacher | 52.56 | 51.77 | 61.00 | — | 100 |
 | MFNet | MFNet_CMNeXt-B2_it_teacher_s3407_p0lr2_s3407 | teacher | 55.39 | 54.81 | 64.33 | — | 100 |

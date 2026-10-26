@@ -73,7 +73,8 @@ def release_tag(run: str, metrics: dict) -> str:
 
 def asset_files(run_dir: Path) -> list[Path]:
     files: list[Path] = []
-    for name in ("best.pth", "last.pth", "probe.pth", "metrics.json", "train.log"):
+    for name in ("best.pth", "last.pth", "probe.pth", "best_gate.pth", "last_gate.pth",
+                 "metrics.json", "result.json", "train.log"):
         p = run_dir / name
         if p.is_file():
             files.append(p)
@@ -83,7 +84,7 @@ def asset_files(run_dir: Path) -> list[Path]:
                 continue
             if p.stat().st_size <= 20 * 1024 * 1024:
                 files.append(p)
-    return files
+    return list(dict.fromkeys(files))
 
 
 def upload_asset(repo: str, release_id: int, token: str, path: Path, asset_name: str) -> tuple[bool, str]:

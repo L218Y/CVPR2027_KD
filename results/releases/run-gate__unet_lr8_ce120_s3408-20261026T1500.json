@@ -1,0 +1,32 @@
+{
+ "run": "gate/unet_lr8_ce120_s3408",
+ "tag": "run-gate__unet_lr8_ce120_s3408-20261026T1500",
+ "dataset": "MFNet",
+ "kd_mode": "unet_gate",
+ "seed": 3408,
+ "best_miou": 57.43,
+ "last10_miou": 57.43,
+ "assets": [
+  {
+   "name": "gate__unet_lr8_ce120_s3408_best_gate.pth",
+   "size": 7779283,
+   "status": "present"
+  },
+  {
+   "name": "gate__unet_lr8_ce120_s3408_last_gate.pth",
+   "size": 7779539,
+   "status": "present"
+  },
+  {
+   "name": "gate__unet_lr8_ce120_s3408_metrics.json",
+   "size": 236,
+   "status": "present"
+  },
+  {
+   "name": "gate__unet_lr8_ce120_s3408_result.json",
+   "size": 4115,
+   "status": "present"
+  }
+ ],
+ "errors": []
+}

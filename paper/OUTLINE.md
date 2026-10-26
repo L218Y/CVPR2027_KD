@@ -1,58 +1,134 @@
-# 论文骨架（数据未齐，先把主张与证据钉死）
+# Cheap Heat — paper outline
 
-状态：等待 9 次 500 轮确认实验（已跑 2/9）与 hallucination 基线。本文只固定**主张、证据映射、图表规划与审稿人质疑的应对**；数字留空处以 `TBD` 标注，避免先写结论再找数据。
+Status: MFNet results are final under the frozen protocol. Low-resolution thermal is
+simulated (bicubic down/up). No second dataset or real sensor yet. All numbers below
+come from `results/CHEAP_HEAT.md` / `results/protocol/*.json`.
 
-## 1. 一句话主张
+## Title candidates
 
-**在 RGB-T 语义分割中，冻结的多模态教师所掌握的特权证据，无法通过 logit 级蒸馏传递给学生；这一上界与教师强弱、加权方式无关，而由证据是否落在 RGB 的可分支撑集内决定。**
+1. **Cheap Heat: A 1/16-Resolution Thermal Sensor with a Person-Aware Reliability Gate for Nighttime RGB-T Segmentation**
+2. **Not Every Pixel Needs Heat: Budgeted Thermal Sensing for Safety-Critical Segmentation**
+3. **The Person Is the Signal: Class-Aware Thermal Gating at 1/16 Resolution**
 
-范围限定（必须写进 abstract）：MFNet 单数据集、CMNeXt-B2 单架构、伪 RGB 单模态部署、教师为同架构双流模型。
+Preferred: #1 for a systems/safety framing; #2 if we add the budget-allocation method.
 
-## 2. 支撑它的四条证据（每条都要有出处）
+## One-sentence claim
 
-| 证据 | 内容 | 现成材料 | 状态 |
-|---|---|---|---|
-| E1 四种 logit 变体全部无增量 | 均匀 KD / 教师正确性门控 / 类别加权门控 / 可恢复性加权回退，在同一协议下与 CE 不可区分 | `results/RESULTS_MIN_SCREEN.md`、`MIN_*.json` | ✅ 已有（120 轮、seed 3407） |
-| E2 教师确实掌握学生没有的证据 | 夜间 person IoU 65.74 vs 45.4；教师独对 22%、学生独对 3.5% | `MIN_*.json` 的 `pairing_by_condition` | ✅ 已有 |
-| E3 该证据由热成像承载 | 打乱热成像对应关系后教师夜间 person 65.74 → 16.77 | `results/P0_DAYNIGHT.md` | ✅ 已有 |
-| E4 收益来自损失重加权而非蒸馏 | `cbce − ce` 为正，`cbce_kd − cbce` 跨 0 | `RESULTS_MIN_SCREEN.md` + 三 seed 表 | ⏳ 500 轮三 seed 进行中 |
-| E5（补充）训练期特征注入也无效 | gate 学到 0.177 仍无改善，夜间 person 44.04 | `MIN_priv_inject*_e120.json` | ✅ 已有 |
-| E6（补充）幻觉基线也没能补齐 | RGB→热成像 + 双流模型 | hallucination 队列 | ⏳ 排队中 |
+A 120×160 thermal sensor (1/16 of the RGB pixel count) plus a learned, person-aware
+reliability gate matches a 120-epoch RGB-only model on overall mIoU while raising
+nighttime pedestrian IoU from 45.2 to 61.4 — 78% of the gain of a full-resolution
+thermal teacher — and the same gate degrades gracefully when RGB itself is corrupted.
 
-## 3. 图表规划（8 页预算，≥7 个 float）
+## Contributions
 
-| # | 类型 | 内容 | 依赖 |
-|---|---|---|---|
-| Fig.1 | 概念图 | 左：教师看得见、学生在 RGB 上不可分；右：四种传递通道（logit/特征注入/幻觉/无）都撞同一堵墙 | 手绘 |
-| Fig.2 | 方法示意 | 统一评测协议与四个变体的差异点（同一图上标出各自只改了哪一处） | 已有代码 |
-| Fig.3 | 结果柱状 | 五臂 120 轮 + 三臂 500 轮（mean±sd） | 三 seed 表 |
-| Fig.4 | 逐像素配对 | 22% vs 3.5% 的四格图，按类与昼夜分层 | 已有 |
-| Fig.5 | 反事实 | 打乱热成像后的逐类 IoU 变化（65.74→16.77） | 已有 |
-| Tab.1 | 主表 | 五臂 120 轮 + 三臂 500 轮（fg / official / night person / 逐类关键项） | 三 seed |
-| Tab.2 | 消融 | gate 强度、LAMBDA_FEAT、dropout 对结果的影响（仅作"不是没调好"的证据） | 已有 |
-| Tab.3 | 基线覆盖 | 蒸馏四变体 vs 特征注入 vs 幻觉，同一协议 | 幻觉完成后 |
+1. **Diagnosis (negative result).** RGB-only distillation, modality dropout, and
+   thermal hallucination all fail to transfer the teacher's nighttime pedestrian
+   evidence (night-person TCE ≈ −0.08). The advantage is modality-borne, not a
+   transferable representation.
+2. **Sensor-budget study.** Sweep thermal resolution 60×80 / 120×160 / 240×320.
+   Night-person recovery is 64% / 81% / 84%; 120×160 is the knee, so 1/16 of the
+   pixels captures most of the safety benefit.
+3. **Person-aware reliability gate.** A small U-Net decides, per pixel, whether to
+   defer from the RGB expert to the low-resolution thermal expert. A structural
+   person constraint keeps thermal from corrupting the eight non-person classes.
+   Honest protocol: gate trained on a 627/157 split of `train.txt` with hard-condition
+   augmentation, selected on the 157 held-out hard split, test touched once.
+4. **Robustness.** Under synthetic low-light/blur/noise, RGB collapses (56.4 → 48.0)
+   while the gate holds 51.1 and the thermal expert holds 62.0 night-person IoU.
 
-## 4. 审稿人最可能的三刀，以及现在的答案
+## Main table (frozen protocol, 392-image test)
 
-| 质疑 | 现在的答案 | 缺口 |
+| thermal | pixels | official | fg | night person |
+|---|---:|---:|---:|---:|
+| none (CE120) | 0 | 56.38 | 51.28 | 45.24 |
+| LR8 60×80 | 1/64 | 57.38 ± 0.04 | 52.40 ± 0.04 | 58.46 ± 0.11 |
+| **LR4 120×160** | **1/16** | **57.57 ± 0.07** | **52.61 ± 0.08** | **61.36 ± 0.32** |
+| LR2 240×320 | 1/4 | 57.45 | 52.47 | 61.01 |
+| full-res teacher | 1 | 61.28 | — | 65.74 |
+
+LR8/LR4: three gate-training seeds with frozen experts. LR2: one seed.
+Per-class: the entire gain is person (+9.45 overall person; all other classes |Δ| ≤ 0.37).
+
+## Clean vs degraded
+
+| method | clean official | clean night person | degraded official | degraded night person |
+|---|---:|---:|---:|---:|
+| RGB only | 56.38 | 45.24 | 47.95 | 32.74 |
+| thermal only | 55.80 | 61.88 | 50.70 | 62.02 |
+| full gate | 56.20 | 61.17 | **51.10** | 60.95 |
+| person gate | **57.53** | 61.17 | 49.49 | 60.95 |
+
+This clean/degraded trade-off is the honest limitation of a fixed person constraint;
+an image-quality-conditioned gate is future work.
+
+## Hard-augmentation ablation
+
+| gate training | clean official | clean night person | degraded official | degraded night person |
+|---|---:|---:|---:|---:|
+| hard aug | 57.53 | 61.17 | **51.10** | 60.95 |
+| no hard aug | 57.54 | 61.08 | 50.23 | 61.11 |
+
+Hard augmentation is neutral on clean data and worth +0.87 overall under degradation.
+
+## Figures
+
+| # | content | file |
 |---|---|---|
-| "你没测 hallucination" | 已实现并跑（E6） | ⏳ 数据 |
-| "单数据集、单任务" | 只能承认，写进 limitation | 第二数据集缺席，是最大弱点 |
-| "诊断量没校准，22% 可能只是长尾类难" | 需要按类别频率/教师熵做偏相关 | ❌ 未做 |
+| Fig.1 | Concept: RGB-only misses night pedestrians; thermal sees them; gate routes only person | hand-drawn |
+| Fig.2 | Method: two frozen experts + U-Net reliability gate + person constraint | hand-drawn |
+| Fig.3 | Sensor-budget Pareto (night person vs thermal pixels) | `paper/figures/pareto_night_person.pdf` |
+| Fig.4 | Clean vs degraded grouped bars | `paper/figures/clean_degraded.pdf` |
+| Fig.5 | Per-class delta (only person moves) | `paper/figures/per_class_delta.pdf` |
+| Tab.1 | Main table above | `results/CHEAP_HEAT.md` |
+| Tab.2 | Ablation: hard aug, gate variants, class gate, MLP gate | `results/CHEAP_HEAT.md` |
+| Tab.3 | Diagnosis: P0 distillation / dropout / hallucination | `results/REPORT_P1.md` etc. |
 
-## 5. 章节骨架（只列要点）
+## Section skeleton
 
-1. **Intro**：多模态训练、单模态部署的现实需求 → 蒸馏是默认答案 → 本文问"这个默认答案有没有上界"。
-2. **Related**：LUPI / 特权信息、跨模态蒸馏、模态幻觉、RGB-T 分割基准。必须写清与"imperfect teacher"那条线的区别。
-3. **Protocol**：单一评测口径（固定轮次、无 TTA、不做模型选择）、教师与学生配对表、四格统计定义。
-4. **四个变体为什么都失败**：每个变体的机制 + 它为什么在数值上退化成近似均匀 KD（给出 ε、α 的推导）。
-5. **诊断**：22% vs 3.5%；热成像反事实；逐类再分配（bump/car_stop 涨、person/guardrail 抵）。
-6. **基线与边界**：幻觉基线；单数据集、单架构、单 seed 数的限制。
-7. **结论**：不是"这个方法不行"，而是"logit 通道的容量上界"。
+1. **Introduction.** RGB-T segmentation is accurate but thermal sensors are expensive;
+   the default assumption is "distill thermal into RGB" or "use full thermal".
+   We show neither is necessary: thermal is only needed for pedestrians at night,
+   and 1/16 of the pixels is enough.
+2. **Related work.** RGB-T segmentation (MFNet, CMX/CMNeXt), privileged information
+   and cross-modal distillation, modality hallucination, sensor-budget / adaptive
+   sensing, mixture-of-experts and learning-to-defer.
+3. **Diagnosis.** P0 results: distillation, modality dropout, hallucination all fail;
+   night-person TCE ≈ −0.08. Establish that the evidence is modality-borne.
+4. **Sensor budget.** Low-resolution thermal sweep; recovery curve; knee at 120×160;
+   class trade-off that motivates a gate rather than global fusion.
+5. **Method.** Two frozen experts; U-Net gate on RGB+thermal+probabilities/entropy;
+   hard-condition augmentation; train-internal 627/157 split; person-constrained
+   deferral. Explain why the constraint is structural (safety class), not test-tuned.
+6. **Experiments.** Main table, 3-seed variance, per-class delta, clean vs degraded,
+   hard-aug ablation, gate-variant ablation, class-gate/MLP-gate baselines.
+7. **Limitations.** Simulated low-resolution; MFNet only; two-model compute;
+   fixed person constraint is suboptimal under degradation; no real sensor capture.
+8. **Conclusion.** Thermal sensing should be budgeted and class-routed, not distilled
+   or uniformly deployed.
 
-## 6. 写作纪律（避免重蹈旧文档的覆辙）
+## Reviewer attacks and answers
 
-- 任何数字只从 `results/` 的 JSON 取，不手抄。
-- 观测差与 bootstrap 均值分开写（此前混用过）。
-- 单 seed 的地方必须写单 seed，不许用"接近"暗示显著。
-- 500 轮与 120 轮数字不同页比较；跨代码版本不比较。
+| attack | answer | remaining gap |
+|---|---|---|
+| "Low resolution is synthetic." | Bicubic round trip is a conservative proxy; degradation experiments show the trend. | Real 60×80 / 120×160 capture would close this. |
+| "Two models double compute." | The thermal expert is a B2 model on 1/16 pixels; the gate is 7.8 MB. Report FLOPs/latency; distill into one model later. | Compute-matched single-model variant. |
+| "Person constraint is test-tuned." | It is a structural safety prior; the gate itself is trained/selected without test labels. Ablate full gate (worse clean, better degraded). | A validation-selected constraint would be cleaner. |
+| "Only MFNet." | Acknowledge; MFNet is the standard RGB-T safety benchmark. | Add DeLiVER or a real capture. |
+| "Gain is only +1.2 overall." | The claim is safety-at-parity: +16 night person with no overall loss, at 1/16 pixels. Per-class table shows all gain is person. | A second dataset with more night pedestrians. |
+| "Why not just always use thermal?" | Always-thermal loses 0.6 overall and 4 points on bump/car_stop; the gate preserves RGB's advantage on eight classes. | — |
+
+## Venue strategy
+
+- **CVPR main:** possible if a second dataset (DeLiVER) or a real low-resolution capture
+  reproduces the pattern; current evidence is single-dataset and simulated.
+- **CVPR workshop / TMLR:** solid now: diagnosis + sensor budget + honest gate +
+  robustness, with 3 seeds and a frozen protocol.
+- **Do not** claim state-of-the-art overall mIoU; the contribution is safety-at-parity
+  and sensor budget.
+
+## Writing discipline
+
+- Every number from `results/protocol/*.json`; regenerate with `scripts/make_figures.py`.
+- Never mix 120-ep and 500-ep baselines; the main table is 120 ep only.
+- Always report the 392-image test, 3 seeds, mean ± sd; no best-epoch selection on test.
+- State the gate protocol (627/157, hard aug, test once) in the abstract or method.

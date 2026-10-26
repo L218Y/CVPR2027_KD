@@ -2,6 +2,14 @@
 
 | tag | run | dataset | seed | best mIoU | assets | errors |
 |---|---|---|---|---|---|---|
+| `run-gate__unet_lr2_ce120-20261026T1500` | gate/unet_lr2_ce120 | MFNet | 3407 | 57.45 | 4 | 0 |
+| `run-gate__unet_lr4_ce120-20261026T1500` | gate/unet_lr4_ce120 | MFNet | 3407 | 57.53 | 4 | 0 |
+| `run-gate__unet_lr4_ce120_nohard-20261026T1500` | gate/unet_lr4_ce120_nohard | MFNet | 3407 | 55.63 | 4 | 0 |
+| `run-gate__unet_lr4_ce120_s3408-20261026T1500` | gate/unet_lr4_ce120_s3408 | MFNet | 3408 | 57.67 | 4 | 0 |
+| `run-gate__unet_lr4_ce120_s3409-20261026T1500` | gate/unet_lr4_ce120_s3409 | MFNet | 3409 | 57.52 | 4 | 0 |
+| `run-gate__unet_lr8_ce120-20261026T1500` | gate/unet_lr8_ce120 | MFNet | 3407 | 57.35 | 4 | 0 |
+| `run-gate__unet_lr8_ce120_s3408-20261026T1500` | gate/unet_lr8_ce120_s3408 | MFNet | 3408 | 57.43 | 4 | 0 |
+| `run-gate__unet_lr8_ce120_s3409-20261026T1500` | gate/unet_lr8_ce120_s3409 | MFNet | 3409 | 57.37 | 4 | 0 |
 | `run-min__ce120__mfnet_cmnext-b2_i_rgb_s3407_p0ce120_s3407-20261026T1319` | min/ce120/MFNet_CMNeXt-B2_i_rgb_s3407_p0ce120_s3407 | MFNet | 3407 | 56.38 | 4 | 0 |
 | `run-min__hallu__mfnet_cmnext-b2_it_teacher_s3407_p0_s3407-20261026T0938` | min/hallu/MFNet_CMNeXt-B2_it_teacher_s3407_p0_s3407 | MFNet | 3407 | 55.0 | 4 | 0 |
 | `run-min__hallu__mfnet_cmnext-b2_it_teacher_s3408_p0_s3408-20261026T0938` | min/hallu/MFNet_CMNeXt-B2_it_teacher_s3408_p0_s3408 | MFNet | 3408 | 52.56 | 4 | 0 |
