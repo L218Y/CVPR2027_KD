@@ -16,6 +16,7 @@ and touches the official test exactly once.
 
 import argparse
 import json
+import random
 import sys
 from pathlib import Path
 
@@ -150,8 +151,10 @@ def main():
     ap.add_argument("--workers", type=int, default=6)
     ap.add_argument("--lr", type=float, default=1e-3)
     ap.add_argument("--p-hard", type=float, default=0.5)
+    ap.add_argument("--seed", type=int, default=3407)
     args = ap.parse_args()
 
+    random.seed(args.seed); np.random.seed(args.seed); torch.manual_seed(args.seed); torch.cuda.manual_seed_all(args.seed)
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
     cfg_a = yaml.safe_load(Path(args.cfg_a).read_text())
     cfg_b = yaml.safe_load(Path(args.cfg_b).read_text())
