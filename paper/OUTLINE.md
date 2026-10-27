@@ -70,18 +70,16 @@ an image-quality-conditioned gate is future work.
 
 Hard augmentation is neutral on clean data and worth +0.87 overall under degradation.
 
-## Figures
+## Figures and tables in the current draft
 
 | # | content | file |
 |---|---|---|
-| Fig.1 | Concept: RGB-only misses night pedestrians; thermal sees them; gate routes only person | hand-drawn |
-| Fig.2 | Method: two frozen experts + U-Net reliability gate + person constraint | hand-drawn |
-| Fig.3 | Sensor-budget Pareto (night person vs thermal pixels) | `paper/figures/pareto_night_person.pdf` |
-| Fig.4 | Clean vs degraded grouped bars | `paper/figures/clean_degraded.pdf` |
-| Fig.5 | Per-class delta (only person moves) | `paper/figures/per_class_delta.pdf` |
-| Tab.1 | Main table above | `results/CHEAP_HEAT.md` |
-| Tab.2 | Ablation: hard aug, gate variants, class gate, MLP gate | `results/CHEAP_HEAT.md` |
-| Tab.3 | Diagnosis: P0 distillation / dropout / hallucination | `results/REPORT_P1.md` etc. |
+| Fig.1 | Sensor-budget Pareto (night person vs thermal pixels) | `paper/figures/pareto_night_person.pdf` |
+| Fig.2 | Per-class delta (only person moves) | `paper/figures/per_class_delta.pdf` |
+| Tab.1 | Thermal budget and gate sweep | `paper/sections/4_experiments.tex` |
+| Tab.2 | Gate variants (seed 3407) | `paper/sections/4_experiments.tex` |
+| Tab.3 | Clean vs corrupted RGB | `paper/sections/4_experiments.tex` |
+| Tab.4 | Single-model compute comparison | `paper/sections/4_experiments.tex` |
 
 ## Section skeleton
 

@@ -26,7 +26,7 @@ fails. The honest conclusion is that the budget knee is dataset-dependent, and t
 deployment should measure it rather than inherit ours.
 
 The third limitation is compute. The gate uses two frozen B2 experts and costs 2.2
-times the RGB-only latency, but 19\% less than the single full-fusion B2 baseline. The sensor-pixel saving is real, and the routing is cheaper than the full-fusion
+times the RGB-only latency, but 19\% less than the single full-fusion B2 baseline at the same thermal budget. The sensor-pixel saving is real, and the routing is cheaper than the full-fusion
 baseline, but it is still 2.2 times RGB; a reviewer is right to ask for a single-model
 variant. A native
 low-resolution thermal branch could share the RGB backbone and reduce the thermal
