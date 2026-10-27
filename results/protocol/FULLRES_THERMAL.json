@@ -1,0 +1,19 @@
+{
+  "model": "CMNeXt-B2 thermal-only full resolution",
+  "epoch": 80,
+  "overall": 46.16,
+  "fg": 58.14,
+  "night_person": 65.61,
+  "per_class": {
+    "unlabeled": 96.56,
+    "car": 74.69,
+    "person": 65.61,
+    "bike": 60.35,
+    "curve": 15.73,
+    "car_stop": 21.56,
+    "guardrail": 9.32,
+    "color_cone": 38.8,
+    "bump": 32.77
+  },
+  "checkpoint": "output/min/full_thermalonly/MFNet_CMNeXt-B2_t/CMNeXt_CMNeXt-B2_MFNet_epoch80_46.16.pth"
+}
