@@ -201,24 +201,20 @@ remaining 2.2 times RGB is the price of the second forward pass. A native low-re
 thermal branch, or distilling the gate into the RGB expert, would remove it; we leave
 both to future work.
 
-\begin{table}[t]
+\begin{table*}[t]
 \centering
-\footnotesize
-\setlength{\tabcolsep}{3pt}
 \caption{Single-model alternatives and the gate at $480\times640$, batch size one on an
 RTX 4090. Single-model rows use seed 3407; the gate is the mean of three seeds. Latency
 is measured with 30 iterations after 10 warm-up iterations.}
 \label{tab:compute}
-\resizebox{\columnwidth}{!}{%
-\begin{tabular}{lrrrrr}
+\begin{tabular}{lccccc}
 \toprule
-Method & params & GFLOPs & ms & official & night \\
+Method & params (M) & GFLOPs & latency (ms) & official & night person \\
 \midrule
 RGB-only & 25.8 & 46.2 & 11.1 & 56.38 & 45.24 \\
-Early fusion & 25.8 & 46.4 & 11.1 & 55.51 & 60.57 \\
+Early fusion (6-channel) & 25.8 & 46.4 & 11.1 & 55.51 & 60.57 \\
 Full fusion (LR thermal) & 58.7 & 74.3 & 29.8 & 55.80 & 61.88 \\
 Gate (person-or) & 53.5 & 138.0 & 24.0 & \textbf{57.48} & \textbf{62.26} \\
 \bottomrule
 \end{tabular}
-}
-\end{table}
+\end{table*}
