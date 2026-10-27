@@ -67,7 +67,7 @@ to 47.79 overall; the constrained gate holds 49.34 and the unconstrained gate 51
 Feeding the same thermal image to a six-channel early-fusion model at RGB compute is not
 sufficient: it reaches 55.51 overall and 60.57 nighttime pedestrian IoU, below the gate
 by 1.97 and 1.69. A compute measurement closes the accounting. The two-expert thermal-only system runs in
-24.0 ms per $480\times640$ frame, 2.2 times the RGB-only 11.1 ms but 19\% faster than a
+24.0 ms per $480\times640$ frame, 2.2 times the RGB-only 11.1 ms but 19\% lower latency than a
 single full-fusion CMNeXt-B2 at the same thermal budget (29.8 ms), and 1.68 overall
 mIoU better than that model. The
 contribution is a sensor-pixel budget, not a compute-parity claim, and we report both
