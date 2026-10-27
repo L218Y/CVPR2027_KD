@@ -191,7 +191,7 @@ six-channel early-fusion CMNeXt-B2 concatenates RGB and thermal at the input and
 (25.8M parameters, 46.4 GFLOPs, 11.1 ms), but reaches only
 55.51 overall and 60.57 nighttime pedestrian IoU: it recovers some thermal evidence but
 loses on the non-person classes and remains below RGB. A single two-stream full-fusion
-CMNeXt-B2 reaches 55.80 and 61.88, but costs 58.7M parameters, 74.3 GFLOPs, and 29.8 ms.
+CMNeXt-B2 at the same thermal budget reaches 55.80 and 61.88, but costs 58.7M parameters, 74.3 GFLOPs, and 29.8 ms.
 The gate has 53.5M parameters, 138.0 GFLOPs, and 24.0 ms: 2.2 times the RGB-only
 latency, but 19\% \emph{lower} than the full-fusion model, with $+1.68$ overall and
 $+0.38$ nighttime pedestrian IoU over it, and $+1.97$/$+1.69$ over the compute-matched
