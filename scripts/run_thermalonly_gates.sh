@@ -13,6 +13,7 @@ for s in 4 8 2; do
   for seed in 3407 3408 3409; do
     tag="thermalonly_lr${s}_s${seed}"
     out="output/gate/unet_${tag}"
+    if [ -f "results/protocol/UNETGATE_${tag}.json" ]; then echo "skip $tag"; continue; fi
     log="logs_p0/gate_${tag}.log"
     python3 scripts/train_unet_gate.py \
       --cfg-a configs/min/ce120.yaml --ckpt-a "$RGB_CKPT" \
