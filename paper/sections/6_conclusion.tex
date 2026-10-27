@@ -4,18 +4,18 @@ Thermal sensing for nighttime segmentation is usually treated as an all-or-nothi
 input: either the full thermal stream is fused into the network, or its knowledge is
 distilled into RGB. We have shown that neither is necessary. On MFNet, the nighttime
 pedestrian advantage of a full-resolution thermal teacher is modality-borne and does
-not distil into an RGB student, but one sixteenth of the thermal pixels recovers 81\%
-of that advantage. A globally fused low-resolution model still loses overall, because
+not distil into an RGB student, but one sixteenth of the thermal pixels recovers 84\%
+of that advantage. A uniformly applied low-resolution thermal stream still loses overall, because
 thermal is worse on the other eight classes. A small person-aware gate resolves the
 conflict: it routes thermal evidence only where the experts disagree and a pedestrian
-is at stake, and it raises nighttime pedestrian IoU from 45.24 to $61.36\pm0.39$ while
-improving overall mIoU from 56.38 to $57.57\pm0.08$. Under corrupted RGB the full gate
+is at stake, and it raises nighttime pedestrian IoU from 45.24 to $62.26\pm1.02$ while
+improving overall mIoU from 56.38 to $57.48\pm0.11$. Under corrupted RGB the full gate
 is the best overall model, and the thermal expert remains useful when RGB collapses.
 
 The broader lesson is that sensor budgets should be measured, not assumed. The
 $120\times160$ knee is a property of MFNet's pedestrian scale and capture conditions,
 not a universal constant; a PST900 pilot shows that smaller, lower-contrast survivors
-need more thermal pixels. The right deployment procedure is therefore to sweep the
+were not recovered at the same one-sixteenth budget. The right deployment procedure is therefore to sweep the
 budget on the target domain, select the routing constraint from the safety class, and
 report the compute cost alongside the sensor cost. We hope this work makes that
 procedure the default for RGB-T perception on low-cost platforms.

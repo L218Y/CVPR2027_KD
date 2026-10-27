@@ -35,7 +35,7 @@ class EarlyFusionCMNeXt(nn.Module):
                 new.bias.copy_(source_bias)
         self.net.backbone.patch_embed1.proj = new
 
-    def init_pretrained(self, pretrained=None):
+    def init_pretrained(self, pretrained: str = None):
         if not pretrained:
             return
         tmp = CMNeXt(self.backbone_name, self.num_classes, ['img'])

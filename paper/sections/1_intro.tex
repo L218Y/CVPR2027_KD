@@ -8,7 +8,8 @@ scene parsing \cite{ha2017mfnet,sun2019rtfnet,zhang2022crossmodal,zhang2023deliv
 The recipe, however, assumes a thermal sensor that is neither cheap nor plentiful.
 Long-wave infrared arrays are coarser and more expensive than their RGB counterparts,
 and the bandwidth and storage of a full thermal stream are difficult to justify on a
-low-cost robot, a delivery vehicle, or a wearable \cite{shivakumar2019rgbthermal}.
+low-cost robot, a delivery vehicle, or a wearable
+\cite{shivakumar2019rgbthermal,stoyanov2026feasibility,walczyk2026hardware}.
 The community has responded by treating thermal as either a full-resolution input or
 as something to be distilled away. Both responses sidestep the budget question: how
 many thermal pixels are actually needed, and which pixels should carry thermal
@@ -27,21 +28,23 @@ objective.
 We then sweep the thermal stream from $60\times80$ to $240\times320$ while holding the
 RGB stream, backbone, schedule, and evaluation protocol fixed. The resulting curve has
 a clear knee at $120\times160$, one sixteenth of the RGB pixel count: this budget
-recovers 81\% of the full-resolution teacher's nighttime pedestrian gain at a cost of
-only 0.58 overall mIoU relative to a 120-epoch RGB-only model. Pushing to $60\times80$
-loses 3.4 points of nighttime pedestrian IoU for a negligible further saving, while
-$240\times320$ buys only 0.6 additional points. The knee is therefore a useful
-operating point, not an arbitrary compromise.
+recovers 84\% of the full-resolution RGB-T teacher's nighttime pedestrian gain. Pushing down
+to $60\times80$ recovers only 58\%, while doubling to $240\times320$ buys 2.3
+additional nighttime pedestrian points over $120\times160$. The knee is therefore a
+useful operating point, not an arbitrary compromise. It is also a statement about the
+safety class, not about overall parsing: the $120\times160$ thermal expert reaches
+41.67 overall mIoU, 14.7 points below RGB, because it loses on cars, curbs, guardrails,
+and road markings.
 
-A low-resolution thermal stream cannot simply be fused globally. At $120\times160$ the
-thermal expert is better than RGB on pedestrians but worse on cars, curbs, guardrails,
-and road markings; a globally fused model inherits both effects and ends at 55.80
-overall mIoU, below the RGB-only 56.38. A per-class gate selected on training accuracy
-does not repair this: the training split is much easier than the official test split,
-and the selector collapses to the thermal expert on every class. The failure is
-instructive. The routing decision is spatial and condition-dependent, and it must be
-selected on data that resembles the deployment distribution, not on clean training
-accuracy.
+A low-resolution thermal stream cannot simply replace RGB. At $120\times160$ the
+thermal expert is better than RGB on pedestrians (62.41 versus 45.24 nighttime IoU)
+but worse on every other class; it ends at 41.67 overall, below the RGB-only 56.38. A
+single global fusion model therefore has to decide where thermal is trustworthy. An
+unconstrained spatial gate can make that decision and reaches 57.74 overall, but it
+also moves car-stop and guardrail IoU by $-1.96$ and $+1.60$, overwriting RGB evidence
+on classes where the low-resolution stream has no mandate. The routing decision is
+spatial and condition-dependent, and it must be selected on data that resembles the
+deployment distribution, not on clean training accuracy.
 
 We introduce a person-aware reliability gate that makes the budget usable. Two frozen
 experts---a 120-epoch RGB model and a thermal-only model on the $120\times160$
@@ -54,19 +57,24 @@ should keep RGB's higher-resolution evidence. The gate is trained on a 627-image
 subset of the training split with hard-condition augmentation, selected on the
 remaining 157 images, and the official 392-image test is touched once.
 
-With three gate-training seeds, the gate reaches $57.57\pm0.07$ overall mIoU and
-$61.36\pm0.32$ nighttime pedestrian IoU, against 56.38 and 45.24 for RGB-only and
-55.80 and 61.88 for the thermal expert alone. The entire gain is the pedestrian class:
-all other classes change by at most 0.37 IoU. Under synthetic low-light, blur, and
-noise, RGB collapses from 56.38 to 47.95 overall, while the gate holds 51.10 and the
-thermal expert holds 62.02 nighttime pedestrian IoU. A compute measurement closes the
-accounting: the two-expert system costs 42.6 ms per $480\times640$ frame on an RTX
-4090, 2.6 times the RGB-only 11.0 ms. The contribution is a sensor-pixel budget, not a
-compute budget, and we report the difference rather than hiding it.
+With three gate-training seeds, the constrained gate reaches $57.48\pm0.11$ overall
+mIoU and $62.26\pm1.02$ nighttime pedestrian IoU, against 56.38 and 45.24 for RGB-only
+and 41.67 and 62.41 for the thermal expert alone. The entire gain is the pedestrian
+class: all other classes change by at most 0.08 IoU. The unconstrained gate reaches
+57.74 overall at the same pedestrian score, which isolates the price of the safety
+constraint at 0.26 mIoU. Under synthetic low-light and noise, RGB collapses from 56.38
+to 47.79 overall; the constrained gate holds 49.34 and the unconstrained gate 51.27.
+Feeding the same thermal image to a six-channel early-fusion model at RGB compute is not
+sufficient: it reaches 55.51 overall and 60.57 nighttime pedestrian IoU, below the gate
+by 1.97 and 1.69. A compute measurement closes the accounting. The two-expert thermal-only system runs in
+24.0 ms per $480\times640$ frame, 2.2 times the RGB-only 11.1 ms but 19\% faster than a
+single full-fusion CMNeXt-B2 (29.8 ms), and 1.68 overall mIoU better than that model. The
+contribution is a sensor-pixel budget, not a compute-parity claim, and we report both
+numbers rather than hiding the gap.
 
 Our contributions are: (i) a negative diagnosis showing that the nighttime pedestrian
 advantage is modality-borne and does not distil into RGB; (ii) a thermal sensor-budget
-curve with a $120\times160$ knee and a per-class explanation of why global
+curve with a $120\times160$ knee and a per-class explanation of why uniform
 low-resolution fusion is insufficient; (iii) a person-aware reliability gate with a
 train-internal selection protocol and three-seed evidence of safety-at-parity; and
 (iv) a degradation study showing when the gate and the thermal expert remain useful

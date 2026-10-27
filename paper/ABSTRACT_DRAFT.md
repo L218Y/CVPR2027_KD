@@ -7,16 +7,16 @@ should they be used? On MFNet, we first show that the thermal teacher's nighttim
 pedestrian advantage cannot be transported to an RGB-only student by logit
 distillation, modality dropout, or thermal hallucination (night-person TCE ≈ −0.08):
 the evidence is modality-borne. We then sweep the thermal sensor from 60×80 to
-240×320 and find a clear knee at 120×160: 1/16 of the RGB pixel count recovers 81%
+240×320 and find a clear knee at 120×160: 1/16 of the RGB pixel count recovers 84%
 of the full-resolution teacher's nighttime pedestrian gain. Used globally, however,
 low-resolution thermal loses on eight other classes. We therefore introduce a
 person-aware reliability gate: a small U-Net, trained on a held-out split of the
 training set with hard-condition augmentation, decides per pixel when to defer from
 an RGB expert to the 120×160 thermal expert, and a structural constraint restricts
 thermal overrides to pedestrians. With three seeds and a frozen 392-image test, the
-gate raises overall mIoU from 56.38 to 57.57 ± 0.07 and nighttime pedestrian IoU from
-45.24 to 61.36 ± 0.32; all other classes change by at most 0.37 IoU. Under synthetic
-low-light, blur, and noise, RGB collapses to 47.95 mIoU while the gate holds 51.10.
+gate raises overall mIoU from 56.38 to 57.48 ± 0.11 and nighttime pedestrian IoU from
+45.24 to 62.26 ± 1.02; all other classes change by at most 0.08 IoU. Under synthetic
+low-light and noise, RGB collapses to 47.79 mIoU while the gate holds 49.34 (unconstrained 51.27).
 Thermal sensing should be budgeted and class-routed, not distilled or uniformly
 deployed.
 

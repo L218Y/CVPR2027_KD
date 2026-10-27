@@ -1,17 +1,20 @@
-\documentclass[10pt,twocolumn]{article}
+\documentclass[10pt,twocolumn,letterpaper]{article}
+\usepackage[review]{cvpr}
 \usepackage[T1]{fontenc}
-\usepackage{times}
 \usepackage{microtype}
-\usepackage[margin=0.75in]{geometry}
 \usepackage{graphicx}
 \usepackage{booktabs}
 \usepackage{amsmath,amssymb}
 \usepackage[numbers,sort&compress]{natbib}
-\usepackage[hidelinks]{hyperref}
 \usepackage{placeins}
 \usepackage{subcaption}
 \usepackage{tikz}
 \usetikzlibrary{arrows.meta,positioning,fit}
+\providecommand{\texorpdfstring}[2]{#1}
+
+\def\paperID{*****}
+\def\confName{CVPR}
+\def\confYear{2026}
 
 \newcommand{\method}{CheapHeat}
 \newcommand{\lr}[1]{\textsc{lr#1}}
@@ -31,7 +34,7 @@
 \input{sections/5_discussion}
 \input{sections/6_conclusion}
 
-\bibliographystyle{plainnat}
+\bibliographystyle{ieeenat_fullname}
 \bibliography{refs}
 
 \end{document}

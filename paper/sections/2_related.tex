@@ -12,11 +12,12 @@ backbone and an auxiliary modality through a Cross-Modal Feature Rectification M
 and a Feature Fusion Module \cite{zhang2022crossmodal}, while CMNeXt and the DeLiVER
 benchmark extend the recipe to an arbitrary set of modalities and to missing-modality
 inference \cite{zhang2023delivering}. Recent variants add spectral-aware global
-fusion \cite{zhang2025spectralaware}, state-space models for real-time wild-scene
-segmentation \cite{guo2025crossmodal}, modality-aware pre-training and rectification
-\cite{guo2025tuni}, language guidance \cite{zhao2025unveiling}, frequency-guided
-fusion \cite{cantez2026frequencyguided}, and broader RGB-X fusion
-\cite{cao2026multimodal,zhang2026crossweaver,reddy2026seeing}. Across this line of
+fusion \cite{zhang2025spectralaware}, wavelet cross fusion \cite{zhang2026waveletcnet},
+orthogonal feature decoupling \cite{liu2026orthogonal}, state-space models for
+real-time wild-scene segmentation \cite{guo2025crossmodal}, modality-aware
+pre-training and rectification \cite{guo2025tuni}, language guidance
+\cite{zhao2025unveiling}, frequency-guided fusion \cite{cantez2026frequencyguided},
+and broader RGB-X fusion \cite{cao2026multimodal,zhang2026crossweaver,reddy2026seeing,li2026multimodal}. Across this line of
 work, the thermal stream is assumed to be full resolution and always available; the
 sensor-cost question is not part of the architecture search.
 
@@ -31,7 +32,11 @@ domain gap with a large unlabeled capture and a small annotated test set
 annotations without paired RGB \cite{li2019soda}. These datasets make clear that
 thermal imagery is valuable precisely when visible evidence is weak, but they do not
 isolate the resolution of the thermal stream: the sensor is either full resolution or
-absent. Our budget sweep fills that gap by treating thermal resolution as the
+absent. Work on thermal super-resolution and denoising treats the captured thermal
+image as a signal to be restored \cite{zou2025contourlet}, and
+low-cost thermal hardware studies show that consumer arrays trade resolution for
+price \cite{stoyanov2026feasibility,walczyk2026hardware}; neither line asks which
+pixels should be routed to which class. Our budget sweep fills that gap by treating thermal resolution as the
 controlled variable and measuring the safety class separately from the other classes.
 
 \subsection{Cross-Modal Transfer and Routing}
@@ -46,7 +51,10 @@ cannot. The result is consistent with the broader observation that a student can
 recover information that is absent from its input, no matter how the distillation loss
 is shaped.
 
-Routing between experts is a separate line of work. Learning-to-defer methods learn
+Reliability-aware fusion is a separate line of work: recent driving systems detect
+degraded or failed sensors and reweight modalities before segmentation
+\cite{deregnaucourt2026reliabilityaware}. Routing between experts is a related
+problem. Learning-to-defer methods learn
 when a classifier should abstain in favor of a human or another model, with
 theoretical guarantees for single- and multi-expert settings
 \cite{mao2023principled,montreuil2025onestage,liu2026when}. Mixture-of-experts models

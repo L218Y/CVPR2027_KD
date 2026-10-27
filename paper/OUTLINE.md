@@ -33,30 +33,30 @@ thermal teacher — and the same gate degrades gracefully when RGB itself is cor
    person constraint keeps thermal from corrupting the eight non-person classes.
    Honest protocol: gate trained on a 627/157 split of `train.txt` with hard-condition
    augmentation, selected on the 157 held-out hard split, test touched once.
-4. **Robustness.** Under synthetic low-light/blur/noise, RGB collapses (56.4 → 48.0)
-   while the gate holds 51.1 and the thermal expert holds 62.0 night-person IoU.
+4. **Robustness.** Under synthetic low-light/noise, RGB collapses (56.4 → 48.0)
+   while the person-constrained gate holds 49.3, the unconstrained gate 51.3, and the thermal expert 62.4 night-person IoU.
 
 ## Main table (frozen protocol, 392-image test)
 
 | thermal | pixels | official | fg | night person |
 |---|---:|---:|---:|---:|
 | none (CE120) | 0 | 56.38 | 51.28 | 45.24 |
-| LR8 60×80 | 1/64 | 57.38 ± 0.04 | 52.40 ± 0.04 | 58.46 ± 0.11 |
-| **LR4 120×160** | **1/16** | **57.57 ± 0.07** | **52.61 ± 0.08** | **61.36 ± 0.32** |
-| LR2 240×320 | 1/4 | 57.45 | 52.47 | 61.01 |
+| LR8 60×80 | 1/64 | 57.19 ± 0.07 | 52.19 ± 0.08 | 58.63 ± 0.23 |
+| **LR4 120×160** | **1/16** | **57.48 ± 0.11** | **52.50 ± 0.12** | **62.26 ± 1.02** |
+| LR2 240×320 | 1/4 | 57.54 ± 0.06 | 52.57 ± 0.07 | 63.29 ± 0.64 |
 | full-res teacher | 1 | 61.28 | — | 65.74 |
 
-LR8/LR4: three gate-training seeds with frozen experts. LR2: one seed.
-Per-class: the entire gain is person (+9.45 overall person; all other classes |Δ| ≤ 0.37).
+LR8/LR4/LR2: three gate-training seeds with frozen experts.
+Per-class: the entire gain is person (+8.91 person; all other classes |Δ| ≤ 0.08).
 
 ## Clean vs degraded
 
 | method | clean official | clean night person | degraded official | degraded night person |
 |---|---:|---:|---:|---:|
-| RGB only | 56.38 | 45.24 | 47.95 | 32.74 |
-| thermal only | 55.80 | 61.88 | 50.70 | 62.02 |
-| full gate | 56.20 | 61.17 | **51.10** | 60.95 |
-| person gate | **57.53** | 61.17 | 49.49 | 60.95 |
+| RGB only | 56.38 | 45.24 | 47.79 | 33.78 |
+| thermal only | 41.67 | 62.41 | 41.67 | 62.41 |
+| full gate | **57.58** | 61.42 | **51.27** | 60.52 |
+| person gate | 57.39 | 61.42 | 49.34 | 60.52 |
 
 This clean/degraded trade-off is the honest limitation of a fixed person constraint;
 an image-quality-conditioned gate is future work.
