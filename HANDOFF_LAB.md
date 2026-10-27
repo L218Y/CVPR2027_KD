@@ -117,9 +117,18 @@ python3 tools/val_mm.py --cfg configs/min/full_thermalonly.yaml
 python3 scripts/make_figures.py
 ```
 
-Checkpoints are archived in GitHub release `thermalonly-2026-10-26` (assets:
-`thermalonly_lr{8,4,2}_*.pth`, `rgb_ce120_best.pth`, `gate_lr4_s340{7,8,9}.pth`).
-They are not in git. If the lab disk is lost, retrain each with:
+Final artifacts are in GitHub release
+`cheapheat-final-2026-10-27` (https://github.com/L218Y/CVPR2027_KD/releases/tag/cheapheat-final-2026-10-27):
+`cheapheat_final_main.pdf`, `full_thermalonly_epoch80_46.16.pth`,
+`earlyfusion_epoch120_55.51.pth`,
+`gate_thermalonly_lr{8,4,2}_s340{7,8,9}_best_gate.pth`,
+`gate_thermalonly_lr4_nohard_best_gate.pth`,
+`logs_p0_2026-10-27.tar.gz`, `COMPUTE_thermalonly.json`, `FULLRES_THERMAL.json`.
+
+The RGB expert, thermal-only LR8/LR4/LR2 experts, and original LR4 gates are in
+release `thermalonly-2026-10-26` (assets: `thermalonly_lr{8,4,2}_*.pth`,
+`rgb_ce120_best.pth`, `gate_lr4_s340{7,8,9}.pth`). Checkpoints are not in git.
+If the lab disk is lost, retrain each with:
 
 ```bash
 bash scripts/run_thermalonly.sh 8
