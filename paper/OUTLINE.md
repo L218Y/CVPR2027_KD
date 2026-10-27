@@ -16,7 +16,7 @@ Preferred: #1 for a systems/safety framing; #2 if we add the budget-allocation m
 
 A 120×160 thermal sensor (1/16 of the RGB pixel count) plus a learned, person-aware
 reliability gate matches a 120-epoch RGB-only model on overall mIoU while raising
-nighttime pedestrian IoU from 45.2 to 61.4 — 78% of the gain of a full-resolution
+nighttime pedestrian IoU from 45.2 to 62.3 — 84% of the gain of a full-resolution
 thermal teacher — and the same gate degrades gracefully when RGB itself is corrupted.
 
 ## Contributions
@@ -26,7 +26,7 @@ thermal teacher — and the same gate degrades gracefully when RGB itself is cor
    evidence (night-person TCE ≈ −0.08). The advantage is modality-borne, not a
    transferable representation.
 2. **Sensor-budget study.** Sweep thermal resolution 60×80 / 120×160 / 240×320.
-   Night-person recovery is 64% / 81% / 84%; 120×160 is the knee, so 1/16 of the
+   Night-person recovery is 58% / 84% / 95%; 120×160 is the knee, so 1/16 of the
    pixels captures most of the safety benefit.
 3. **Person-aware reliability gate.** A small U-Net decides, per pixel, whether to
    defer from the RGB expert to the low-resolution thermal expert. A structural
